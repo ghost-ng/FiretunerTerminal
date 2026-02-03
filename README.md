@@ -45,24 +45,43 @@ What you get that FireTuner doesn't give you:
 - **Auto-reconnect** - Game crashed? Terminal reconnects when you restart
 - **Pretty JSON** - Responses get formatted so you can actually read them
 
-## Quick Start
+## Installation
+
+### Windows
 
 ```bash
-# Create venv
+git clone https://github.com/ghost-ng/FiretunerTerminal.git
+cd FiretunerTerminal
+
 python -m venv venv
-venv\Scripts\activate  # Windows
-# source venv/bin/activate  # Linux/Mac
+venv\Scripts\activate
 
-# Install deps
 pip install -r requirements.txt
-
-# Run it
-python -m civ7_terminal
 ```
 
-Make sure Civ 7 is running with debug mode enabled.
+### Linux/Mac
+
+```bash
+git clone https://github.com/ghost-ng/FiretunerTerminal.git
+cd FiretunerTerminal
+
+python3 -m venv venv
+source venv/bin/activate
+
+pip install -r requirements.txt
+```
 
 ## Usage
+
+Make sure Civ 7 is running with debug mode enabled, then:
+
+```bash
+# Windows (with venv activated)
+python -m civ7_terminal
+
+# Linux/Mac (with venv activated)
+python3 -m civ7_terminal
+```
 
 Just type JavaScript and hit Enter:
 
