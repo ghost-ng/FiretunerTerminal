@@ -11,26 +11,18 @@ from textual.strip import Strip
 from textual.widget import Widget
 from textual.widgets import TextArea
 
-# Single-char control codes as line color markers (invisible, easy to strip)
-MARK_CYAN = "\x01"      # SOH - Commands
-MARK_GREEN = "\x02"     # STX - Responses
-MARK_RED = "\x03"       # ETX - Errors
-MARK_YELLOW = "\x04"    # EOT - Info
-
-# Map markers to Rich styles
-MARKER_STYLES = {
-    "\x01": Style(color="#00ffff"),        # Cyan - commands
-    "\x02": Style(color="green"),          # Green - responses
-    "\x03": Style(color="red", bold=True), # Red - errors
-    "\x04": Style(color="yellow"),         # Yellow - info
-}
+# Color styles for different line types
+STYLE_COMMAND = Style(color="#00ffff")        # Cyan
+STYLE_RESPONSE = Style(color="green")         # Green
+STYLE_ERROR = Style(color="red", bold=True)   # Red
+STYLE_INFO = Style(color="yellow")            # Yellow
 
 
 class HighlightedTextArea(TextArea):
-    """TextArea with marker-based color highlighting."""
+    """TextArea with prefix-based color highlighting."""
 
     def render_line(self, y: int) -> Strip:
-        """Render a line, using first-char marker for color."""
+        """Render a line with color based on prefix."""
         strip = super().render_line(y)
 
         # y is visual row - add scroll offset to get document line
@@ -38,44 +30,36 @@ class HighlightedTextArea(TextArea):
         if doc_line < self.document.line_count:
             line = self.document.get_line(doc_line)
 
-            # Check for color marker at start of line
-            if line and line[0] in MARKER_STYLES:
-                marker = line[0]
-                color_style = MARKER_STYLES[marker]
+            # Determine color based on line prefix
+            if line.startswith("> "):
+                color_style = STYLE_COMMAND
+            elif line.startswith("ERROR:"):
+                color_style = STYLE_ERROR
+            elif line.startswith("INFO:"):
+                color_style = STYLE_INFO
+            else:
+                color_style = STYLE_RESPONSE
 
-                # Rebuild strip: strip marker char, apply color
-                new_segments = []
-                stripped_marker = False
+            # Rebuild strip with our color
+            new_segments = []
+            for seg in strip:
+                if seg.control:
+                    new_segments.append(seg)
+                    continue
 
-                for seg in strip:
-                    if seg.control:
-                        new_segments.append(seg)
-                        continue
+                # Apply our color, preserve selection bgcolor
+                if seg.style and seg.style.bgcolor:
+                    new_style = Style(
+                        color=color_style.color,
+                        bgcolor=seg.style.bgcolor,
+                        bold=color_style.bold,
+                    )
+                else:
+                    new_style = color_style
 
-                    text = seg.text
+                new_segments.append(Segment(seg.text, new_style, seg.control))
 
-                    # Strip the marker from first text segment
-                    if not stripped_marker and text:
-                        if text[0] == marker:
-                            text = text[1:]
-                            stripped_marker = True
-
-                    if not text:
-                        continue
-
-                    # Apply our color, preserve selection bgcolor
-                    if seg.style and seg.style.bgcolor:
-                        new_style = Style(
-                            color=color_style.color,
-                            bgcolor=seg.style.bgcolor,
-                            bold=color_style.bold,
-                        )
-                    else:
-                        new_style = color_style
-
-                    new_segments.append(Segment(text, new_style, seg.control))
-
-                return Strip(new_segments)
+            return Strip(new_segments)
 
         return strip
 
@@ -127,13 +111,13 @@ class TerminalOutput(Widget):
         Args:
             command: The command string entered by the user.
         """
-        # Handle multiline commands - each line gets cyan marker
+        # Handle multiline commands - first line gets "> " prefix
         lines = command.split("\n")
         for i, line in enumerate(lines):
             if i == 0:
-                self._append_line(f"{MARK_CYAN}> {line}")
+                self._append_line(f"> {line}")
             else:
-                self._append_line(f"{MARK_CYAN}{line}")
+                self._append_line(f"> {line}")
 
         self._scroll_to_bottom()
 
@@ -149,10 +133,7 @@ class TerminalOutput(Widget):
         else:
             formatted = self._format_response(response)
 
-        # Add green marker to each line
-        lines = formatted.split("\n")
-        for line in lines:
-            self._append_line(f"{MARK_GREEN}{line}")
+        self._append_line(formatted)
 
         self._scroll_to_bottom()
 
@@ -163,7 +144,7 @@ class TerminalOutput(Widget):
         Args:
             error: The error message.
         """
-        self._append_line(f"{MARK_RED}ERROR: {error}")
+        self._append_line(f"ERROR: {error}")
         self._scroll_to_bottom()
 
     def add_info(self, info: str) -> None:
@@ -173,7 +154,7 @@ class TerminalOutput(Widget):
         Args:
             info: The info message.
         """
-        self._append_line(f"{MARK_YELLOW}INFO: {info}")
+        self._append_line(f"INFO: {info}")
         self._scroll_to_bottom()
 
     def clear(self) -> None:
