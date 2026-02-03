@@ -192,7 +192,12 @@ class CommandInput(TextArea):
         Binding("enter", "submit", "Submit", show=False, priority=True),
         Binding("ctrl+enter", "newline", "Newline", show=False, priority=True),
         Binding("ctrl+j", "newline", "Newline", show=False, priority=True),
+        Binding("ctrl+a", "select_all", "Select All", show=False, priority=True),
     ]
+
+    def action_select_all(self) -> None:
+        """Select all text in the input."""
+        self.select_all()
 
     def _is_syntax_complete(self, text: str) -> bool:
         """Check if JavaScript syntax is complete (balanced brackets/quotes)."""

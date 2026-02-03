@@ -24,14 +24,17 @@ class HighlightedTextArea(TextArea):
             line = self.document.get_line(y)
 
             # Determine style based on line prefix
-            if line.startswith("> ") or line.startswith("  "):
-                color_style = Style(color="cyan")
+            if line.startswith("> "):
+                color_style = Style(color="#00ffff")  # Command - match input prompt color
+            elif line.startswith("  ") and not line.lstrip().startswith('"'):
+                # Command continuation (indented, not JSON)
+                color_style = Style(color="#00ffff")
             elif line.startswith("ERROR:"):
                 color_style = Style(color="red", bold=True)
             elif line.startswith("INFO:"):
                 color_style = Style(color="yellow")
             else:
-                color_style = Style(color="green")
+                color_style = Style(color="green")  # Response
 
             # Rebuild strip with our color applied
             new_segments = []
@@ -40,8 +43,11 @@ class HighlightedTextArea(TextArea):
                     # Keep control segments unchanged
                     new_segments.append(seg)
                 else:
-                    # Apply our color, but let existing style (selection) override
-                    combined = color_style + (seg.style or Style())
+                    # Our color takes precedence, but preserve background for selection
+                    if seg.style and seg.style.bgcolor:
+                        combined = color_style + Style(bgcolor=seg.style.bgcolor)
+                    else:
+                        combined = color_style
                     new_segments.append(Segment(seg.text, combined, seg.control))
 
             return Strip(new_segments, strip.cell_length)
