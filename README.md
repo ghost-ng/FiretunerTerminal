@@ -54,7 +54,7 @@ git clone https://github.com/ghost-ng/FiretunerTerminal.git
 cd FiretunerTerminal
 
 python -m venv venv
-.\venv\Scripts\Activate
+.\venv\Scripts\Activate.ps1
 
 pip install -r requirements.txt
 ```
