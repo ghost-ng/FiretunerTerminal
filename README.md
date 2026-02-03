@@ -39,7 +39,7 @@ What you get that FireTuner doesn't give you:
 - **Command history** - Up/Down arrows, like a real terminal
 - **Multiline editing** - Write actual code, not one-liners
 - **Smart continuation** - Detects unclosed brackets/quotes and auto-continues
-- **Copy/paste that works** - Select text, right-click, done
+- **Copy/paste that works** - Select text, Ctrl+C to copy
 - **Multiple tabs** - Different sessions for different experiments
 - **Session logging** - Everything gets saved to disk
 - **Auto-reconnect** - Game crashed? Terminal reconnects when you restart
@@ -73,13 +73,42 @@ GameplayMap.getGridWidth()
 For multiline stuff, the terminal auto-continues when you have unclosed brackets:
 
 ```javascript
-Players.getAliveMajorIds().forEach(id => {
-    const p = Players.get(id);
-    console.log(p.name);
+// Find all continents with sample tiles
+const continents = new Map();
+const w = GameplayMap.getGridWidth();
+const h = GameplayMap.getGridHeight();
+for (let x = 0; x < w; x += 5) {
+  for (let y = 0; y < h; y += 5) {
+    const c = GameplayMap.getContinentType(x, y);
+    if (c !== -1 && !continents.has(c)) {
+      const regionId = GameplayMap.getLandmassRegionId(x, y);
+      continents.set(c, {x, y, regionId});
+    }
+  }
+}
+
+// Build result string
+let r = "=== CONTINENTS ===\n";
+continents.forEach((v, k) => {
+  r += `C${k}: tile(${v.x},${v.y}) region=${v.regionId}\n`;
 });
+
+r += "\n=== PLAYERS ===\n";
+Players.getAliveMajorIds().forEach(id => {
+  const p = Players.get(id);
+  const cap = p.Cities?.getCapital()?.location;
+  const homeReg = cap ? GameplayMap.getLandmassRegionId(cap.x, cap.y) : "?";
+  r += `P${id} (reg ${homeReg}): `;
+  continents.forEach((v, k) => {
+    r += `C${k}=${p.isDistantLands(v) ? "D" : "H"} `;
+  });
+  r += "\n";
+});
+
+r
 ```
 
-Or force a newline with `Ctrl+Enter`.
+The last line `r` returns the built string. Or force a newline with `Ctrl+Enter`.
 
 ## Keybindings
 

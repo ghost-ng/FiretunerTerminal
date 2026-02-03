@@ -15,70 +15,6 @@ from .connection import ConnectionConfig, ConnectionManager, ConnectionState
 from .widgets import StatusBar, TerminalSession
 
 
-class ContextMenuScreen(ModalScreen):
-    """Context menu screen for right-click actions."""
-
-    DEFAULT_CSS = """
-    ContextMenuScreen {
-        align: center middle;
-    }
-
-    ContextMenuScreen > Vertical {
-        width: auto;
-        height: auto;
-        background: $boost;
-        border: solid $primary;
-        padding: 1;
-    }
-
-    ContextMenuScreen Button {
-        width: 100%;
-        min-width: 20;
-        background: $boost;
-        color: $text;
-        margin: 0 0 1 0;
-    }
-
-    ContextMenuScreen Button:hover {
-        background: $primary;
-    }
-
-    ContextMenuScreen Button:focus {
-        background: $primary;
-    }
-
-    ContextMenuScreen Button#cancel {
-        margin-bottom: 0;
-    }
-    """
-
-    BINDINGS = [
-        Binding("escape", "cancel", "Cancel", show=False),
-    ]
-
-    def compose(self) -> ComposeResult:
-        with Vertical():
-            yield Button("Copy", id="copy")
-            yield Button("Paste", id="paste")
-            yield Button("Copy Last Response", id="copy-response")
-            yield Button("Cancel", id="cancel")
-
-    def on_button_pressed(self, event: Button.Pressed) -> None:
-        """Handle button presses."""
-        if event.button.id == "copy":
-            self.dismiss("copy")
-        elif event.button.id == "paste":
-            self.dismiss("paste")
-        elif event.button.id == "copy-response":
-            self.dismiss("copy-response")
-        else:
-            self.dismiss(None)
-
-    def action_cancel(self) -> None:
-        """Cancel the context menu."""
-        self.dismiss(None)
-
-
 class RenameTabScreen(ModalScreen):
     """Modal screen for renaming a tab."""
 
@@ -476,10 +412,9 @@ class Civ7TerminalApp(App):
             return None
 
     def on_click(self, event: Click) -> None:
-        """Handle mouse clicks for context menu."""
-        # Right-click (button 3)
+        """Handle mouse clicks for tab rename."""
+        # Right-click (button 3) on tab to rename
         if event.button == 3:
-            # Check if clicking on a tab
             widget = event.widget
             # Walk up the widget tree to find a Tab
             while widget is not None:
@@ -487,8 +422,6 @@ class Civ7TerminalApp(App):
                     self._show_rename_tab_screen(widget)
                     return
                 widget = widget.parent
-            # Not on a tab, show regular context menu
-            self._show_context_menu()
 
     def _show_rename_tab_screen(self, tab: Tab) -> None:
         """Show the rename tab screen."""
@@ -521,75 +454,6 @@ class Civ7TerminalApp(App):
                     break
         except Exception:
             pass
-
-    def _show_context_menu(self) -> None:
-        """Show the right-click context menu."""
-        def handle_result(result: Optional[str]) -> None:
-            if result == "copy":
-                self._do_copy()
-            elif result == "paste":
-                self._do_paste()
-            elif result == "copy-response":
-                self.action_copy_last_response()
-
-        self.push_screen(ContextMenuScreen(), handle_result)
-
-    def _do_copy(self) -> None:
-        """Copy selected text from terminal or input, or last response."""
-        session = self._get_active_session()
-        command_input = self.query_one(CommandInput)
-
-        if not session:
-            return
-
-        # Try to get selected text from terminal output
-        try:
-            output_area = session.terminal.query_one(TextArea)
-            selected = output_area.selected_text
-            if selected:
-                pyperclip.copy(selected)
-                session.add_info("Copied selection to clipboard")
-                return
-        except Exception:
-            pass
-
-        # Try to get selected text from input
-        try:
-            selected = command_input.selected_text
-            if selected:
-                pyperclip.copy(selected)
-                session.add_info("Copied selection to clipboard")
-                return
-        except Exception:
-            pass
-
-        # Fall back to last response
-        if session.last_response:
-            try:
-                pyperclip.copy(session.last_response)
-                session.add_info("Copied last response to clipboard")
-            except Exception as e:
-                session.add_error(f"Failed to copy: {e}")
-        else:
-            session.add_info("Nothing to copy")
-
-    def _do_paste(self) -> None:
-        """Paste clipboard content into the command input."""
-        session = self._get_active_session()
-        command_input = self.query_one(CommandInput)
-
-        if not session:
-            return
-
-        try:
-            text = pyperclip.paste()
-            if text:
-                command_input.insert(text)
-                session.add_info("Pasted from clipboard")
-            else:
-                session.add_info("Clipboard is empty")
-        except Exception as e:
-            session.add_error(f"Failed to paste: {e}")
 
     async def on_unmount(self) -> None:
         """Clean up on unmount."""
@@ -718,11 +582,12 @@ class Civ7TerminalApp(App):
 
         if cmd == "/help":
             session.add_info("Available commands:")
-            session.add_info("  /raw    - Toggle raw output mode")
-            session.add_info("  /copy   - Copy last response to clipboard")
-            session.add_info("  /clear  - Clear the screen")
-            session.add_info("  /quit   - Exit the terminal")
-            session.add_info("  /help   - Show this help")
+            session.add_info("  /raw     - Toggle raw output mode")
+            session.add_info("  /copy    - Copy last response to clipboard")
+            session.add_info("  /copyall - Copy all terminal output to clipboard")
+            session.add_info("  /clear   - Clear the screen")
+            session.add_info("  /quit    - Exit the terminal")
+            session.add_info("  /help    - Show this help")
             session.add_info("")
             session.add_info("Keyboard shortcuts:")
             session.add_info("  Enter         - Execute (auto-continues if syntax incomplete)")
@@ -734,7 +599,6 @@ class Civ7TerminalApp(App):
             session.add_info("  Ctrl+D        - Exit terminal")
             session.add_info("  Ctrl+L        - Clear screen")
             session.add_info("  PageUp/Down   - Scroll output")
-            session.add_info("  Right-click   - Context menu (copy)")
             session.add_info("")
             session.add_info("Tab shortcuts:")
             session.add_info("  Ctrl+T        - New tab")
@@ -750,6 +614,9 @@ class Civ7TerminalApp(App):
 
         elif cmd == "/copy":
             self.action_copy_last_response()
+
+        elif cmd == "/copyall":
+            self._copy_all_output()
 
         elif cmd == "/clear":
             session.clear()
@@ -832,6 +699,23 @@ class Civ7TerminalApp(App):
                 session.add_error(f"Failed to copy: {e}")
         else:
             session.add_info("No response to copy")
+
+    def _copy_all_output(self) -> None:
+        """Copy all terminal output to clipboard."""
+        session = self._get_active_session()
+        if not session:
+            return
+
+        try:
+            output_area = session.terminal.query_one(TextArea)
+            all_text = output_area.text
+            if all_text:
+                pyperclip.copy(all_text)
+                session.add_info("Copied all output to clipboard")
+            else:
+                session.add_info("No output to copy")
+        except Exception as e:
+            session.add_error(f"Failed to copy: {e}")
 
     async def action_new_tab(self) -> None:
         """Create a new tab."""
