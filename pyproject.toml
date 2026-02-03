@@ -1,0 +1,16 @@
+[project]
+name = "civ7-terminal"
+version = "0.1.0"
+description = "Debug terminal for Civilization 7"
+requires-python = ">=3.10"
+dependencies = [
+    "textual>=0.47.0",
+    "pyperclip>=1.8.0",
+]
+
+[project.scripts]
+civ7-terminal = "civ7_terminal.__main__:main"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
