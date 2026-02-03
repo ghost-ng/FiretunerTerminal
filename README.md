@@ -49,12 +49,12 @@ What you get that FireTuner doesn't give you:
 
 ### Windows
 
-```bash
+```powershell
 git clone https://github.com/ghost-ng/FiretunerTerminal.git
 cd FiretunerTerminal
 
 python -m venv venv
-venv\Scripts\activate
+.\venv\Scripts\Activate
 
 pip install -r requirements.txt
 ```
