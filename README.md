@@ -71,9 +71,22 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
+## Enable FireTuner in Civ 7
+
+Edit your `AppOptions.txt` file and set `EnableTuner` to `1`:
+
+**Windows:** `%LOCALAPPDATA%\Firaxis Games\Sid Meier's Civilization VII\AppOptions.txt`
+
+Find this line and change it:
+```
+EnableTuner 1
+```
+
+Restart the game after making this change.
+
 ## Usage
 
-Make sure Civ 7 is running with debug mode enabled, then:
+With FireTuner enabled and Civ 7 running:
 
 ```bash
 # Windows (with venv activated)
