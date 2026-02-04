@@ -8,6 +8,8 @@ Civ 7 ships with a debug console called FireTuner - lets you run JavaScript comm
 
 So I built my own.
 
+![Terminal interface](terminal.png)
+
 ## The Protocol
 
 Firaxis didn't document this anywhere (that I could find), so I had to reverse engineer it. Fired up Wireshark and watched the traffic:
