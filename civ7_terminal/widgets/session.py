@@ -119,7 +119,3 @@ class TerminalSession(Widget):
     def clear(self) -> None:
         """Clear the terminal output."""
         self.terminal.clear()
-
-    def toggle_raw_mode(self) -> bool:
-        """Toggle raw output mode."""
-        return self.terminal.toggle_raw_mode()

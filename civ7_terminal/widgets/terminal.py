@@ -6,7 +6,6 @@ from typing import Optional
 from rich.segment import Segment
 from rich.style import Style
 from textual.app import ComposeResult
-from textual.reactive import reactive
 from textual.strip import Strip
 from textual.widget import Widget
 from textual.widgets import TextArea
@@ -93,8 +92,6 @@ class TerminalOutput(Widget):
     }
     """
 
-    raw_mode: reactive[bool] = reactive(False)
-
     def compose(self) -> ComposeResult:
         """Compose the terminal output layout."""
         yield HighlightedTextArea(id="output-scroll", read_only=True)
@@ -128,10 +125,7 @@ class TerminalOutput(Widget):
         Args:
             response: The response string from the server.
         """
-        if self.raw_mode:
-            formatted = response
-        else:
-            formatted = self._format_response(response)
+        formatted = self._format_response(response)
 
         self._append_line(formatted)
 
@@ -161,16 +155,6 @@ class TerminalOutput(Widget):
         """Clear all output."""
         text_area = self.query_one(TextArea)
         text_area.load_text("")
-
-    def toggle_raw_mode(self) -> bool:
-        """
-        Toggle raw output mode.
-
-        Returns:
-            The new raw mode state.
-        """
-        self.raw_mode = not self.raw_mode
-        return self.raw_mode
 
     def _append_line(self, text: str) -> None:
         """Append a line to the output."""

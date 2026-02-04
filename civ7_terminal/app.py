@@ -582,7 +582,6 @@ class Civ7TerminalApp(App):
 
         if cmd == "/help":
             session.add_info("Available commands:")
-            session.add_info("  /raw     - Toggle raw output mode")
             session.add_info("  /copy    - Copy last response to clipboard")
             session.add_info("  /copyall - Copy all terminal output to clipboard")
             session.add_info("  /clear   - Clear the screen")
@@ -607,10 +606,6 @@ class Civ7TerminalApp(App):
             session.add_info("  Ctrl+Shift+Tab- Previous tab")
             session.add_info("")
             session.add_info("Comments: Lines starting with // or # are echoed but not sent")
-
-        elif cmd == "/raw":
-            raw_mode = session.toggle_raw_mode()
-            session.add_info(f"Raw mode: {'ON' if raw_mode else 'OFF'}")
 
         elif cmd == "/copy":
             self.action_copy_last_response()
