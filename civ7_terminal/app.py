@@ -349,7 +349,8 @@ class Civ7TerminalApp(App):
         self._connection: Optional[ConnectionManager] = None
         self._tab_counter: int = 0
         self._pending_tab_id: Optional[str] = None  # Tab awaiting response
-        self._showed_disconnect_msg: bool = False  # Avoid spamming disconnect messages
+        self._ever_connected: bool = False  # Track if we've connected at least once
+        self._showed_connecting_msg: bool = False  # Avoid spamming connecting messages
 
     def compose(self) -> ComposeResult:
         """Compose the application layout."""
@@ -478,22 +479,22 @@ class Civ7TerminalApp(App):
         if session:
             try:
                 if state == ConnectionState.CONNECTED:
-                    self._showed_disconnect_msg = False
+                    self._ever_connected = True
+                    self._showed_connecting_msg = False
                     session.add_info(f"Connected to {self._host}:{self._port}")
                     session.log_info(f"Connected to {self._host}:{self._port}")
                 elif state == ConnectionState.CONNECTING:
-                    self._showed_disconnect_msg = False
-                    session.add_info(f"Connecting to {self._host}:{self._port}...")
+                    # Only show "Connecting..." once, not on every retry
+                    if not self._showed_connecting_msg:
+                        self._showed_connecting_msg = True
+                        session.add_info(f"Connecting to {self._host}:{self._port}...")
                     session.log_info(f"Connecting to {self._host}:{self._port}...")
                 elif state == ConnectionState.DISCONNECTED:
-                    if not self._showed_disconnect_msg:
-                        self._showed_disconnect_msg = True
-                        if retry_countdown is not None:
-                            session.add_info(f"Disconnected. Retrying...")
-                            session.log_info(f"Disconnected, retrying in {int(retry_countdown)}s")
-                        else:
-                            session.add_info("Disconnected")
-                            session.log_info("Disconnected")
+                    # Only show disconnect message if we were previously connected
+                    if self._ever_connected and not self._showed_connecting_msg:
+                        self._showed_connecting_msg = True  # Reuse flag to prevent spam
+                        session.add_info("Disconnected. Reconnecting...")
+                    session.log_info("Disconnected")
             except Exception:
                 pass
 
@@ -514,9 +515,12 @@ class Civ7TerminalApp(App):
 
     def _on_connection_error(self, error: str) -> None:
         """Handle connection errors."""
-        session = self._get_active_session()
-        if session:
-            session.add_error(error)
+        # Only show connection errors after we've been connected at least once
+        # This prevents spam during initial connection attempts when the game isn't running
+        if self._ever_connected:
+            session = self._get_active_session()
+            if session:
+                session.add_error(error)
 
     async def on_command_input_submitted(self, event: CommandInput.Submitted) -> None:
         """Handle command input submission."""
