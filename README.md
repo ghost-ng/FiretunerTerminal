@@ -8,13 +8,13 @@ Civ 7 ships with a debug console called FireTuner - lets you run JavaScript comm
 
 So I built my own.
 
-![Terminal interface](terminal.png)
+![Terminal interface](assets/terminal.png)
 
 ## The Protocol
 
 Firaxis didn't document this anywhere (that I could find), so I had to reverse engineer it. Fired up Wireshark and watched the traffic:
 
-![Wireshark capture of FireTuner protocol](wireshark.png)
+![Wireshark capture of FireTuner protocol](assets/wireshark.png)
 
 Turns out it's pretty simple - binary messages over TCP on port 4318:
 
@@ -229,6 +229,10 @@ Add to your `claude_desktop_config.json` (same idea - use the venv Python path i
 - **`civ7://status`** - Check connection status to the game
 
 The MCP server auto-reconnects to Civ 7, so agents can start before the game is running. Claude Code and Cursor will start the server automatically when you open a project with the `.mcp.json` config.
+
+### Demo
+
+<video src="assets/civ7mcp.mp4" controls width="100%"></video>
 
 ### Example: Agent Querying a Live Game
 
