@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "civ7": {
+      "type": "stdio",
+      "command": "/path/to/FiretunerTerminal/venv/Scripts/python.exe",
+      "args": ["-m", "civ7_terminal.mcp_server"],
+      "env": {
+        "PYTHONPATH": "/path/to/FiretunerTerminal"
+      }
+    }
+  }
+}
