@@ -1,6 +1,6 @@
 # Civ 7 JavaScript API Library
 
-A community-built reference for the Civilization 7 debug console JavaScript API. This API is accessed through the FireTuner debug port (TCP 4318) and is **not officially documented by Firaxis** — everything here was discovered through runtime introspection.
+A community-built quick reference for the Civilization 7 debug console JavaScript API. This API is accessed through the FireTuner debug port (TCP 4318). The methods and objects are visible in the game's JS files, but digging through them every time is slow — this library consolidates what's known into a single searchable reference to speed up troubleshooting and modding.
 
 > **This is a living document.** If you discover new API calls, useful patterns, or corrections, please [open a pull request](https://github.com/ghost-ng/FiretunerTerminal/pulls) to add them. The more people contribute, the more useful this becomes for everyone.
 

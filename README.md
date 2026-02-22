@@ -166,7 +166,7 @@ The last line `r` returns the built string. Or force a newline with `Ctrl+Enter`
 
 ## JavaScript API Library
 
-The Civ 7 debug console exposes a rich JavaScript API that's completely undocumented by Firaxis. We've reverse-engineered and documented it in **[`API_LIBRARY.md`](API_LIBRARY.md)** — a community-driven reference covering `GameplayMap`, `Players`, `Game`, cities, units, diplomacy, and more.
+The Civ 7 debug console exposes a rich JavaScript API. The methods and objects are visible in the game's JS files, but there's no single reference that pulls it all together — so we built one. **[`API_LIBRARY.md`](API_LIBRARY.md)** is a community-driven quick reference covering `GameplayMap`, `Players`, `Game`, cities, units, diplomacy, and more. Saves you from digging through game files every time you need a method signature.
 
 If you're an AI agent or a human poking around, start there. If you discover something new, [open a PR](https://github.com/ghost-ng/FiretunerTerminal/pulls) to add it.
 
