@@ -156,6 +156,31 @@ The last line `r` returns the built string. Or force a newline with `Ctrl+Enter`
 | Ctrl+T | New tab |
 | Ctrl+W | Close tab |
 | Ctrl+D | Exit |
+| Tab | Autocomplete API methods/properties |
+
+## Autocomplete
+
+Tab completion for the Civ7 JavaScript API, extracted directly from the game's source maps. Covers 18 globals, 40 sub-objects, 531 methods, and 252 properties — see the full **[Type Reference](TYPE_REFERENCE.md)** for every method signature and property.
+
+### Setup
+
+```bash
+# Extract types from your game install (auto-detects Steam path)
+python -m civ7_terminal.extract_types
+
+# Or specify the path manually
+python -m civ7_terminal.extract_types --game-dir "/path/to/Sid Meier's Civilization VII"
+```
+
+This creates a `completions.json` file. Re-run after game updates to pick up any API changes.
+
+### Usage
+
+- Type a global name and press **Tab** to complete: `GameplayM` → `GameplayMap`
+- After a dot, Tab completes methods and properties: `GameplayMap.getGr` → `GameplayMap.getGridWidth`
+- Press **Tab repeatedly** to cycle through matches
+- Works with sub-objects too: `player.Cities.get` → `player.Cities.getCities`
+- Typing any key resets the completion cycle
 
 ## Colors
 

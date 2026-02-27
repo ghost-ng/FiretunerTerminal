@@ -192,6 +192,7 @@ class CommandInput(TextArea):
 
     def action_submit(self) -> None:
         """Submit the current input, or continue if syntax incomplete."""
+        self._reset_completion_state()
         text = self.text.strip()
 
         # Empty input - just submit
@@ -209,6 +210,7 @@ class CommandInput(TextArea):
 
     def action_newline(self) -> None:
         """Insert a newline (max 5 lines)."""
+        self._reset_completion_state()
         if self.document.line_count < 5:
             self.insert("\n")
 
@@ -251,7 +253,7 @@ class CommandInput(TextArea):
         self._completion_prefix = ""
         self._completion_start = -1
 
-    def _cursor_offset(self) -> int:
+    def _calc_flat_offset(self) -> int:
         """Return the cursor position as a flat character offset into self.text."""
         row, col = self.cursor_location
         offset = 0
@@ -267,7 +269,7 @@ class CommandInput(TextArea):
 
         If the token has no dot, returns the whole token.
         """
-        offset = self._cursor_offset()
+        offset = self._calc_flat_offset()
         if self._completion_engine is None:
             return ""
         token = self._completion_engine._extract_token(self.text, offset)
@@ -287,7 +289,7 @@ class CommandInput(TextArea):
             return
 
         # Start a new completion
-        offset = self._cursor_offset()
+        offset = self._calc_flat_offset()
         candidates = self._completion_engine.get_completions(self.text, offset)
         if not candidates:
             return
@@ -310,7 +312,7 @@ class CommandInput(TextArea):
 
         chosen = self._completions[self._completion_index]
         start = self._completion_start
-        offset = self._cursor_offset()
+        offset = self._calc_flat_offset()
 
         full_text = self.text
         new_text = full_text[:start] + chosen + full_text[offset:]
@@ -341,6 +343,7 @@ class CommandInput(TextArea):
 
     def action_history_up(self) -> None:
         """Navigate to previous command in history."""
+        self._reset_completion_state()
         # Only navigate history if cursor is on first line
         cursor_row = self.cursor_location[0]
         if cursor_row > 0:
@@ -362,6 +365,7 @@ class CommandInput(TextArea):
 
     def action_history_down(self) -> None:
         """Navigate to next command in history."""
+        self._reset_completion_state()
         # Only navigate history if cursor is on last line
         cursor_row = self.cursor_location[0]
         last_row = self.document.line_count - 1
@@ -387,6 +391,7 @@ class CommandInput(TextArea):
         self.load_text("")
         self._history_index = -1
         self._current_input = ""
+        self._reset_completion_state()
 
 
 class Civ7TerminalApp(App):

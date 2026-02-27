@@ -41,3 +41,4 @@ htmlcov/
 # Type checking
 .mypy_cache/
 .mcp.json
+completions.json

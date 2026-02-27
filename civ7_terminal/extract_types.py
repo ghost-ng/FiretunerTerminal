@@ -140,7 +140,7 @@ def extract_typescript_sources(map_files: list[Path]) -> list[str]:
         try:
             with open(map_file, "r", encoding="utf-8") as f:
                 data = json.load(f)
-        except (json.JSONDecodeError, UnicodeDecodeError):
+        except (json.JSONDecodeError, UnicodeDecodeError, OSError):
             errors += 1
             continue
 
@@ -189,7 +189,8 @@ def _build_global_typed_call_pattern(global_name: str) -> re.Pattern:
 def _build_global_call_pattern(global_name: str) -> re.Pattern:
     """Match Global.method(args) calls (without type extraction)."""
     return re.compile(
-        re.escape(global_name)
+        r'(?<![.\w])'
+        + re.escape(global_name)
         + r'\.([\w]+)\s*\(([^)]*)\)'
     )
 
@@ -201,6 +202,7 @@ def _build_global_property_pattern(global_name: str) -> re.Pattern:
     # partial match of a method name (e.g. 'getGridWidt' from 'getGridWidth()')
     return re.compile(
         r'(?:(?:const|let|var)\s+\w+\s*:\s*([\w\[\]|<>, ]+?)\s*=\s*)?'
+        + r'(?<![.\w])'
         + re.escape(global_name)
         + r'\.([\w]+)\b(?!\s*\()'
     )
@@ -268,6 +270,10 @@ def _extract_param_names(args_str: str) -> list[str]:
     if current.strip():
         params.append(current.strip())
 
+    # If parens were unbalanced (truncated by [^)]*), discard all params
+    if depth != 0:
+        return []
+
     # Clean up parameter names
     clean_params = []
     for p in params:
@@ -277,10 +283,14 @@ def _extract_param_names(args_str: str) -> list[str]:
 
         # If it's a typed parameter (formal): 'name: Type'
         if ": " in p:
-            name = p.split(":")[0].strip()
-            # Remove optional marker
-            name = name.rstrip("?")
-            clean_params.append(name)
+            candidate = p.split(":")[0].strip().rstrip("?")
+            # Only treat as typed param if the name part is a simple identifier
+            if re.match(r'^\w+$', candidate):
+                clean_params.append(candidate)
+            else:
+                # Ternary or complex expression, not a typed param
+                clean_params.append("arg" + str(len(clean_params)))
+            continue
         else:
             # It's a call-site argument - try to get a meaningful name
             # Skip literals: strings, numbers, booleans, null/undefined
@@ -317,11 +327,10 @@ def _clean_return_type(raw_type: str | None) -> str | None:
     if not raw_type:
         return None
     t = raw_type.strip()
-    # Remove null union: 'Type | null' -> 'Type'
-    if " | null" in t:
-        t = t.replace(" | null", "").strip()
-    if " | undefined" in t:
-        t = t.replace(" | undefined", "").strip()
+    # Remove null/undefined from union types: 'Type | null' -> 'Type'
+    parts = [p.strip() for p in t.split(" | ")]
+    parts = [p for p in parts if p not in ("null", "undefined")]
+    t = " | ".join(parts)
     # Skip overly complex types
     if len(t) > 60:
         return None
