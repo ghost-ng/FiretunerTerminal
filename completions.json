@@ -1,0 +1,4243 @@
+{
+  "version": 1,
+  "globals": {
+    "GameplayMap": {
+      "methods": {
+        "getResourceType": {
+          "params": [
+            "iAdjacentX",
+            "iAdjacentY"
+          ],
+          "return_type": "ResourceType"
+        },
+        "getOwningCityFromXY": {
+          "params": [
+            "x",
+            "y"
+          ],
+          "return_type": "ComponentID"
+        },
+        "getIndexFromLocation": {
+          "params": [
+            "independentLocation"
+          ],
+          "return_type": "number"
+        },
+        "getTerrainType": {
+          "params": [
+            "iX",
+            "iY"
+          ],
+          "return_type": "TerrainType"
+        },
+        "getGridWidth": {
+          "params": [],
+          "return_type": "number"
+        },
+        "getGridHeight": {
+          "params": [],
+          "return_type": "number"
+        },
+        "getMapSize": {
+          "params": [],
+          "return_type": null
+        },
+        "getRandomSeed": {
+          "params": [],
+          "return_type": null
+        },
+        "getLocationFromIndex": {
+          "params": [
+            "selectedResourceValue"
+          ],
+          "return_type": "float2"
+        },
+        "getPlotIndicesInRadius": {
+          "params": [
+            "iX",
+            "iY",
+            "minRange"
+          ],
+          "return_type": "number[]"
+        },
+        "getIndexFromXY": {
+          "params": [
+            "iAdjacentX",
+            "iAdjacentY"
+          ],
+          "return_type": "number"
+        },
+        "getPlotDistance": {
+          "params": [
+            "iContinentLeftEdge",
+            "iContinentBottomRow",
+            "iContinentCenterX",
+            "iContinentCenterY"
+          ],
+          "return_type": "number"
+        },
+        "getBiomeType": {
+          "params": [
+            "xCoord",
+            "yCoord"
+          ],
+          "return_type": "BiomeType"
+        },
+        "isNavigableRiver": {
+          "params": [
+            "xCoord",
+            "yCoord"
+          ],
+          "return_type": null
+        },
+        "isNaturalWonder": {
+          "params": [
+            "iAdjacentX",
+            "iAdjacentY"
+          ],
+          "return_type": null
+        },
+        "hasPlotTag": {
+          "params": [
+            "iAdjacentX",
+            "iAdjacentY",
+            "PLOT_TAG_ISLAND"
+          ],
+          "return_type": null
+        },
+        "getLandmassRegionId": {
+          "params": [
+            "iX",
+            "iY"
+          ],
+          "return_type": null
+        },
+        "isWater": {
+          "params": [
+            "iAdjacentX",
+            "iAdjacentY"
+          ],
+          "return_type": null
+        },
+        "isMountain": {
+          "params": [
+            "iX",
+            "iY"
+          ],
+          "return_type": null
+        },
+        "getContinentType": {
+          "params": [
+            "hoveredX",
+            "hoveredY"
+          ],
+          "return_type": null
+        },
+        "isRiver": {
+          "params": [
+            "iX",
+            "iY"
+          ],
+          "return_type": null
+        },
+        "getFeatureType": {
+          "params": [
+            "iX",
+            "iY"
+          ],
+          "return_type": "FeatureType"
+        },
+        "isLake": {
+          "params": [
+            "iX",
+            "iY"
+          ],
+          "return_type": null
+        },
+        "getOwner": {
+          "params": [
+            "iX",
+            "iY"
+          ],
+          "return_type": "PlayerId"
+        },
+        "isImpassable": {
+          "params": [
+            "iAdjacentX",
+            "iAdjacentY"
+          ],
+          "return_type": null
+        },
+        "getElevation": {
+          "params": [
+            "iAdjacentX",
+            "iAdjacentY"
+          ],
+          "return_type": "number"
+        },
+        "getAdjacentPlotLocation": {
+          "params": [
+            "plotCursorCoords",
+            "DIRECTION_WEST"
+          ],
+          "return_type": "PlotCoord"
+        },
+        "isCliffCrossing": {
+          "params": [
+            "iX",
+            "iY",
+            "iDirection"
+          ],
+          "return_type": null
+        },
+        "isCoastalLand": {
+          "params": [
+            "iX",
+            "iY"
+          ],
+          "return_type": null
+        },
+        "isAdjacentToShallowWater": {
+          "params": [
+            "iAdjacentX",
+            "iAdjacentY"
+          ],
+          "return_type": null
+        },
+        "getRainfall": {
+          "params": [
+            "iX",
+            "iY"
+          ],
+          "return_type": "number"
+        },
+        "getPlotLatitude": {
+          "params": [
+            "iX",
+            "iY"
+          ],
+          "return_type": "number"
+        },
+        "isAdjacentToRivers": {
+          "params": [
+            "iX",
+            "iY",
+            "arg2"
+          ],
+          "return_type": null
+        },
+        "isAdjacentToFeature": {
+          "params": [
+            "iX",
+            "iY",
+            "featIdx"
+          ],
+          "return_type": null
+        },
+        "isAdjacentToLand": {
+          "params": [
+            "iX",
+            "iY"
+          ],
+          "return_type": null
+        },
+        "findSecondContinent": {
+          "params": [
+            "iX",
+            "iY",
+            "arg2"
+          ],
+          "return_type": null
+        },
+        "getRiverType": {
+          "params": [
+            "iAdjacentX",
+            "iAdjacentY"
+          ],
+          "return_type": "RiverTypes"
+        },
+        "getAreaId": {
+          "params": [
+            "iAdjacentX",
+            "iAdjacentY"
+          ],
+          "return_type": null
+        },
+        "getAreaIsWater": {
+          "params": [
+            "iAdjacentX",
+            "iAdjacentY"
+          ],
+          "return_type": null
+        },
+        "getHemisphere": {
+          "params": [
+            "iX"
+          ],
+          "return_type": null
+        },
+        "getPrimaryHemisphere": {
+          "params": [],
+          "return_type": null
+        },
+        "getDirectionToPlot": {
+          "params": [
+            "sourcePlotLocation",
+            "targetPlotLocation"
+          ],
+          "return_type": "DirectionTypes"
+        },
+        "getYieldsWithCity": {
+          "params": [
+            "location",
+            "cityID"
+          ],
+          "return_type": null
+        },
+        "getRevealedState": {
+          "params": [
+            "localObserverID",
+            "x",
+            "y"
+          ],
+          "return_type": "RevealedStates"
+        },
+        "getVolcanoName": {
+          "params": [
+            "x",
+            "y"
+          ],
+          "return_type": null
+        },
+        "getRiverName": {
+          "params": [
+            "x",
+            "y"
+          ],
+          "return_type": "string"
+        },
+        "getOwnerName": {
+          "params": [
+            "x",
+            "y"
+          ],
+          "return_type": null
+        },
+        "isPlotInAdvancedStartRegion": {
+          "params": [
+            "localPlayerID",
+            "x",
+            "y"
+          ],
+          "return_type": null
+        },
+        "isFreshWater": {
+          "params": [
+            "x",
+            "y"
+          ],
+          "return_type": null
+        },
+        "getAppeal": {
+          "params": [
+            "x",
+            "y"
+          ],
+          "return_type": null
+        },
+        "getFeatureClassType": {
+          "params": [
+            "x",
+            "y"
+          ],
+          "return_type": null
+        },
+        "getYields": {
+          "params": [
+            "plotIndex",
+            "localPlayerID"
+          ],
+          "return_type": null
+        },
+        "getRevealedStates": {
+          "params": [
+            "localPlayerID"
+          ],
+          "return_type": null
+        },
+        "getRouteType": {
+          "params": [
+            "x",
+            "y"
+          ],
+          "return_type": "RouteType"
+        },
+        "isFerry": {
+          "params": [
+            "x",
+            "y"
+          ],
+          "return_type": "boolean"
+        },
+        "getOwnerHostility": {
+          "params": [
+            "x",
+            "y",
+            "localPlayerID"
+          ],
+          "return_type": "string"
+        },
+        "getYield": {
+          "params": [
+            "x",
+            "y",
+            "YieldType",
+            "playerID"
+          ],
+          "return_type": "number"
+        },
+        "isVolcano": {
+          "params": [
+            "x",
+            "y"
+          ],
+          "return_type": null
+        },
+        "isVolcanoActive": {
+          "params": [
+            "x",
+            "y"
+          ],
+          "return_type": null
+        },
+        "isCityWithinMinimumDistance": {
+          "params": [
+            "x",
+            "y"
+          ],
+          "return_type": null
+        },
+        "getRegionId": {
+          "params": [
+            "x",
+            "y"
+          ],
+          "return_type": null
+        },
+        "isValidLocation": {
+          "params": [
+            "plotCursorCoords"
+          ],
+          "return_type": null
+        }
+      },
+      "properties": {}
+    },
+    "Players": {
+      "methods": {
+        "get": {
+          "params": [
+            "_selectedPlayerID"
+          ],
+          "return_type": "PlayerLibrary"
+        },
+        "getAlive": {
+          "params": [],
+          "return_type": "PlayerLibrary[]"
+        },
+        "getAliveIds": {
+          "params": [],
+          "return_type": null
+        },
+        "getAliveMajorIds": {
+          "params": [],
+          "return_type": null
+        },
+        "isHuman": {
+          "params": [
+            "localPlayerID"
+          ],
+          "return_type": null
+        },
+        "push": {
+          "params": [
+            "playerConfig"
+          ],
+          "return_type": null
+        },
+        "isAI": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        },
+        "getEverAlive": {
+          "params": [],
+          "return_type": "PlayerLibrary[]"
+        },
+        "isValid": {
+          "params": [
+            "_selectedPlayerID"
+          ],
+          "return_type": null
+        },
+        "isAlive": {
+          "params": [
+            "localPlayerID"
+          ],
+          "return_type": null
+        },
+        "isParticipant": {
+          "params": [
+            "localPlayerID"
+          ],
+          "return_type": null
+        },
+        "filter": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        },
+        "forEach": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        },
+        "includes": {
+          "params": [
+            "localPlayerID"
+          ],
+          "return_type": null
+        },
+        "some": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        },
+        "getWasEverAliveMajorIds": {
+          "params": [],
+          "return_type": null
+        },
+        "entries": {
+          "params": [],
+          "return_type": null
+        }
+      },
+      "properties": {
+        "length": {
+          "type": null
+        },
+        "AI": {
+          "type": null
+        },
+        "maxPlayers": {
+          "type": null
+        },
+        "Advisory": {
+          "type": null
+        }
+      }
+    },
+    "Game": {
+      "methods": {
+        "isRunning": {
+          "params": [],
+          "return_type": null
+        },
+        "getHash": {
+          "params": [
+            "itemBankName"
+          ],
+          "return_type": "number"
+        },
+        "start": {
+          "params": [
+            "startParameters"
+          ],
+          "return_type": null
+        },
+        "cancel": {
+          "params": [],
+          "return_type": null
+        },
+        "randomRange": {
+          "params": [
+            "arg0",
+            "gridHeight - Y_PADDING - 1"
+          ],
+          "return_type": null
+        },
+        "getBenchmarkType": {
+          "params": [],
+          "return_type": null
+        },
+        "setLightweightGraphPosition": {
+          "params": [
+            "x",
+            "y",
+            "width",
+            "height"
+          ],
+          "return_type": null
+        },
+        "getDebugUiVisiblity": {
+          "params": [],
+          "return_type": null
+        },
+        "getTurnDate": {
+          "params": [],
+          "return_type": "string"
+        },
+        "bind": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        },
+        "setDebugUiVisiblity": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        }
+      },
+      "properties": {
+        "turn": {
+          "type": "number"
+        },
+        "age": {
+          "type": "AgeType"
+        },
+        "Location": {
+          "type": null
+        },
+        "Type": {
+          "type": null
+        },
+        "IsAutosave": {
+          "type": null
+        },
+        "IsQuicksave": {
+          "type": null
+        },
+        "FileName": {
+          "type": null
+        },
+        "Directory": {
+          "type": null
+        },
+        "LocationCategories": {
+          "type": null
+        },
+        "ContentType": {
+          "type": null
+        },
+        "playerScores": {
+          "type": null
+        },
+        "updateCallback": {
+          "type": null
+        },
+        "Summary": {
+          "type": null
+        },
+        "maxTurns": {
+          "type": null
+        }
+      }
+    },
+    "GameContext": {
+      "methods": {
+        "hasSentTurnComplete": {
+          "params": [],
+          "return_type": null
+        },
+        "hasSentTurnUnreadyThisTurn": {
+          "params": [],
+          "return_type": null
+        },
+        "sendTurnComplete": {
+          "params": [],
+          "return_type": null
+        },
+        "sendUnreadyTurn": {
+          "params": [],
+          "return_type": null
+        },
+        "hasSentRetire": {
+          "params": [],
+          "return_type": null
+        },
+        "sendRetireRequest": {
+          "params": [],
+          "return_type": null
+        },
+        "sendPauseRequest": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        }
+      },
+      "properties": {
+        "localPlayerID": {
+          "type": "PlayerId"
+        },
+        "localObserverID": {
+          "type": "PlayerId"
+        }
+      }
+    },
+    "Configuration": {
+      "methods": {
+        "getUser": {
+          "params": [],
+          "return_type": "ConfigurationUserLibrary"
+        },
+        "getPlayer": {
+          "params": [
+            "defeatedPlayer"
+          ],
+          "return_type": "ConfigurationPlayerAccessor"
+        },
+        "getGame": {
+          "params": [],
+          "return_type": "ConfigurationGameAccessor"
+        },
+        "getMapValue": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": "number"
+        },
+        "getGameValue": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        },
+        "editGame": {
+          "params": [],
+          "return_type": "ConfigurationGameMutator"
+        },
+        "editPlayer": {
+          "params": [
+            "localPlayerID"
+          ],
+          "return_type": "ConfigurationPlayerMutator"
+        },
+        "getMap": {
+          "params": [],
+          "return_type": "ConfigurationMapAccessor"
+        },
+        "editMap": {
+          "params": [],
+          "return_type": null
+        },
+        "getXR": {
+          "params": [],
+          "return_type": null
+        }
+      },
+      "properties": {
+        "leaderTypeName": {
+          "type": null
+        },
+        "leaderName": {
+          "type": null
+        },
+        "previousAgeCount": {
+          "type": null
+        },
+        "script": {
+          "type": null
+        },
+        "isNetworkMultiplayer": {
+          "type": null
+        },
+        "isSavedGame": {
+          "type": null
+        }
+      }
+    },
+    "UI": {
+      "methods": {
+        "shouldShowDisconnectionPopup": {
+          "params": [],
+          "return_type": null
+        },
+        "setDisconnectionPopupWasShown": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        },
+        "getIconURL": {
+          "params": [
+            "civID == \"RANDOM\" ? \"CIVILIZATION_RANDOM\"",
+            "indCivType == \"MILITARISTIC\" ? \"PLAYER_RELATIONSHIP\""
+          ],
+          "return_type": "string"
+        },
+        "getOption": {
+          "params": [
+            "RIBBON_DISPLAY_OPTION_SET",
+            "RIBBON_DISPLAY_OPTION_TYPE",
+            "optionName"
+          ],
+          "return_type": "number"
+        },
+        "sendAudioEvent": {
+          "params": [
+            "improvementEvent"
+          ],
+          "return_type": null
+        },
+        "getIcon": {
+          "params": [
+            "ReligionType",
+            "arg1"
+          ],
+          "return_type": null
+        },
+        "getViewExperience": {
+          "params": [],
+          "return_type": null
+        },
+        "requestPortrait": {
+          "params": [
+            "unitType",
+            "unitType",
+            "isUnique ? \"UnitPortraitsBG_UNIQUE\""
+          ],
+          "return_type": null
+        },
+        "isInShell": {
+          "params": [],
+          "return_type": null
+        },
+        "isInGame": {
+          "params": [],
+          "return_type": null
+        },
+        "createModelGroup": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        },
+        "releaseEventID": {
+          "params": [
+            "eventReference"
+          ],
+          "return_type": null
+        },
+        "requestCinematic": {
+          "params": [
+            "plot"
+          ],
+          "return_type": null
+        },
+        "referenceCurrentEvent": {
+          "params": [],
+          "return_type": null
+        },
+        "createFixedMarker": {
+          "params": [
+            "{ x, y, z"
+          ],
+          "return_type": null
+        },
+        "triggerVFXAtPlot": {
+          "params": [
+            "vfxName",
+            "location",
+            "{ x",
+            "{ angle"
+          ],
+          "return_type": null
+        },
+        "triggerCinematic": {
+          "params": [
+            "location"
+          ],
+          "return_type": null
+        },
+        "getIconCSS": {
+          "params": [
+            "selectedReligionType",
+            "context ? context"
+          ],
+          "return_type": "string"
+        },
+        "getIconBLP": {
+          "params": [
+            "ConstructibleType",
+            "arg1"
+          ],
+          "return_type": "string"
+        },
+        "createOverlayGroup": {
+          "params": [
+            "arg0",
+            "UNIT_MOVEMENT_SKIRT",
+            "{ x"
+          ],
+          "return_type": null
+        },
+        "setOption": {
+          "params": [
+            "RIBBON_DISPLAY_OPTION_SET",
+            "RIBBON_DISPLAY_OPTION_TYPE",
+            "optionName",
+            "enable ? 1"
+          ],
+          "return_type": null
+        },
+        "getDiploRibbonIndex": {
+          "params": [],
+          "return_type": null
+        },
+        "setDiploRibbonIndex": {
+          "params": [
+            "firstLeaderIndex"
+          ],
+          "return_type": null
+        },
+        "hash": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        },
+        "releaseMarker": {
+          "params": [
+            "leader3DRevealFlagMarker"
+          ],
+          "return_type": null
+        },
+        "clearBackground": {
+          "params": [],
+          "return_type": null
+        },
+        "setUnitVisibility": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        },
+        "popFilter": {
+          "params": [],
+          "return_type": null
+        },
+        "setCursorByType": {
+          "params": [
+            "NotAllowed"
+          ],
+          "return_type": null
+        },
+        "pushRegionColorFilter": {
+          "params": [
+            "arg0",
+            "arg1",
+            "OUTER_REGION_OVERLAY_FILTER"
+          ],
+          "return_type": null
+        },
+        "getPlotLocation": {
+          "params": [
+            "desiredDestination",
+            "{ x",
+            "TERRAIN"
+          ],
+          "return_type": null
+        },
+        "createSpriteGrid": {
+          "params": [
+            "name + \"_Background\"",
+            "FixedBillboard"
+          ],
+          "return_type": null
+        },
+        "getSafeAreaMargins": {
+          "params": [],
+          "return_type": "SafeAreaMargins"
+        },
+        "getGameLoadingState": {
+          "params": [],
+          "return_type": null
+        },
+        "notifyUIReady": {
+          "params": [],
+          "return_type": null
+        },
+        "lockCursor": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        },
+        "hideCursor": {
+          "params": [],
+          "return_type": null
+        },
+        "minimapToWorld": {
+          "params": [
+            "{ x"
+          ],
+          "return_type": null
+        },
+        "canDisplayKeyboard": {
+          "params": [],
+          "return_type": null
+        },
+        "useDefaultCustomReligionName": {
+          "params": [],
+          "return_type": null
+        },
+        "lookup": {
+          "params": [
+            "eventClass"
+          ],
+          "return_type": null
+        },
+        "setClipboardText": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        },
+        "isDebugPlotInfoVisible": {
+          "params": [],
+          "return_type": null
+        },
+        "setPlotLocation": {
+          "params": [
+            "x",
+            "y",
+            "plotIndex"
+          ],
+          "return_type": null
+        },
+        "isCursorLocked": {
+          "params": [],
+          "return_type": null
+        },
+        "panelEnd": {
+          "params": [
+            "targetClassName",
+            "panelContent",
+            "viewChangeMethod",
+            "arg3"
+          ],
+          "return_type": null
+        },
+        "panelStart": {
+          "params": [
+            "targetClassName",
+            "panelContent",
+            "viewChangeMethod",
+            "arg3"
+          ],
+          "return_type": null
+        },
+        "playUnitSelectSound": {
+          "params": [
+            "unitType"
+          ],
+          "return_type": null
+        },
+        "pushGaussianBlurFilter": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        },
+        "toggleGameCenterAccessPoint": {
+          "params": [
+            "arg0",
+            "BottomLeading"
+          ],
+          "return_type": null
+        },
+        "isInLoading": {
+          "params": [],
+          "return_type": null
+        },
+        "showCursor": {
+          "params": [],
+          "return_type": null
+        },
+        "notifyLoadingCurtainReady": {
+          "params": [],
+          "return_type": null
+        },
+        "sendAudioEventWithFinishedCallback": {
+          "params": [
+            "voTag"
+          ],
+          "return_type": null
+        },
+        "isClipboardAvailable": {
+          "params": [],
+          "return_type": null
+        },
+        "canExitToDesktop": {
+          "params": [],
+          "return_type": null
+        },
+        "isMultiplayer": {
+          "params": [],
+          "return_type": null
+        },
+        "notifyUIReadyForEvents": {
+          "params": [],
+          "return_type": null
+        },
+        "isAudioCursorEnabled": {
+          "params": [],
+          "return_type": null
+        },
+        "supportsTextToSpeech": {
+          "params": [],
+          "return_type": null
+        },
+        "isMouseAvailable": {
+          "params": [],
+          "return_type": null
+        },
+        "displayKeyboard": {
+          "params": [
+            "value",
+            "arg1"
+          ],
+          "return_type": null
+        },
+        "getVirtualKeyboardType": {
+          "params": [],
+          "return_type": null
+        },
+        "getIMEConfirmationValueLocation": {
+          "params": [],
+          "return_type": null
+        },
+        "isTouchEnabled": {
+          "params": [],
+          "return_type": null
+        },
+        "getApplicationOption": {
+          "params": [
+            "arg0",
+            "arg1"
+          ],
+          "return_type": null
+        },
+        "favorSpeedOverQuality": {
+          "params": [],
+          "return_type": null
+        },
+        "canSkipMovies": {
+          "params": [],
+          "return_type": null
+        },
+        "panelDefault": {
+          "params": [],
+          "return_type": null
+        },
+        "setTouchscreenTapDelay": {
+          "params": [
+            "clickDuration"
+          ],
+          "return_type": null
+        },
+        "getCursorType": {
+          "params": [],
+          "return_type": null
+        },
+        "getCursorURL": {
+          "params": [],
+          "return_type": null
+        },
+        "getScreenPlotPos": {
+          "params": [
+            "plotCursorCoords"
+          ],
+          "return_type": null
+        },
+        "getPlotAt": {
+          "params": [
+            "controllerCursor",
+            "arg1"
+          ],
+          "return_type": null
+        },
+        "wrapWorldPosition": {
+          "params": [
+            "pos",
+            "{ x"
+          ],
+          "return_type": null
+        },
+        "roundDirectionToHex": {
+          "params": [
+            "dx",
+            "dy"
+          ],
+          "return_type": null
+        },
+        "moveFixedMarkerImmediate": {
+          "params": [
+            "miniCursorMarker",
+            "{ x, y, z"
+          ],
+          "return_type": null
+        },
+        "triggerVFXAtPos": {
+          "params": [
+            "arg0",
+            "{ x, y, z"
+          ],
+          "return_type": null
+        },
+        "getDirection": {
+          "params": [
+            "x",
+            "y"
+          ],
+          "return_type": null
+        },
+        "getScreenPos": {
+          "params": [
+            "controllerCursor"
+          ],
+          "return_type": null
+        },
+        "getChatIconGroups": {
+          "params": [],
+          "return_type": null
+        },
+        "getChatIcons": {
+          "params": [
+            "groupId"
+          ],
+          "return_type": null
+        },
+        "refreshInput": {
+          "params": [],
+          "return_type": null
+        },
+        "setViewExperience": {
+          "params": [
+            "newExperience"
+          ],
+          "return_type": null
+        },
+        "isShowIntroSequences": {
+          "params": [],
+          "return_type": null
+        },
+        "SetShowIntroSequences": {
+          "params": [
+            "value ? 1"
+          ],
+          "return_type": null
+        },
+        "useReadOnlyInputMappingScreen": {
+          "params": [],
+          "return_type": null
+        },
+        "hasViewExperience": {
+          "params": [],
+          "return_type": null
+        },
+        "supportsHIDPI": {
+          "params": [],
+          "return_type": null
+        },
+        "canSetAutoScaling": {
+          "params": [],
+          "return_type": null
+        },
+        "supportsTouchscreenTapDelay": {
+          "params": [],
+          "return_type": null
+        },
+        "getGraphicsProfile": {
+          "params": [
+            "profile as number"
+          ],
+          "return_type": null
+        },
+        "exposeShowIntroVideoOption": {
+          "params": [],
+          "return_type": null
+        },
+        "isRumbleAvailable": {
+          "params": [],
+          "return_type": null
+        },
+        "areAdaptiveTriggersAvailable": {
+          "params": [],
+          "return_type": null
+        },
+        "commitApplicationOptions": {
+          "params": [],
+          "return_type": null
+        },
+        "commitNetworkOptions": {
+          "params": [],
+          "return_type": null
+        },
+        "refreshPlayerColors": {
+          "params": [],
+          "return_type": null
+        },
+        "reloadUI": {
+          "params": [],
+          "return_type": null
+        },
+        "defaultApplicationOptions": {
+          "params": [],
+          "return_type": null
+        },
+        "defaultAudioOptions": {
+          "params": [],
+          "return_type": null
+        },
+        "defaultUserOptions": {
+          "params": [],
+          "return_type": null
+        },
+        "defaultTutorialOptions": {
+          "params": [],
+          "return_type": null
+        },
+        "revertApplicationOptions": {
+          "params": [],
+          "return_type": null
+        },
+        "revertNetworkOptions": {
+          "params": [],
+          "return_type": null
+        },
+        "supportsDLC": {
+          "params": [],
+          "return_type": null
+        },
+        "registerCursor": {
+          "params": [
+            "NotAllowed",
+            "CANT_PLACE",
+            "arg2"
+          ],
+          "return_type": null
+        },
+        "beginProfiling": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        },
+        "endProfiling": {
+          "params": [
+            "refreshGameOptionsProfilingHandle"
+          ],
+          "return_type": null
+        },
+        "isNonPreferredCivsDisabled": {
+          "params": [],
+          "return_type": null
+        },
+        "addBackgroundLayer": {
+          "params": [
+            "arg0",
+            "arg1"
+          ],
+          "return_type": null
+        },
+        "addMaskedBackgroundLayer": {
+          "params": [
+            "backgroundName",
+            "arg1",
+            "{\r\n\t\t\t\t\tstretch"
+          ],
+          "return_type": null
+        },
+        "shouldIncludeAppleCredit": {
+          "params": [],
+          "return_type": null
+        },
+        "shouldDisplayBenchmarkingTools": {
+          "params": [],
+          "return_type": null
+        },
+        "pushGlobalColorFilter": {
+          "params": [
+            "{ saturation"
+          ],
+          "return_type": null
+        },
+        "isNetworkBuild": {
+          "params": [],
+          "return_type": null
+        },
+        "supportsMultiplayer": {
+          "params": [],
+          "return_type": null
+        },
+        "shouldShowAdditionalContent": {
+          "params": [],
+          "return_type": null
+        },
+        "shouldShowHighEndAssetsDownloadOption": {
+          "params": [],
+          "return_type": null
+        },
+        "isShowODRDownloadPrompt": {
+          "params": [],
+          "return_type": null
+        },
+        "randomInt": {
+          "params": [
+            "arg0",
+            "length - 1"
+          ],
+          "return_type": null
+        },
+        "loadAsset": {
+          "params": [
+            "assetName"
+          ],
+          "return_type": null
+        },
+        "isAssetLoaded": {
+          "params": [
+            "currentPreloadingAsset"
+          ],
+          "return_type": null
+        },
+        "setShowODRDownloadPrompt": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        },
+        "startHighEndAssetsDownload": {
+          "params": [],
+          "return_type": null
+        },
+        "supportsAutoMatching": {
+          "params": [],
+          "return_type": null
+        },
+        "screenTypeAction": {
+          "params": [
+            "CLOSE",
+            "SOCIAL"
+          ],
+          "return_type": null
+        },
+        "isFirstBoot": {
+          "params": [],
+          "return_type": null
+        },
+        "isSessionStartup": {
+          "params": [],
+          "return_type": null
+        },
+        "isHostAPC": {
+          "params": [],
+          "return_type": null
+        },
+        "getOOBEGraphicsRestart": {
+          "params": [],
+          "return_type": null
+        },
+        "shouldDisplayOOBLegal": {
+          "params": [],
+          "return_type": null
+        },
+        "shouldDisableIntroAfterFirstPlay": {
+          "params": [],
+          "return_type": null
+        },
+        "getCurrentGraphicsProfile": {
+          "params": [],
+          "return_type": null
+        },
+        "setOOBEGraphicsRestart": {
+          "params": [],
+          "return_type": null
+        },
+        "setApplicationOption": {
+          "params": [
+            "arg0",
+            "arg1",
+            "arg2"
+          ],
+          "return_type": null
+        },
+        "activityLoadLastSaveGameConfirmed": {
+          "params": [],
+          "return_type": null
+        },
+        "activityHostMPGameConfirmed": {
+          "params": [],
+          "return_type": null
+        },
+        "setGlobalScale": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        },
+        "setCursorSize": {
+          "params": [
+            "{ i"
+          ],
+          "return_type": null
+        },
+        "viewChanged": {
+          "params": [
+            "viewID"
+          ],
+          "return_type": null
+        }
+      },
+      "properties": {
+        "Player": {
+          "type": "ComponentID"
+        },
+        "Control": {
+          "type": null
+        },
+        "ModelGroup": {
+          "type": null
+        },
+        "Marker": {
+          "type": null
+        },
+        "Cinematic": {
+          "type": null
+        },
+        "PlotSet": {
+          "type": null
+        },
+        "BorderStyle": {
+          "type": null
+        },
+        "Debug": {
+          "type": null
+        },
+        "ModelInstance": {
+          "type": null
+        },
+        "ForegroundCamera": {
+          "type": null
+        },
+        "PlotOverlay": {
+          "type": null
+        },
+        "ColorFilter": {
+          "type": null
+        },
+        "OverlayGroup": {
+          "type": null
+        },
+        "BorderOverlay": {
+          "type": null
+        },
+        "SpriteGrid": {
+          "type": null
+        },
+        "HexGridOverlay": {
+          "type": null
+        },
+        "Plot": {
+          "type": null
+        },
+        "SpriteParams": {
+          "type": null
+        },
+        "TextParams": {
+          "type": null
+        },
+        "Color": {
+          "type": "PlayerColor"
+        },
+        "VFXParams": {
+          "type": null
+        },
+        "ModelParams": {
+          "type": null
+        },
+        "AssetID": {
+          "type": null
+        }
+      }
+    },
+    "WorldBuilder": {
+      "methods": {},
+      "properties": {
+        "MapPlots": {
+          "type": null
+        }
+      }
+    },
+    "WorldUI": {
+      "methods": {
+        "requestPortrait": {
+          "params": [
+            "unitType",
+            "unitType",
+            "isUnique ? \"UnitPortraitsBG_UNIQUE\""
+          ],
+          "return_type": null
+        },
+        "createModelGroup": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        },
+        "requestCinematic": {
+          "params": [
+            "plot"
+          ],
+          "return_type": null
+        },
+        "createFixedMarker": {
+          "params": [
+            "{ x, y, z"
+          ],
+          "return_type": null
+        },
+        "triggerVFXAtPlot": {
+          "params": [
+            "vfxName",
+            "location",
+            "{ x",
+            "{ angle"
+          ],
+          "return_type": null
+        },
+        "triggerCinematic": {
+          "params": [
+            "location"
+          ],
+          "return_type": null
+        },
+        "createOverlayGroup": {
+          "params": [
+            "arg0",
+            "UNIT_MOVEMENT_SKIRT",
+            "{ x"
+          ],
+          "return_type": null
+        },
+        "hash": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        },
+        "releaseMarker": {
+          "params": [
+            "leader3DRevealFlagMarker"
+          ],
+          "return_type": null
+        },
+        "clearBackground": {
+          "params": [],
+          "return_type": null
+        },
+        "setUnitVisibility": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        },
+        "popFilter": {
+          "params": [],
+          "return_type": null
+        },
+        "pushRegionColorFilter": {
+          "params": [
+            "arg0",
+            "arg1",
+            "OUTER_REGION_OVERLAY_FILTER"
+          ],
+          "return_type": null
+        },
+        "getPlotLocation": {
+          "params": [
+            "desiredDestination",
+            "{ x",
+            "TERRAIN"
+          ],
+          "return_type": "float3"
+        },
+        "createSpriteGrid": {
+          "params": [
+            "name + \"_Background\"",
+            "FixedBillboard"
+          ],
+          "return_type": null
+        },
+        "minimapToWorld": {
+          "params": [
+            "{ x"
+          ],
+          "return_type": null
+        },
+        "pushGaussianBlurFilter": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        },
+        "getScreenPlotPos": {
+          "params": [
+            "plotCursorCoords"
+          ],
+          "return_type": null
+        },
+        "getPlotAt": {
+          "params": [
+            "controllerCursor",
+            "arg1"
+          ],
+          "return_type": null
+        },
+        "wrapWorldPosition": {
+          "params": [
+            "pos",
+            "{ x"
+          ],
+          "return_type": null
+        },
+        "roundDirectionToHex": {
+          "params": [
+            "dx",
+            "dy"
+          ],
+          "return_type": null
+        },
+        "moveFixedMarkerImmediate": {
+          "params": [
+            "miniCursorMarker",
+            "{ x, y, z"
+          ],
+          "return_type": null
+        },
+        "triggerVFXAtPos": {
+          "params": [
+            "arg0",
+            "{ x, y, z"
+          ],
+          "return_type": null
+        },
+        "getDirection": {
+          "params": [
+            "x",
+            "y"
+          ],
+          "return_type": null
+        },
+        "getScreenPos": {
+          "params": [
+            "controllerCursor"
+          ],
+          "return_type": null
+        },
+        "addBackgroundLayer": {
+          "params": [
+            "arg0",
+            "arg1"
+          ],
+          "return_type": null
+        },
+        "addMaskedBackgroundLayer": {
+          "params": [
+            "backgroundName",
+            "arg1",
+            "{\r\n\t\t\t\t\tstretch"
+          ],
+          "return_type": null
+        },
+        "pushGlobalColorFilter": {
+          "params": [
+            "{ saturation"
+          ],
+          "return_type": null
+        },
+        "loadAsset": {
+          "params": [
+            "assetName"
+          ],
+          "return_type": null
+        },
+        "isAssetLoaded": {
+          "params": [
+            "currentPreloadingAsset"
+          ],
+          "return_type": null
+        }
+      },
+      "properties": {
+        "ModelGroup": {
+          "type": null
+        },
+        "Marker": {
+          "type": null
+        },
+        "Cinematic": {
+          "type": null
+        },
+        "PlotSet": {
+          "type": null
+        },
+        "BorderStyle": {
+          "type": null
+        },
+        "ModelInstance": {
+          "type": null
+        },
+        "ForegroundCamera": {
+          "type": null
+        },
+        "PlotOverlay": {
+          "type": null
+        },
+        "ColorFilter": {
+          "type": null
+        },
+        "OverlayGroup": {
+          "type": null
+        },
+        "BorderOverlay": {
+          "type": null
+        },
+        "SpriteGrid": {
+          "type": null
+        },
+        "HexGridOverlay": {
+          "type": null
+        },
+        "Plot": {
+          "type": null
+        },
+        "SpriteParams": {
+          "type": null
+        },
+        "TextParams": {
+          "type": null
+        },
+        "VFXParams": {
+          "type": null
+        },
+        "ModelParams": {
+          "type": null
+        },
+        "AssetID": {
+          "type": null
+        }
+      }
+    },
+    "Locale": {
+      "methods": {
+        "toNumber": {
+          "params": [
+            "value",
+            "arg1"
+          ],
+          "return_type": "string"
+        },
+        "compose": {
+          "params": [
+            "volcanoDetailsKey",
+            "settlementInDistantLands",
+            "completionScore",
+            "theirInfluenceBonus"
+          ],
+          "return_type": "string"
+        },
+        "stylize": {
+          "params": [
+            "arg0",
+            "value > 0 ? \"text-positive\"",
+            "goldenAgeTurnsLeft",
+            "theirInfluenceBonus"
+          ],
+          "return_type": "string"
+        },
+        "getCurrentDisplayLocale": {
+          "params": [],
+          "return_type": null
+        },
+        "keyExists": {
+          "params": [
+            "baseDiplomacyMessageString + \"_ACCEPTED_\" + otherLeaderName"
+          ],
+          "return_type": null
+        },
+        "compare": {
+          "params": [
+            "Description ?? \"\"",
+            "Description ?? \"\""
+          ],
+          "return_type": null
+        },
+        "toUpper": {
+          "params": [
+            "StoryTitle"
+          ],
+          "return_type": null
+        },
+        "fromUGC": {
+          "params": [
+            "baseReligionName",
+            "customReligionName"
+          ],
+          "return_type": null
+        },
+        "plainText": {
+          "params": [
+            "string"
+          ],
+          "return_type": null
+        },
+        "toRomanNumeral": {
+          "params": [
+            "depthUnlocked + 1"
+          ],
+          "return_type": "string"
+        },
+        "toPercent": {
+          "params": [
+            "victoryProgression / maxAgeProgress"
+          ],
+          "return_type": null
+        },
+        "getIconTagsForLocStrings": {
+          "params": [
+            "locStrings"
+          ],
+          "return_type": null
+        },
+        "getCurrentLocale": {
+          "params": [],
+          "return_type": null
+        },
+        "getCurrentAudioLanguageOption": {
+          "params": [],
+          "return_type": null
+        },
+        "getCurrentDisplayLanguageOption": {
+          "params": [],
+          "return_type": null
+        },
+        "changeAudioLanguageOption": {
+          "params": [
+            "selectedAudioIdx"
+          ],
+          "return_type": null
+        },
+        "changeDisplayLanguageOption": {
+          "params": [
+            "selectedDisplayIdx"
+          ],
+          "return_type": null
+        },
+        "getAudioLanguageOptionNames": {
+          "params": [],
+          "return_type": null
+        },
+        "getDisplayLanguageOptionNames": {
+          "params": [],
+          "return_type": null
+        },
+        "unpack": {
+          "params": [
+            "hostCivilizationName"
+          ],
+          "return_type": null
+        }
+      },
+      "properties": {
+        "Compose": {
+          "type": null
+        },
+        "Stylize": {
+          "type": null
+        }
+      }
+    },
+    "MapConstructibles": {
+      "methods": {
+        "addDiscovery": {
+          "params": [
+            "iX",
+            "iY",
+            "IMPROVEMENT_SHIPWRECK",
+            "discoveryType"
+          ],
+          "return_type": null
+        },
+        "getConstructibles": {
+          "params": [
+            "hoveredX",
+            "hoveredY"
+          ],
+          "return_type": "ComponentID[]"
+        },
+        "getReplaceableConstructible": {
+          "params": [
+            "x",
+            "y"
+          ],
+          "return_type": "number"
+        },
+        "getHiddenFilteredConstructibles": {
+          "params": [
+            "x",
+            "y"
+          ],
+          "return_type": null
+        },
+        "addRoute": {
+          "params": [
+            "x",
+            "y",
+            "arg2"
+          ],
+          "return_type": null
+        },
+        "addDiscoveryType": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        },
+        "addIndependentType": {
+          "params": [
+            "x",
+            "y"
+          ],
+          "return_type": null
+        },
+        "removeRoute": {
+          "params": [
+            "x",
+            "y"
+          ],
+          "return_type": null
+        }
+      },
+      "properties": {}
+    },
+    "MapCities": {
+      "methods": {
+        "getCity": {
+          "params": [
+            "iX",
+            "iY"
+          ],
+          "return_type": "any"
+        },
+        "getDistrict": {
+          "params": [
+            "iX",
+            "iY"
+          ],
+          "return_type": "ComponentID"
+        }
+      },
+      "properties": {}
+    },
+    "MapUnits": {
+      "methods": {
+        "getUnits": {
+          "params": [
+            "x",
+            "y"
+          ],
+          "return_type": "ComponentID[]"
+        }
+      },
+      "properties": {}
+    },
+    "Districts": {
+      "methods": {
+        "get": {
+          "params": [
+            "districtId"
+          ],
+          "return_type": "District"
+        },
+        "getAtLocation": {
+          "params": [
+            "plotCoordinate"
+          ],
+          "return_type": "District"
+        },
+        "getDistrictIds": {
+          "params": [],
+          "return_type": null
+        },
+        "getDistrictHealth": {
+          "params": [
+            "location"
+          ],
+          "return_type": null
+        },
+        "getDistrictMaxHealth": {
+          "params": [
+            "location"
+          ],
+          "return_type": null
+        },
+        "getLocations": {
+          "params": [
+            "districtIdsRural"
+          ],
+          "return_type": "PlotCoord[]"
+        },
+        "getIdsOfType": {
+          "params": [
+            "districtType"
+          ],
+          "return_type": null
+        },
+        "getIdsOfTypes": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        },
+        "lookup": {
+          "params": [
+            "AdjacentDistrict"
+          ],
+          "return_type": null
+        },
+        "getFreeConstructible": {
+          "params": [
+            "plotCoordinate",
+            "localPlayerID"
+          ],
+          "return_type": null
+        },
+        "getDistrictIsBesieged": {
+          "params": [
+            "location"
+          ],
+          "return_type": null
+        },
+        "getIdAtLocation": {
+          "params": [
+            "loc"
+          ],
+          "return_type": null
+        }
+      },
+      "properties": {
+        "cityCenter": {
+          "type": null
+        }
+      }
+    },
+    "Database": {
+      "methods": {
+        "makeHash": {
+          "params": [
+            "UnitPromotionDisciplineType"
+          ],
+          "return_type": "number"
+        },
+        "register": {
+          "params": [],
+          "return_type": null
+        },
+        "query": {
+          "params": [
+            "arg0",
+            "SQL",
+            "TraditionType as Type",
+            "ReasonType FROM LeaderCivilizationBias\""
+          ],
+          "return_type": null
+        },
+        "changes": {
+          "params": [
+            "dbName"
+          ],
+          "return_type": null
+        }
+      },
+      "properties": {
+        "DbRow": {
+          "type": null
+        },
+        "DbName": {
+          "type": null
+        }
+      }
+    },
+    "Loading": {
+      "methods": {
+        "runWhenFinished": {
+          "params": [
+            "onPullCurtain"
+          ],
+          "return_type": null
+        },
+        "runWhenInitialized": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        },
+        "runWhenLoaded": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        }
+      },
+      "properties": {
+        "isInitialized": {
+          "type": null
+        },
+        "whenLoaded": {
+          "type": null
+        },
+        "isFinished": {
+          "type": null
+        },
+        "whenInitialized": {
+          "type": null
+        },
+        "onInitialScriptAdded": {
+          "type": null
+        },
+        "isLoaded": {
+          "type": null
+        },
+        "whenFinished": {
+          "type": null
+        },
+        "processInitialScriptsRAF": {
+          "type": null
+        }
+      }
+    },
+    "Controls": {
+      "methods": {
+        "define": {
+          "params": [
+            "EditorKeyboardBindingPanelTagName",
+            "{\r\n\t\tcreateInstance"
+          ],
+          "return_type": null
+        },
+        "preloadImage": {
+          "params": [
+            "url",
+            "arg1"
+          ],
+          "return_type": null
+        },
+        "getDefinition": {
+          "params": [
+            "typeName"
+          ],
+          "return_type": "ComponentDefinition"
+        },
+        "initializeComponents": {
+          "params": [],
+          "return_type": null
+        },
+        "appendChild": {
+          "params": [
+            "accessibilityContainer"
+          ],
+          "return_type": null
+        },
+        "removeChild": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        }
+      },
+      "properties": {
+        "classList": {
+          "type": null
+        },
+        "children": {
+          "type": null
+        }
+      }
+    },
+    "GameInfo": {
+      "methods": {},
+      "properties": {
+        "Leaders": {
+          "type": "LeaderDefinition"
+        },
+        "ProgressionTreeNodes": {
+          "type": "ProgressionTreeNodeDefinition"
+        },
+        "Unit_Stats": {
+          "type": "Unit_StatDefinition"
+        },
+        "ProgressionTreeNodeUnlocks": {
+          "type": "ProgressionTreeNodeUnlockDefinition"
+        },
+        "Buildings": {
+          "type": "BuildingDefinition"
+        },
+        "LegacyCivilizationTraits": {
+          "type": "CivilizationTraitDefinition"
+        },
+        "UniqueQuarters": {
+          "type": null
+        },
+        "Improvements": {
+          "type": "ImprovementDefinition"
+        },
+        "Constructible_WarehouseYields": {
+          "type": null
+        },
+        "Beliefs": {
+          "type": "BeliefDefinition"
+        },
+        "Ages": {
+          "type": "AgeDefinition"
+        },
+        "Civilizations": {
+          "type": "string"
+        },
+        "Projects": {
+          "type": "ProjectDefinition"
+        },
+        "Victories": {
+          "type": "VictoryDefinition"
+        },
+        "Maps": {
+          "type": null
+        },
+        "AdvancedStartParameters": {
+          "type": null
+        },
+        "GlobalParameters": {
+          "type": "GlobalParameterDefinition"
+        },
+        "Biomes": {
+          "type": "BiomeType"
+        },
+        "StartBiasBiomes": {
+          "type": "string"
+        },
+        "StartBiasTerrains": {
+          "type": null
+        },
+        "StartBiasNaturalWonders": {
+          "type": null
+        },
+        "StartBiasRivers": {
+          "type": null
+        },
+        "StartBiasAdjacentToCoasts": {
+          "type": null
+        },
+        "StartBiasFeatureClasses": {
+          "type": null
+        },
+        "StartBiasResources": {
+          "type": null
+        },
+        "StartBiasLakes": {
+          "type": null
+        },
+        "Terrains": {
+          "type": "TerrainType"
+        },
+        "FeatureClasses": {
+          "type": null
+        },
+        "Features": {
+          "type": "FeatureType"
+        },
+        "DiscoverySiftingImprovements": {
+          "type": null
+        },
+        "NarrativeStories": {
+          "type": "NarrativeStoryDefinition"
+        },
+        "MapResourceMinimumAmountModifier": {
+          "type": null
+        },
+        "Feature_NaturalWonders": {
+          "type": null
+        },
+        "MapIslandBehavior": {
+          "type": null
+        },
+        "Resource_Distribution": {
+          "type": null
+        },
+        "Unit_ShadowReplacements": {
+          "type": null
+        },
+        "AdvancedStartDeckCardEntries": {
+          "type": "DefinitionCollection<AdvancedStartDeckCardEntryDefinition>"
+        },
+        "AgeProgressionMilestones": {
+          "type": null
+        },
+        "KeywordAbilities": {
+          "type": null
+        },
+        "UnitAbilities": {
+          "type": null
+        },
+        "Attributes": {
+          "type": null
+        },
+        "Constructible_Adjacencies": {
+          "type": null
+        },
+        "Governments": {
+          "type": "GovernmentDefinition"
+        },
+        "GoldenAges": {
+          "type": "GoldenAgeDefinition"
+        },
+        "Wonders": {
+          "type": "WonderDefinition"
+        },
+        "TypeQuotes": {
+          "type": null
+        },
+        "CityStateBonuses": {
+          "type": "CityStateBonusDefinition"
+        },
+        "Independents": {
+          "type": null
+        },
+        "Religions": {
+          "type": "ReligionDefinition"
+        },
+        "Resource_YieldChanges": {
+          "type": null
+        },
+        "Unit_Costs": {
+          "type": null
+        },
+        "UnitUpgrades": {
+          "type": null
+        },
+        "Unit_RequiredConstructibles": {
+          "type": null
+        },
+        "Constructible_YieldChanges": {
+          "type": null
+        },
+        "Adjacency_YieldChanges": {
+          "type": null
+        },
+        "ConstructibleModifiers": {
+          "type": null
+        },
+        "Constructible_Maintenances": {
+          "type": null
+        },
+        "Types": {
+          "type": null
+        },
+        "Routes": {
+          "type": null
+        },
+        "ResourceClasses": {
+          "type": null
+        },
+        "CivilopediaSectionExcludes": {
+          "type": null
+        },
+        "CivilopediaPageExcludes": {
+          "type": null
+        },
+        "CivilopediaPageGroupExcludes": {
+          "type": null
+        },
+        "CivilopediaSections": {
+          "type": null
+        },
+        "CivilopediaPageGroups": {
+          "type": null
+        },
+        "CivilopediaPages": {
+          "type": null
+        },
+        "CivilopediaPageGroupQueries": {
+          "type": null
+        },
+        "CivilopediaPageQueries": {
+          "type": null
+        },
+        "CivilopediaPageLayoutChapters": {
+          "type": null
+        },
+        "CivilopediaPageChapterHeaders": {
+          "type": null
+        },
+        "CivilopediaPageLayoutChapterContentQueries": {
+          "type": null
+        },
+        "CivilopediaPageChapterParagraphs": {
+          "type": null
+        },
+        "CivilopediaPageSearchTermQueries": {
+          "type": null
+        },
+        "CivilopediaPageSearchTerms": {
+          "type": null
+        },
+        "CivilopediaPageLayouts": {
+          "type": null
+        },
+        "CivilopediaPageSidebarPanels": {
+          "type": null
+        },
+        "Ideologies": {
+          "type": null
+        },
+        "DiplomacyStatements": {
+          "type": null
+        },
+        "DiplomacyStatementFrames": {
+          "type": null
+        },
+        "DiplomacyStatementSelections": {
+          "type": null
+        },
+        "DiplomacyActions": {
+          "type": "DiplomacyActionDefinition"
+        },
+        "Defeats": {
+          "type": null
+        },
+        "EndGameMovies": {
+          "type": null
+        },
+        "GreatWorks": {
+          "type": "GreatWorkDefinition"
+        },
+        "GreatWork_YieldChanges": {
+          "type": "GreatWork_YieldChangeDefinition"
+        },
+        "TypeTags": {
+          "type": null
+        },
+        "Continents": {
+          "type": null
+        },
+        "NarrativeStory_Links": {
+          "type": "NarrativeStory_LinkDefinition[]"
+        },
+        "NarrativeRewardIcons": {
+          "type": "NarrativeRewardIconDefinition[]"
+        },
+        "NarrativeStory_RewardIcons": {
+          "type": null
+        },
+        "NarrativeDisplay_Civilizations": {
+          "type": null
+        },
+        "NotificationSounds": {
+          "type": null
+        },
+        "BeliefClasses": {
+          "type": null
+        },
+        "RandomEventUI": {
+          "type": null
+        },
+        "Traditions": {
+          "type": "TraditionDefinition"
+        },
+        "CivilizationTraits": {
+          "type": null
+        },
+        "TradeYields": {
+          "type": "TradeYieldDefinition"
+        },
+        "StartingGovernments": {
+          "type": null
+        },
+        "PlotEffects": {
+          "type": "PlotEffectDefinition"
+        },
+        "UnitReplaces": {
+          "type": "UnitReplaceDefinition[]"
+        },
+        "AdvisorySubjects": {
+          "type": null
+        },
+        "UnitPromotionClassSets": {
+          "type": null
+        },
+        "UnitPromotionDisciplines": {
+          "type": "UnitPromotionDisciplineDefinition"
+        },
+        "UnitPromotionDisciplineDetails": {
+          "type": "UnitPromotionDisciplineDetailDefinition[]"
+        },
+        "UnitPromotions": {
+          "type": null
+        },
+        "AgeProgressionRewards": {
+          "type": "AgeProgressionRewardDefinition"
+        },
+        "LoadingInfo_Civilizations": {
+          "type": null
+        },
+        "UnlockRewards": {
+          "type": null
+        },
+        "LegacyCivilizations": {
+          "type": null
+        },
+        "UnlockRequirements": {
+          "type": null
+        },
+        "Modifiers": {
+          "type": null
+        },
+        "DiplomaticProjects_UI_Data": {
+          "type": null
+        },
+        "TraditionModifiers": {
+          "type": null
+        },
+        "VictoryCinematics": {
+          "type": null
+        },
+        "AgeProgressionDarkAgeRewardInfos": {
+          "type": null
+        },
+        "AgeProgressionMilestoneRewards": {
+          "type": null
+        },
+        "LoadingInfo_Leaders": {
+          "type": null
+        },
+        "Mementos": {
+          "type": null
+        },
+        "Difficulties": {
+          "type": null
+        },
+        "GameSpeeds": {
+          "type": null
+        },
+        "DisplayQueuePriorities": {
+          "type": null
+        },
+        "InterfaceModes": {
+          "type": "InterfaceModeDefinition"
+        },
+        "missingMods": {
+          "type": null
+        },
+        "unownedMods": {
+          "type": null
+        },
+        "isLiveEventGame": {
+          "type": null
+        },
+        "ID": {
+          "type": null
+        },
+        "ModifierStrings": {
+          "type": null
+        },
+        "LeaderInfo": {
+          "type": null
+        }
+      }
+    },
+    "engine": {
+      "methods": {
+        "on": {
+          "params": [
+            "OnChanged",
+            "automationTestXRScreenshotAllSeuratsListener",
+            "context"
+          ],
+          "return_type": null
+        },
+        "trigger": {
+          "params": [
+            "arg0",
+            "actionName",
+            "status",
+            "x",
+            "y"
+          ],
+          "return_type": null
+        },
+        "call": {
+          "params": [
+            "SPEAK",
+            "text",
+            "volume",
+            "speed",
+            "lang"
+          ],
+          "return_type": null
+        },
+        "off": {
+          "params": [
+            "OnChanged",
+            "onNetworkConnectionStatusChangedListener",
+            "arg2"
+          ],
+          "return_type": null
+        },
+        "updateWholeModel": {
+          "params": [
+            "CityCaptureChooser"
+          ],
+          "return_type": null
+        },
+        "createJSModel": {
+          "params": [
+            "observableName",
+            "CityCaptureChooser"
+          ],
+          "return_type": null
+        },
+        "synchronizeModels": {
+          "params": [],
+          "return_type": null
+        },
+        "RemoveOnHandler": {
+          "params": [
+            "name",
+            "handler",
+            "context || engine"
+          ],
+          "return_type": null
+        },
+        "AddOrRemoveOnHandler": {
+          "params": [
+            "name",
+            "callback",
+            "context || engine"
+          ],
+          "return_type": null
+        },
+        "addDataBindEventListner": {
+          "params": [
+            "arg0",
+            "onUpdateWholeModel"
+          ],
+          "return_type": null
+        },
+        "BindingsReady": {
+          "params": [
+            "arg0",
+            "arg1",
+            "arg2",
+            "arg3"
+          ],
+          "return_type": null
+        },
+        "registerBindingAttribute": {
+          "params": [
+            "arg0",
+            "LocalizationDataBoundAttributeHandler"
+          ],
+          "return_type": null
+        },
+        "reloadLocalization": {
+          "params": [],
+          "return_type": null
+        }
+      },
+      "properties": {
+        "whenReady": {
+          "type": null
+        },
+        "isAttached": {
+          "type": null
+        },
+        "SendMessage": {
+          "type": null
+        },
+        "TriggerEvent": {
+          "type": null
+        },
+        "enableImmediateLayout": {
+          "type": null
+        },
+        "isImmediateLayoutEnabled": {
+          "type": null
+        },
+        "executeImmediateLayoutSync": {
+          "type": null
+        },
+        "mock": {
+          "type": null
+        },
+        "events": {
+          "type": null
+        },
+        "dependency": {
+          "type": null
+        },
+        "hasAttachedUpdateListner": {
+          "type": null
+        },
+        "onUpdateWholeModel": {
+          "type": null
+        },
+        "createObservableModel": {
+          "type": null
+        },
+        "addSynchronizationDependency": {
+          "type": null
+        },
+        "removeSynchronizationDependency": {
+          "type": null
+        }
+      }
+    }
+  },
+  "sub_objects": {
+    "Cities": {
+      "methods": {
+        "getCityIds": {
+          "params": [],
+          "return_type": null
+        },
+        "getCities": {
+          "params": [],
+          "return_type": null
+        },
+        "get": {
+          "params": [
+            "observer"
+          ],
+          "return_type": null
+        }
+      },
+      "properties": {}
+    },
+    "Units": {
+      "methods": {
+        "lookup": {
+          "params": [
+            "playerMerchantType"
+          ],
+          "return_type": "UnitDefinition"
+        },
+        "getUnitTypesUnlockedWithTag": {
+          "params": [
+            "tag",
+            "arg1"
+          ],
+          "return_type": "UnitType[]"
+        },
+        "forEach": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        },
+        "getBuildUnit": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        },
+        "getUnits": {
+          "params": [],
+          "return_type": "Unit[]"
+        },
+        "getNumUnitsOfType": {
+          "params": [
+            "UnitType"
+          ],
+          "return_type": null
+        },
+        "getUnitIds": {
+          "params": [],
+          "return_type": "ComponentID[]"
+        },
+        "find": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        },
+        "getUnitTypesWithTag": {
+          "params": [
+            "tag"
+          ],
+          "return_type": "UnitType[]"
+        },
+        "filter": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        }
+      },
+      "properties": {
+        "length": {
+          "type": null
+        }
+      }
+    },
+    "Techs": {
+      "methods": {
+        "getTurnsForNode": {
+          "params": [
+            "nodeType"
+          ],
+          "return_type": null
+        }
+      },
+      "properties": {}
+    },
+    "Culture": {
+      "methods": {
+        "get": {
+          "params": [
+            "localPlayerID"
+          ],
+          "return_type": "PlayerCulture"
+        },
+        "isNodeUnlocked": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        },
+        "getGovernmentType": {
+          "params": [],
+          "return_type": null
+        },
+        "getTurnsForNode": {
+          "params": [
+            "nodeType"
+          ],
+          "return_type": null
+        },
+        "getChosenIdeology": {
+          "params": [],
+          "return_type": null
+        },
+        "GetCelebrationTypesForGovernment": {
+          "params": [
+            "GovernmentType"
+          ],
+          "return_type": "string[]"
+        },
+        "getGreatWorkType": {
+          "params": [
+            "greatWorkIndex"
+          ],
+          "return_type": null
+        }
+      },
+      "properties": {}
+    },
+    "Treasury": {
+      "methods": {
+        "get": {
+          "params": [
+            "localPlayerID"
+          ],
+          "return_type": null
+        }
+      },
+      "properties": {
+        "goldBalance": {
+          "type": null
+        }
+      }
+    },
+    "Diplomacy": {
+      "methods": {
+        "canMakePeaceWith": {
+          "params": [
+            "arg0",
+            "arg1"
+          ],
+          "return_type": "DiplomacyQueryResult"
+        },
+        "getInfluenceForBaseAction": {
+          "params": [
+            "DIPLOMACY_ACTION_DECLARE_FORMAL_WAR",
+            "localPlayerID",
+            "selectedPlayerID"
+          ],
+          "return_type": "number"
+        },
+        "isAtWarWith": {
+          "params": [
+            "playerId"
+          ],
+          "return_type": null
+        },
+        "canDeclareWarOn": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        },
+        "hasMet": {
+          "params": [
+            "localPlayerID",
+            "owner"
+          ],
+          "return_type": null
+        },
+        "getCompletionData": {
+          "params": [
+            "selectedActionID"
+          ],
+          "return_type": "DiplomacyEventCompletionData"
+        },
+        "getDiplomaticEventData": {
+          "params": [
+            "selectedActionID"
+          ],
+          "return_type": "DiplomaticEventHeader"
+        },
+        "getPlayerEvents": {
+          "params": [
+            "targetIndependent"
+          ],
+          "return_type": "DiplomaticEventHeader[]"
+        },
+        "getInfluenceForNextSupport": {
+          "params": [
+            "uniqueID",
+            "localPlayerID",
+            "localPlayerID"
+          ],
+          "return_type": null
+        },
+        "getStages": {
+          "params": [
+            "uniqueID"
+          ],
+          "return_type": null
+        },
+        "getJointEvents": {
+          "params": [
+            "localPlayerID",
+            "hoveredPlayerID",
+            "arg2"
+          ],
+          "return_type": "DiplomaticEventHeader[]"
+        },
+        "getProjectDataForUI": {
+          "params": [
+            "initialPlayer",
+            "targetPlayer != null && targetPlayer != GameContext.localPlayerID ? targetPlayer",
+            "NO_DIPLOMACY_TARGET",
+            "NO_DIPLOMACY_ACTION_GROUP",
+            "arg4",
+            "NO_DIPLOMACY_TARGET"
+          ],
+          "return_type": "DiplomaticProjectUIData[]"
+        },
+        "getSupportingPlayersWithBonusEnvoys": {
+          "params": [
+            "uniqueID"
+          ],
+          "return_type": null
+        },
+        "getOpposingPlayersWithBonusEnvoys": {
+          "params": [
+            "uniqueID"
+          ],
+          "return_type": null
+        },
+        "hasTeammate": {
+          "params": [
+            "id"
+          ],
+          "return_type": null
+        },
+        "getWarData": {
+          "params": [
+            "uniqueID",
+            "localPlayerID"
+          ],
+          "return_type": "WarData"
+        },
+        "getOpposingPlayers": {
+          "params": [
+            "uniqueID"
+          ],
+          "return_type": null
+        },
+        "isProjectCanceled": {
+          "params": [
+            "selectedActionID"
+          ],
+          "return_type": null
+        },
+        "getInfluenceIndependentData": {
+          "params": [
+            "uniqueID"
+          ],
+          "return_type": "InfluenceIndependentData"
+        },
+        "getAgendaNames": {
+          "params": [
+            "selectedPlayerID"
+          ],
+          "return_type": "string[]"
+        },
+        "getAgendaDescriptions": {
+          "params": [
+            "selectedPlayerID"
+          ],
+          "return_type": "string[]"
+        },
+        "getActionRelationshipDelta": {
+          "params": [
+            "target",
+            "actionType"
+          ],
+          "return_type": "number[]"
+        },
+        "getActiveStage": {
+          "params": [
+            "uniqueID"
+          ],
+          "return_type": null
+        },
+        "modifyByGameSpeed": {
+          "params": [
+            "RandomInitialProgress"
+          ],
+          "return_type": "number"
+        },
+        "hasAllied": {
+          "params": [
+            "initialPlayer"
+          ],
+          "return_type": null
+        },
+        "getBaseDiplomaticActionDuration": {
+          "params": [
+            "actionType"
+          ],
+          "return_type": null
+        },
+        "getEspionagePenaltyForReveal": {
+          "params": [
+            "actionType",
+            "localPlayerID"
+          ],
+          "return_type": null
+        },
+        "getRecentlyEndedDiplomaticEvents": {
+          "params": [
+            "localPlayerID"
+          ],
+          "return_type": null
+        },
+        "getFirstMeetResponseCostAndRelDelta": {
+          "params": [
+            "greetingType",
+            "localPlayerID"
+          ],
+          "return_type": "number[]"
+        },
+        "getFM_RevealCapitalsString": {
+          "params": [
+            "localPlayerID",
+            "otherPlayer"
+          ],
+          "return_type": "string"
+        },
+        "getNextCallToArms": {
+          "params": [
+            "localPlayerID"
+          ],
+          "return_type": "DiplomacyActionEventId"
+        },
+        "getResponseDataForUI": {
+          "params": [
+            "id"
+          ],
+          "return_type": null
+        },
+        "get": {
+          "params": [
+            "playerA"
+          ],
+          "return_type": null
+        }
+      },
+      "properties": {}
+    },
+    "Resources": {
+      "methods": {
+        "lookup": {
+          "params": [
+            "resourceChosenIndex"
+          ],
+          "return_type": "ResourceDefinition"
+        },
+        "getNumTreasureFleetResources": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        },
+        "getNumFactoryResources": {
+          "params": [],
+          "return_type": null
+        },
+        "getLocalResources": {
+          "params": [],
+          "return_type": null
+        },
+        "getUniqueResourceName": {
+          "params": [
+            "uniqueResource"
+          ],
+          "return_type": null
+        },
+        "getOriginCity": {
+          "params": [
+            "resourceValue"
+          ],
+          "return_type": null
+        }
+      },
+      "properties": {
+        "length": {
+          "type": null
+        }
+      }
+    },
+    "Trade": {
+      "methods": {
+        "countPlayerTradeRoutes": {
+          "params": [],
+          "return_type": null
+        },
+        "isInRailNetwork": {
+          "params": [],
+          "return_type": null
+        },
+        "isConnectedToOwnersCapitalByLand": {
+          "params": [],
+          "return_type": null
+        },
+        "isInTradeNetwork": {
+          "params": [],
+          "return_type": null
+        }
+      },
+      "properties": {}
+    },
+    "Districts": {
+      "methods": {
+        "get": {
+          "params": [
+            "playerID"
+          ],
+          "return_type": "PlayerDistricts"
+        },
+        "lookup": {
+          "params": [
+            "AdjacentDistrict"
+          ],
+          "return_type": "DistrictDefinition"
+        }
+      },
+      "properties": {}
+    },
+    "Religion": {
+      "methods": {
+        "canHaveBelief": {
+          "params": [
+            "localPlayerID",
+            "$index"
+          ],
+          "return_type": null
+        },
+        "getPlayerFromReligion": {
+          "params": [
+            "ReligionType"
+          ],
+          "return_type": null
+        },
+        "getPantheons": {
+          "params": [],
+          "return_type": "BeliefType[]"
+        },
+        "isBeliefClaimable": {
+          "params": [
+            "BeliefType"
+          ],
+          "return_type": null
+        },
+        "hasBeenFounded": {
+          "params": [
+            "selectedReligionType"
+          ],
+          "return_type": "boolean"
+        },
+        "getReligionType": {
+          "params": [],
+          "return_type": null
+        },
+        "get": {
+          "params": [],
+          "return_type": null
+        },
+        "canCreateReligion": {
+          "params": [],
+          "return_type": null
+        },
+        "hasCreatedReligion": {
+          "params": [],
+          "return_type": null
+        }
+      },
+      "properties": {}
+    },
+    "Yields": {
+      "methods": {
+        "lookup": {
+          "params": [
+            "yieldType"
+          ],
+          "return_type": null
+        },
+        "forEach": {
+          "params": [
+            "(yieldDef"
+          ],
+          "return_type": null
+        },
+        "extractYieldChangesData": {
+          "params": [
+            "yieldChanges",
+            "yieldType"
+          ],
+          "return_type": null
+        },
+        "getTradeYields": {
+          "params": [],
+          "return_type": null
+        },
+        "getResourceYields": {
+          "params": [],
+          "return_type": null
+        },
+        "findIndex": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        }
+      },
+      "properties": {
+        "length": {
+          "type": null
+        }
+      }
+    },
+    "BuildQueue": {
+      "methods": {},
+      "properties": {
+        "isEmpty": {
+          "type": null
+        },
+        "CurrentProductionTypeHash": {
+          "type": null
+        }
+      }
+    },
+    "Combat": {
+      "methods": {
+        "toString": {
+          "params": [],
+          "return_type": null
+        },
+        "testAttackInto": {
+          "params": [
+            "selectedUnitID",
+            "parameters"
+          ],
+          "return_type": "CombatTypes"
+        },
+        "getDefensibleDistrict": {
+          "params": [
+            "location"
+          ],
+          "return_type": "ComponentID"
+        },
+        "getBestDefender": {
+          "params": [
+            "location",
+            "selectedUnitID"
+          ],
+          "return_type": "ComponentID"
+        },
+        "simulateAttackAsync": {
+          "params": [
+            "id",
+            "args"
+          ],
+          "return_type": null
+        }
+      },
+      "properties": {}
+    },
+    "Health": {
+      "methods": {},
+      "properties": {
+        "maxDamage": {
+          "type": null
+        },
+        "damage": {
+          "type": null
+        }
+      }
+    },
+    "Movement": {
+      "methods": {},
+      "properties": {
+        "canMove": {
+          "type": null
+        },
+        "movementMovesRemaining": {
+          "type": null
+        }
+      }
+    },
+    "Experience": {
+      "methods": {},
+      "properties": {
+        "getStoredPromotionPoints": {
+          "type": null
+        },
+        "getTotalPromotionsEarned": {
+          "type": null
+        },
+        "experiencePoints": {
+          "type": null
+        },
+        "experienceToNextLevel": {
+          "type": null
+        },
+        "getLevel": {
+          "type": null
+        },
+        "getStoredCommendations": {
+          "type": null
+        }
+      }
+    },
+    "VictoryManager": {
+      "methods": {
+        "getLatestPlayerDefeat": {
+          "params": [
+            "localPlayerID"
+          ],
+          "return_type": "DefeatType"
+        },
+        "getVictories": {
+          "params": [],
+          "return_type": "VictoryManagerLibrary_VictoryInfo[]"
+        }
+      },
+      "properties": {}
+    },
+    "CityStates": {
+      "methods": {
+        "getBonusType": {
+          "params": [
+            "playerID"
+          ],
+          "return_type": "CityStateBonusType"
+        },
+        "getCityStateBonusToSelect": {
+          "params": [
+            "localPlayerID"
+          ],
+          "return_type": "PlayerId"
+        },
+        "canHaveBonus": {
+          "params": [
+            "localPlayerID",
+            "cityState",
+            "CityStateBonusType"
+          ],
+          "return_type": null
+        }
+      },
+      "properties": {}
+    },
+    "RandomEvents": {
+      "methods": {
+        "lookup": {
+          "params": [
+            "eventType"
+          ],
+          "return_type": "RandomEventDefinition"
+        }
+      },
+      "properties": {}
+    },
+    "CrisisManager": {
+      "methods": {
+        "getCrisisStageTriggerPercent": {
+          "params": [
+            "arg0",
+            "arg1"
+          ],
+          "return_type": null
+        },
+        "isCrisisEnabled": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        },
+        "getCurrentCrisisStage": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        },
+        "getMinimumTurnsRemainingInCurrentCrisis": {
+          "params": [
+            "arg0",
+            "crisisStage"
+          ],
+          "return_type": null
+        },
+        "getMaximumTurnsRemainingInCurrentCrisis": {
+          "params": [
+            "arg0",
+            "crisisStage"
+          ],
+          "return_type": null
+        }
+      },
+      "properties": {}
+    },
+    "Notifications": {
+      "methods": {
+        "getTypeName": {
+          "params": [
+            "notificationType"
+          ],
+          "return_type": "string"
+        },
+        "find": {
+          "params": [
+            "endTurnBlockingNotificationId"
+          ],
+          "return_type": "Notification"
+        },
+        "getEndTurnBlockingType": {
+          "params": [
+            "localPlayerID"
+          ],
+          "return_type": "EndTurnBlockingType"
+        },
+        "activate": {
+          "params": [
+            "endTurnBlockingNotificationId"
+          ],
+          "return_type": null
+        },
+        "findEndTurnBlocking": {
+          "params": [
+            "localPlayerID",
+            "endTurnBlockingType"
+          ],
+          "return_type": "ComponentID"
+        },
+        "getMessage": {
+          "params": [
+            "endTurnBlockingNotificationId"
+          ],
+          "return_type": null
+        },
+        "getType": {
+          "params": [
+            "notificationId"
+          ],
+          "return_type": "number"
+        },
+        "getSeverity": {
+          "params": [
+            "notificationId"
+          ],
+          "return_type": null
+        },
+        "getIdsForPlayer": {
+          "params": [
+            "localPlayer",
+            "DISMISSED"
+          ],
+          "return_type": "ComponentID[]"
+        },
+        "getBlocksTurnAdvancement": {
+          "params": [
+            "entryTopId"
+          ],
+          "return_type": null
+        },
+        "lookup": {
+          "params": [
+            "Type"
+          ],
+          "return_type": null
+        },
+        "clearNotifAudioTracking": {
+          "params": [
+            "notificationId"
+          ],
+          "return_type": null
+        },
+        "getPlayedAudioOnTurn": {
+          "params": [
+            "notificationID",
+            "turn"
+          ],
+          "return_type": null
+        },
+        "setPlayedAudioOnTurn": {
+          "params": [
+            "notificationID",
+            "turn"
+          ],
+          "return_type": null
+        },
+        "dismiss": {
+          "params": [
+            "_notificationId"
+          ],
+          "return_type": null
+        },
+        "getSummary": {
+          "params": [
+            "notificationId"
+          ],
+          "return_type": null
+        },
+        "canUserDismissNotification": {
+          "params": [
+            "notification"
+          ],
+          "return_type": null
+        }
+      },
+      "properties": {}
+    },
+    "PlayerOperations": {
+      "methods": {
+        "canStart": {
+          "params": [
+            "localPlayerID",
+            "CHOOSE_NARRATIVE_STORY_DIRECTION",
+            "actionOperationArguments",
+            "arg3"
+          ],
+          "return_type": "OperationResult"
+        },
+        "sendRequest": {
+          "params": [
+            "localPlayerID",
+            "CHOOSE_NARRATIVE_STORY_DIRECTION",
+            "actionOperationArguments"
+          ],
+          "return_type": null
+        }
+      },
+      "properties": {}
+    },
+    "UnitOperations": {
+      "methods": {
+        "canStart": {
+          "params": [
+            "unitID",
+            "operationName",
+            "parameters",
+            "arg3"
+          ],
+          "return_type": "OperationResult"
+        },
+        "forEach": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        },
+        "lookup": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": "UnitOperationDefinition"
+        },
+        "sendRequest": {
+          "params": [
+            "unitID",
+            "operationName",
+            "args"
+          ],
+          "return_type": null
+        }
+      },
+      "properties": {}
+    },
+    "CityOperations": {
+      "methods": {
+        "canStart": {
+          "params": [
+            "selectedCityID",
+            "BUILD",
+            "{ ConstructibleType",
+            "arg3"
+          ],
+          "return_type": null
+        },
+        "sendRequest": {
+          "params": [
+            "CityID",
+            "CONSIDER_TOWN_PROJECT",
+            "operationArgs"
+          ],
+          "return_type": null
+        },
+        "canStartQuery": {
+          "params": [
+            "id",
+            "BUILD",
+            "Constructible"
+          ],
+          "return_type": null
+        }
+      },
+      "properties": {}
+    },
+    "UnitCommands": {
+      "methods": {
+        "canStart": {
+          "params": [
+            "selectedUnitID",
+            "MAKE_TRADE_ROUTE",
+            "CommandArguments",
+            "arg3"
+          ],
+          "return_type": "OperationResult"
+        },
+        "forEach": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        },
+        "lookup": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": "UnitCommandDefinition"
+        },
+        "sendRequest": {
+          "params": [
+            "selectedUnitID",
+            "MAKE_TRADE_ROUTE",
+            "actionParams"
+          ],
+          "return_type": null
+        }
+      },
+      "properties": {}
+    },
+    "CityCommands": {
+      "methods": {
+        "canStart": {
+          "params": [
+            "_cityID",
+            "CHANGE_GROWTH_MODE",
+            "{ ConstructibleType",
+            "arg3"
+          ],
+          "return_type": "OperationResult"
+        },
+        "sendRequest": {
+          "params": [
+            "_cityID",
+            "CHANGE_GROWTH_MODE",
+            "operationArgs"
+          ],
+          "return_type": null
+        },
+        "canStartQuery": {
+          "params": [
+            "id",
+            "PURCHASE",
+            "Constructible"
+          ],
+          "return_type": null
+        }
+      },
+      "properties": {}
+    },
+    "DiplomacyDeals": {
+      "methods": {
+        "getDealIds": {
+          "params": [
+            "id"
+          ],
+          "return_type": null
+        },
+        "hasPendingDeal": {
+          "params": [
+            "thisPlayerID",
+            "_selectedPlayerID"
+          ],
+          "return_type": null
+        },
+        "getWorkingDeal": {
+          "params": [
+            "currentWorkingDealID!"
+          ],
+          "return_type": "DiplomacyDeal"
+        },
+        "getWorkingDealItem": {
+          "params": [
+            "currentWorkingDealID!",
+            "itemID"
+          ],
+          "return_type": "DiplomacyDealItem"
+        },
+        "getPossibleWorkingDealItems": {
+          "params": [
+            "workingDealId",
+            "localPlayerID",
+            "CITIES"
+          ],
+          "return_type": "DiplomacyDealItem[]"
+        },
+        "clearWorkingDeal": {
+          "params": [
+            "currentWorkingDealID"
+          ],
+          "return_type": null
+        },
+        "addItemToWorkingDeal": {
+          "params": [
+            "currentWorkingDealID!",
+            "initialPeaceDealItem"
+          ],
+          "return_type": null
+        },
+        "sendWorkingDeal": {
+          "params": [
+            "currentWorkingDealID",
+            "PROPOSED"
+          ],
+          "return_type": null
+        },
+        "removeItemFromWorkingDeal": {
+          "params": [
+            "currentWorkingDealID!",
+            "id"
+          ],
+          "return_type": null
+        }
+      },
+      "properties": {}
+    },
+    "DiplomacySessions": {
+      "methods": {
+        "getKeyNameOrNumber": {
+          "params": [
+            "StatementType"
+          ],
+          "return_type": "string"
+        },
+        "closeSession": {
+          "params": [
+            "ourDiplomacySession"
+          ],
+          "return_type": null
+        },
+        "getKeyName": {
+          "params": [
+            "responseTypeHash"
+          ],
+          "return_type": null
+        },
+        "sendResponse": {
+          "params": [
+            "sessionId",
+            "localPlayerID",
+            "Key"
+          ],
+          "return_type": null
+        }
+      },
+      "properties": {}
+    },
+    "Constructibles": {
+      "methods": {
+        "lookup": {
+          "params": [
+            "constructibleToBeBuiltOnExpand"
+          ],
+          "return_type": "ConstructibleDefinition"
+        },
+        "getIds": {
+          "params": [],
+          "return_type": "ConstructibleID[]"
+        },
+        "find": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        },
+        "getNumWonders": {
+          "params": [],
+          "return_type": null
+        },
+        "isAdjacencyUnlocked": {
+          "params": [
+            "ID"
+          ],
+          "return_type": null
+        },
+        "getGreatWorkBuildings": {
+          "params": [],
+          "return_type": "GreatWorkBuilding[]"
+        },
+        "getNumGreatWorkSlots": {
+          "params": [
+            "constructibleID"
+          ],
+          "return_type": null
+        },
+        "getBuildingYieldFromGreatWorks": {
+          "params": [
+            "yieldType",
+            "constructibleID"
+          ],
+          "return_type": null
+        },
+        "getYieldFromGreatWork": {
+          "params": [
+            "yieldType",
+            "$index"
+          ],
+          "return_type": "number"
+        }
+      },
+      "properties": {
+        "length": {
+          "type": null
+        }
+      }
+    },
+    "DiplomacyTreasury": {
+      "methods": {},
+      "properties": {
+        "diplomacyBalance": {
+          "type": null
+        }
+      }
+    },
+    "Influence": {
+      "methods": {
+        "getSuzerain": {
+          "params": [],
+          "return_type": "PlayerId"
+        }
+      },
+      "properties": {}
+    },
+    "LegacyPaths": {
+      "methods": {
+        "getVictoryPointsFromPlayer": {
+          "params": [
+            "$hash",
+            "id"
+          ],
+          "return_type": null
+        },
+        "lookup": {
+          "params": [
+            "LegacyPathType"
+          ],
+          "return_type": null
+        }
+      },
+      "properties": {}
+    },
+    "AdvancedStart": {
+      "methods": {
+        "get": {
+          "params": [
+            "iPlayer"
+          ],
+          "return_type": null
+        }
+      },
+      "properties": {}
+    },
+    "Stats": {
+      "methods": {
+        "getNetYield": {
+          "params": [
+            "YIELD_HAPPINESS"
+          ],
+          "return_type": null
+        }
+      },
+      "properties": {
+        "numSettlements": {
+          "type": null
+        },
+        "settlementCap": {
+          "type": null
+        }
+      }
+    },
+    "AgeProgressManager": {
+      "methods": {
+        "getMaxAgeProgressionPoints": {
+          "params": [],
+          "return_type": "number"
+        },
+        "getCurrentAgeProgressionPoints": {
+          "params": [],
+          "return_type": "number"
+        },
+        "isMilestoneComplete": {
+          "params": [
+            "AgeProgressionMilestoneType"
+          ],
+          "return_type": "boolean"
+        },
+        "getMilestoneProgressionPoints": {
+          "params": [
+            "AgeProgressionMilestoneType"
+          ],
+          "return_type": null
+        },
+        "canTransitionToNextAge": {
+          "params": [
+            "localPlayerID"
+          ],
+          "return_type": null
+        }
+      },
+      "properties": {
+        "isFinalAge": {
+          "type": null
+        },
+        "ageCountdownStarted": {
+          "type": "boolean"
+        },
+        "getAgeCountdownLength": {
+          "type": null
+        },
+        "isExtendedGame": {
+          "type": null
+        },
+        "isAgeOver": {
+          "type": null
+        }
+      }
+    },
+    "IndependentPowers": {
+      "methods": {
+        "independentName": {
+          "params": [
+            "selectedPlayerID"
+          ],
+          "return_type": "string"
+        },
+        "getIndependentHostility": {
+          "params": [
+            "independentID",
+            "localObserverID"
+          ],
+          "return_type": "string"
+        },
+        "isIndependentEncampment": {
+          "params": [
+            "independentID"
+          ],
+          "return_type": "boolean"
+        },
+        "getIndependentPlayerIDAt": {
+          "params": [
+            "x",
+            "y"
+          ],
+          "return_type": "PlayerId"
+        },
+        "getIndependentPlayerIDFromUnit": {
+          "params": [
+            "viewingObjectID"
+          ],
+          "return_type": "PlayerId"
+        },
+        "getIndependentPlayerIDWithUnitsAt": {
+          "params": [
+            "x",
+            "y"
+          ],
+          "return_type": null
+        },
+        "independentVillageDiscoveredByPlayer": {
+          "params": [
+            "independentID",
+            "localPlayerID"
+          ],
+          "return_type": null
+        },
+        "getIndependentRelationship": {
+          "params": [
+            "independentID",
+            "localObserverID"
+          ],
+          "return_type": "IndependentRelationship"
+        },
+        "getDistanceToNearestIndependent": {
+          "params": [
+            "plotCoord"
+          ],
+          "return_type": "number"
+        }
+      },
+      "properties": {}
+    },
+    "PlacementRules": {
+      "methods": {
+        "getValidOceanNavalLocation": {
+          "params": [
+            "iPlayer"
+          ],
+          "return_type": null
+        }
+      },
+      "properties": {}
+    },
+    "EconomicRules": {
+      "methods": {
+        "adjustForGameSpeed": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        }
+      },
+      "properties": {}
+    },
+    "ProgressionTrees": {
+      "methods": {
+        "getTree": {
+          "params": [
+            "localPlayerID",
+            "_sourceProgressionTree"
+          ],
+          "return_type": "ProgressionTree"
+        },
+        "find": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        },
+        "lookup": {
+          "params": [
+            "ProgressionTree"
+          ],
+          "return_type": "ProgressionTreeDefinition"
+        },
+        "getNodeState": {
+          "params": [
+            "playerId",
+            "nodeType"
+          ],
+          "return_type": "ProgressionTreeNodeState"
+        },
+        "getNode": {
+          "params": [
+            "localPlayerID",
+            "ProgressionTreeNodeType"
+          ],
+          "return_type": "ProgressionTreeNode"
+        },
+        "getTreeStructure": {
+          "params": [
+            "_sourceProgressionTree"
+          ],
+          "return_type": "ProgressionTreeStructureNode[]"
+        },
+        "canEverUnlock": {
+          "params": [
+            "localPlayerID",
+            "nodeType"
+          ],
+          "return_type": null
+        },
+        "hasLegendUnlocked": {
+          "params": [
+            "_player",
+            "nodeType"
+          ],
+          "return_type": null
+        },
+        "getLegendAttributeNodeLockedString": {
+          "params": [
+            "_player",
+            "nodeType"
+          ],
+          "return_type": null
+        }
+      },
+      "properties": {}
+    },
+    "Unlocks": {
+      "methods": {
+        "getProgressForPlayer": {
+          "params": [
+            "UnlockType",
+            "localPlayerID"
+          ],
+          "return_type": null
+        }
+      },
+      "properties": {}
+    }
+  }
+}

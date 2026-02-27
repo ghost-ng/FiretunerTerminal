@@ -12,6 +12,7 @@ dependencies = [
 [project.scripts]
 civ7-terminal = "civ7_terminal.__main__:main"
 civ7-mcp = "civ7_terminal.mcp_server:main"
+civ7-extract-types = "civ7_terminal.extract_types:main"
 
 [build-system]
 requires = ["setuptools>=61.0"]
