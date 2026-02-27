@@ -11,6 +11,7 @@ from textual.message import Message
 from textual.screen import ModalScreen
 from textual.widgets import Button, Input, Static, Tab, TabbedContent, TabPane, TextArea
 
+from .completions import CompletionEngine
 from .connection import ConnectionConfig, ConnectionManager, ConnectionState
 from .widgets import StatusBar, TerminalSession
 
@@ -123,6 +124,7 @@ class CommandInput(TextArea):
     """
 
     BINDINGS = [
+        Binding("tab", "complete", "Complete", show=False, priority=True),
         Binding("up", "history_up", "History Up", show=False, priority=True),
         Binding("down", "history_down", "History Down", show=False, priority=True),
         Binding("enter", "submit", "Submit", show=False, priority=True),
@@ -221,6 +223,16 @@ class CommandInput(TextArea):
         self._history: list[str] = []
         self._history_index: int = -1
         self._current_input: str = ""
+        # Tab-completion state
+        self._completions: list[str] = []
+        self._completion_index: int = -1
+        self._completion_prefix: str = ""
+        self._completion_start: int = -1
+        self._completion_engine: Optional[CompletionEngine] = None
+
+    def set_completion_engine(self, engine: CompletionEngine) -> None:
+        """Attach a CompletionEngine for tab completion."""
+        self._completion_engine = engine
 
     @property
     def value(self) -> str:
@@ -231,6 +243,94 @@ class CommandInput(TextArea):
     def value(self, text: str) -> None:
         """Set the current text."""
         self.load_text(text)
+
+    def _reset_completion_state(self) -> None:
+        """Clear any in-progress tab completion cycle."""
+        self._completions = []
+        self._completion_index = -1
+        self._completion_prefix = ""
+        self._completion_start = -1
+
+    def _cursor_offset(self) -> int:
+        """Return the cursor position as a flat character offset into self.text."""
+        row, col = self.cursor_location
+        offset = 0
+        for i, line in enumerate(self.text.split("\n")):
+            if i == row:
+                offset += col
+                break
+            offset += len(line) + 1  # +1 for the newline
+        return offset
+
+    def _get_current_partial(self) -> str:
+        """Extract the text after the last dot before cursor (the partial member name).
+
+        If the token has no dot, returns the whole token.
+        """
+        offset = self._cursor_offset()
+        if self._completion_engine is None:
+            return ""
+        token = self._completion_engine._extract_token(self.text, offset)
+        if "." in token:
+            return token.rsplit(".", 1)[1]
+        return token
+
+    def action_complete(self) -> None:
+        """Handle Tab: start or cycle through completions."""
+        if self._completion_engine is None or not self._completion_engine.is_loaded:
+            return
+
+        if self._completions and self._completion_index >= 0:
+            # Already cycling -- advance to next candidate
+            self._completion_index = (self._completion_index + 1) % len(self._completions)
+            self._apply_completion()
+            return
+
+        # Start a new completion
+        offset = self._cursor_offset()
+        candidates = self._completion_engine.get_completions(self.text, offset)
+        if not candidates:
+            return
+
+        self._completion_prefix = self._get_current_partial()
+        self._completion_start = offset - len(self._completion_prefix)
+        self._completions = candidates
+        self._completion_index = 0
+        self._apply_completion()
+
+    def _apply_completion(self) -> None:
+        """Replace the current partial token with the selected completion.
+
+        Uses ``_completion_start`` so that cycling works correctly -- each
+        successive Tab replaces from the same start position regardless of
+        the length of the previously inserted candidate.
+        """
+        if not self._completions or self._completion_index < 0:
+            return
+
+        chosen = self._completions[self._completion_index]
+        start = self._completion_start
+        offset = self._cursor_offset()
+
+        full_text = self.text
+        new_text = full_text[:start] + chosen + full_text[offset:]
+        new_cursor_offset = start + len(chosen)
+
+        self.load_text(new_text)
+
+        # Reposition cursor
+        pos = 0
+        for row_idx, line in enumerate(new_text.split("\n")):
+            if pos + len(line) >= new_cursor_offset:
+                col_idx = new_cursor_offset - pos
+                self.move_cursor((row_idx, col_idx))
+                break
+            pos += len(line) + 1  # +1 for newline
+
+    def on_key(self, event: Key) -> None:
+        """Reset completion state on any non-Tab key."""
+        if event.key != "tab":
+            self._reset_completion_state()
 
     def add_to_history(self, command: str) -> None:
         """Add a command to history."""
@@ -386,6 +486,14 @@ class Civ7TerminalApp(App):
 
         # Start connection
         await self._connection.start()
+
+        # Load completions engine
+        from pathlib import Path as _Path
+
+        completions_path = _Path(__file__).resolve().parent.parent / "completions.json"
+        engine = CompletionEngine()
+        if engine.load(completions_path):
+            self.query_one(CommandInput).set_completion_engine(engine)
 
         # Focus on input
         self.query_one(CommandInput).focus()
