@@ -626,14 +626,14 @@ class Civ7TerminalApp(App):
         if session:
             session.add_response(response)
 
-    def _on_connection_error(self, error: str) -> None:
+    def _on_connection_error(self, error: str, replace_last: bool = False) -> None:
         """Handle connection errors."""
         # Only show connection errors after we've been connected at least once
         # This prevents spam during initial connection attempts when the game isn't running
         if self._ever_connected:
             session = self._get_active_session()
             if session:
-                session.add_error(error)
+                session.add_error(error, replace_last=replace_last)
 
     async def on_command_input_submitted(self, event: CommandInput.Submitted) -> None:
         """Handle command input submission."""

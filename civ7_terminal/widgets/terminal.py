@@ -131,14 +131,18 @@ class TerminalOutput(Widget):
 
         self._scroll_to_bottom()
 
-    def add_error(self, error: str) -> None:
+    def add_error(self, error: str, replace_last: bool = False) -> None:
         """
         Add an error message to the output.
 
         Args:
             error: The error message.
+            replace_last: If True, replace the last line instead of appending.
         """
-        self._append_line(f"ERROR: {error}")
+        if replace_last:
+            self._replace_last_line(f"ERROR: {error}")
+        else:
+            self._append_line(f"ERROR: {error}")
         self._scroll_to_bottom()
 
     def add_info(self, info: str) -> None:
@@ -164,6 +168,16 @@ class TerminalOutput(Widget):
             text_area.load_text(current + "\n" + text)
         else:
             text_area.load_text(text)
+
+    def _replace_last_line(self, text: str) -> None:
+        """Replace the last line of the output."""
+        text_area = self.query_one(TextArea)
+        current = text_area.text
+        if "\n" in current:
+            current = current.rsplit("\n", 1)[0] + "\n" + text
+        else:
+            current = text
+        text_area.load_text(current)
 
     def _format_response(self, response: str) -> str:
         """

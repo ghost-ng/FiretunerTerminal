@@ -52,7 +52,7 @@ class ConnectionManager:
         config: ConnectionConfig,
         on_state_change: Optional[Callable[[ConnectionState, Optional[float]], None]] = None,
         on_response: Optional[Callable[[str], None]] = None,
-        on_error: Optional[Callable[[str], None]] = None,
+        on_error: Optional[Callable[[str, bool], None]] = None,
     ):
         """
         Initialize the connection manager.
@@ -81,6 +81,10 @@ class ConnectionManager:
         self._sender_task: Optional[asyncio.Task] = None
         self._receiver_task: Optional[asyncio.Task] = None
 
+        # Dedup repeated error messages
+        self._last_error_msg: Optional[str] = None
+        self._error_count: int = 0
+
     @property
     def state(self) -> ConnectionState:
         """Get current connection state."""
@@ -98,9 +102,17 @@ class ConnectionManager:
             self._on_state_change(state, retry_countdown)
 
     def _notify_error(self, message: str) -> None:
-        """Notify error callback."""
-        if self._on_error:
-            self._on_error(message)
+        """Notify error callback, collapsing repeated identical messages."""
+        if not self._on_error:
+            return
+
+        if message == self._last_error_msg:
+            self._error_count += 1
+            self._on_error(f"{message} (x{self._error_count})", True)
+        else:
+            self._last_error_msg = message
+            self._error_count = 1
+            self._on_error(message, False)
 
     def _notify_response(self, response: str) -> None:
         """Notify response callback."""
@@ -171,8 +183,10 @@ class ConnectionManager:
                 await self._connect()
 
                 if self._state == ConnectionState.CONNECTED:
-                    # Reset retry delay on successful connection
+                    # Reset retry delay and error dedup on successful connection
                     self._retry_delay = self.config.initial_retry_delay
+                    self._last_error_msg = None
+                    self._error_count = 0
 
                     # Start sender and receiver tasks
                     self._sender_task = asyncio.create_task(self._sender_loop())

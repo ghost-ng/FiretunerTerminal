@@ -100,10 +100,10 @@ class TerminalSession(Widget):
         """Add an info message."""
         self.terminal.add_info(info)
 
-    def add_error(self, error: str) -> None:
+    def add_error(self, error: str, replace_last: bool = False) -> None:
         """Add an error message."""
-        self.terminal.add_error(error)
-        if self._session_logger:
+        self.terminal.add_error(error, replace_last=replace_last)
+        if self._session_logger and not replace_last:
             self._session_logger.log_error(error)
 
     def log_command(self, command: str) -> None:
