@@ -87,20 +87,48 @@ Configuration.getMap().getValue(key) ?? Game.getProperty(key)
 
 ## Multiplayer / hotseat limitation (verified 2026-08-16)
 
-**The debug port stops servicing commands once a multiplayer lobby opens —
+**The game CLOSES the FireTuner port (4318) in multiplayer contexts —
 including local hotseat.** Sequence observed: main menu → MULTIPLAYER →
 hotseat → game creator all respond normally (GameSetup writes verified);
-the moment "Host Lobby" opens the staging screen, every command times out
-while the TCP connection stays ESTABLISHED and the game renders normally.
-Suspected tuner suspension in MP contexts (anti-cheat).
+the moment "Host Lobby" opens the staging screen, commands time out, and
+shortly after the listener is gone entirely — new connections get
+ConnectionRefused while the game runs fine. Anti-cheat behavior. The MCP
+server will show as disconnected; it recovers when the port reopens (after
+leaving the MP session — verify timing when known).
 
 Consequences for automation:
 - Hotseat lobby setup (adding human slots, launching) cannot be driven via
   MCP — manual step.
-- Whether the tuner revives once the hotseat GAME loads is untested.
+- **The tuner does NOT revive once the hotseat game loads** (verified
+  2026-08-16: Turn 1 in a loaded hotseat game, port 4318 has no listener
+  at all — the game process listens only on 9444).
 - Fallback verification channel: the map script's `console.log` output in
   `Scripting.log` (map-gen context logging is unaffected), plus any state
   the script persists via `Game.setProperty`.
+
+### Workaround: Cohtml UI remote debugger (verified 2026-08-16, in hotseat)
+
+With `UIDebugger 1` in AppOptions.txt, the game serves the Chrome DevTools
+Protocol on **port 9444** (Coherent Gameface), and this listener stays up
+in multiplayer/hotseat while the tuner is suspended. `Runtime.evaluate`
+executes JS in the UI context (`fs://game/root-game.html`) — same context
+the tuner's CMD channel uses, so `Game`, `Players`, `GameplayMap`, DOM,
+and `engine` are all reachable:
+
+    # discover the page target
+    curl http://127.0.0.1:9444/json
+    # then over ws://127.0.0.1:9444/json/devtools/page/0 :
+    {"id":1,"method":"Runtime.evaluate",
+     "params":{"expression":"Game.turn","returnByValue":true}}
+
+Verified live in a hotseat game: `1+1` → 2, `Game.turn` → 1,
+`Players.getAliveMajorIds()` → [0..5]. Python: `websocket-client` package,
+`create_connection('ws://127.0.0.1:9444/json/devtools/page/0')`.
+
+Caveats: only one CDP client at a time (the official Dev Tools app competes
+for it); JSON-RPC framing instead of the tuner protocol, so the MCP server
+does not use it (yet); local debugging only — do not use to interact with
+real online multiplayer sessions.
 
 Hotseat entry (the part that DOES automate): the MP landing/creator screens
 are old-framework — plain `action-activate` CustomEvent dispatch works
