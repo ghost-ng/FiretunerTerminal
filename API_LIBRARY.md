@@ -34,6 +34,8 @@ A community-built quick reference for the Civilization 7 debug console JavaScrip
 - [GameContext](#gamecontext)
 - [Configuration](#configuration)
 - [UI](#ui)
+- [GameSetup (shell only)](#gamesetup-shell-only)
+- [UI Automation (engine-input)](#ui-automation-engine-input)
 - [WorldBuilder](#worldbuilder)
 - [Useful Patterns](#useful-patterns)
 - [Contributing](#contributing)
@@ -817,6 +819,70 @@ User interface control. Large API surface — most methods are for internal UI m
 | `random()` | `number` | Random number |
 | `randomInt(min, max)` | `number` | Random integer |
 | `debugPrint(message)` | | Print debug message |
+| `reloadUI()` | | Reload all UI documents from the VFS (drops to main menu). Picks up changed UIScripts/CSS without a game restart |
+
+---
+
+## GameSetup (shell only)
+
+Programmatic game configuration — the API behind the entire create-game UI.
+Available at the main menu / create-game flow, not in game.
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `findGameParameter(id)` | parameter | Game-scoped setup parameter (`'Map'`, `'MapSize'`, `'Age'`, `'Difficulty'`, `'GameSpeeds'`, plus mod-registered IDs) |
+| `findPlayerParameter(playerId, id)` | parameter | Player-scoped parameter (`'PlayerCivilization'`, `'PlayerLeader'`, ...) |
+| `setGameParameterValue(param.ID, value)` | | Write a parameter value (applies immediately) |
+| `resolveString(handle)` | `string` | Resolve a GameSetup string handle (incl. LOC_ keys) to text |
+| `makeString(text)` | handle | Create a string handle (for comparing `additionalProperties` names) |
+
+Parameter object: `.value.value` (current), `.value.name` (display handle),
+`.domain.possibleValues` (`[{value, name, description, icon, sortIndex}]`),
+`.readOnly`, `.ID`.
+
+```js
+// Set map + size, then verify what map scripts will read
+const m = GameSetup.findGameParameter('Map');
+GameSetup.setGameParameterValue(m.ID, '{MyMod}modules/maps/my-map.js');
+const s = GameSetup.findGameParameter('MapSize');
+GameSetup.setGameParameterValue(s.ID, 'MAPSIZE_STANDARD');  // auto-adjusts player count
+Configuration.getMap().getValue('MyModOptionKey')            // cross-check
+```
+
+**Gotcha:** a failed map generation resets ALL setup parameters to defaults.
+
+---
+
+## UI Automation (engine-input)
+
+Game buttons **ignore** synthetic DOM events (`el.click()`, `MouseEvent`,
+`action-activate`). They listen for the engine's `engine-input` CustomEvent
+on the element itself and activate on `mousebutton-left` START→FINISH:
+
+```js
+function pressButton(el) {
+  const mk = (status) => new CustomEvent('engine-input', {
+    bubbles: true, cancelable: true,
+    detail: { name: 'mousebutton-left', status, x: -1, y: -1,
+              isTouch: false, isMouse: true }
+  });
+  el.dispatchEvent(mk(InputActionStatuses.START));   // 0
+  el.dispatchEvent(mk(InputActionStatuses.FINISH));  // 1 → onActivate fires
+}
+
+// Find buttons / screens
+Array.from(document.querySelectorAll('div.hero-button-2'))          // primary actions
+  .map(el => el.textContent.trim());
+Array.from(document.querySelectorAll('.fullscreen > *')).map(e => e.tagName); // screen stack
+document.querySelector('screen-dialog-box')?.textContent;           // modal dialogs
+```
+
+`InputActionStatuses` = `{START:0, FINISH:1, UPDATE:2, HOLD:3, DRAG:4}`
+(global). Also accepted: `keyboard-enter`, `touch-tap`. Works on ui-next
+`Activatable` (hero buttons, tiles) and old `fxs-text-button` alike.
+
+See `tests/` in this repo for the full automation + debugging playbook
+(dynamic-import preflight, async-result pattern, log file guide).
 
 ---
 

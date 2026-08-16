@@ -131,7 +131,9 @@ API CATEGORIES:
   Game.CityStates — hasBeenChosen(), isBonusActive()
   GameContext     — sendTurnComplete(), sendPauseRequest()
   Configuration   — getGame(), getMap(), getPlayer(id)
-  UI              — isInGame(), debugPrint(), setClipboardText()
+  UI              — isInGame(), reloadUI(), debugPrint(), setClipboardText()
+  GameSetup       — (shell only) findGameParameter(id), setGameParameterValue(id, v)
+  UI Automation   — press buttons via 'engine-input' CustomEvent (DOM clicks are ignored)
   WorldBuilder    — startBlock(), endBlock()
 
 QUICK EXAMPLES:
@@ -142,10 +144,15 @@ QUICK EXAMPLES:
   JSON.stringify(Players.get(0).Cities.getCities().map(c => c.name))
 
 TIPS:
-  • Use JSON.stringify() for complex objects — raw objects return [object Object]
+  • ALWAYS wrap the last expression in JSON.stringify() — bare numbers/objects
+    often return "" or [object Object]
   • Last expression in your code is the return value
+  • globalThis persists between calls — use it to collect async/promise results
+  • import('fs://game/<mod>/file.js?v=' + Date.now()) — validate a mod module's
+    import graph without launching (cache-buster required after redeploys)
   • Use Object.getOwnPropertyNames(obj) to discover new properties
   • Read civ7://api-library for the full reference with all parameters
+  • See tests/ in this repo for the automated testing & debugging playbook
 """
 
 
