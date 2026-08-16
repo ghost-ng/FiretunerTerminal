@@ -13,7 +13,7 @@ import io
 import sys
 import time
 
-WINDOW_TITLE_SUBSTRING = "Civilization VII"
+WINDOW_TITLE_PREFIX = "Sid Meier's Civilization VII"
 
 
 class ScreenshotError(Exception):
@@ -21,15 +21,24 @@ class ScreenshotError(Exception):
 
 
 def _find_game_window():
-    """Return the Civ 7 window handle, or None if not found/available."""
+    """Return the Civ 7 window handle, or None if not found/available.
+
+    Matches on title prefix, not substring — editors and file managers often
+    have the install path (containing "Civilization VII") in their titles.
+    """
     try:
         import pygetwindow
     except ImportError:
         return None
-    for win in pygetwindow.getWindowsWithTitle(WINDOW_TITLE_SUBSTRING):
-        if win.width > 0 and win.height > 0 and not win.isMinimized:
-            return win
-    return None
+    candidates = [
+        win for win in pygetwindow.getWindowsWithTitle(WINDOW_TITLE_PREFIX)
+        if win.title.startswith(WINDOW_TITLE_PREFIX)
+        and win.width > 0 and win.height > 0 and not win.isMinimized
+    ]
+    # The game window is titled "... (DX12)" / "... (Vulkan)"; prefer it over
+    # e.g. the "... Development Tools" window, which shares the prefix
+    candidates.sort(key=lambda w: 0 if "(DX" in w.title or "(Vulkan" in w.title else 1)
+    return candidates[0] if candidates else None
 
 
 def _capture_printwindow(hwnd):
