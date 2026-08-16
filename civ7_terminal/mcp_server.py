@@ -1,16 +1,18 @@
 """MCP server for Civ7 debug console - allows AI agents to execute JavaScript commands."""
 
 import argparse
+import asyncio
 import sys
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
 from pathlib import Path
 
-from mcp.server.fastmcp import FastMCP, Context
+from mcp.server.fastmcp import FastMCP, Context, Image
 from mcp.server.session import ServerSession
 
 from .connection import ConnectionConfig, ConnectionManager, ConnectionState
+from .screenshot import ScreenshotError, capture_game_window
 
 
 @dataclass
@@ -67,6 +69,31 @@ async def execute_js(
     return response
 
 
+@mcp.tool()
+async def screenshot(save_path: str = "", max_width: int = 1568) -> Image:
+    """Capture a screenshot of the running Civ 7 game window and return it as an image.
+
+    This is an OS-level capture of the game window (the debug port itself is
+    text-only). The window is brought to the foreground first. Falls back to
+    the primary monitor if the Civ 7 window can't be found. Combine with
+    execute_js camera calls (e.g. Camera.lookAtPlot(x, y)) to frame the shot.
+
+    Args:
+        save_path: Optional file path to also save the PNG to disk.
+        max_width: Downscale to this width in pixels (default 1568, good for
+            AI vision). Pass 0 for full resolution.
+    """
+    try:
+        png = await asyncio.to_thread(capture_game_window, max_width)
+    except ScreenshotError as e:
+        raise RuntimeError(str(e)) from e
+
+    if save_path:
+        Path(save_path).write_bytes(png)
+
+    return Image(data=png, format="png")
+
+
 @mcp.resource("civ7://status")
 async def get_status(ctx: Context[ServerSession, Civ7Context]) -> str:
     """Get current connection status to the Civ7 debug port."""
@@ -104,6 +131,7 @@ async def help() -> str:
 
 TOOLS:
   execute_js(code)  — Run JavaScript on the Civ7 debug port. Last expression is returned.
+  screenshot()      — Capture the game window as an image (OS-level; optional save_path).
   help()            — This help text.
 
 RESOURCES:

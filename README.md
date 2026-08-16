@@ -253,6 +253,7 @@ Add to your `claude_desktop_config.json` (same idea - use the venv Python path i
 ### What Agents Get
 
 - **`execute_js(code)`** - Send any JavaScript to the game, get the response back
+- **`screenshot(save_path?, max_width?)`** - Capture the game window as a PNG image. This is an OS-level capture (the debug port is text-only) using PrintWindow, so it works even when other windows overlap the game. Pair it with camera calls via `execute_js` to frame a shot of the map. Windows only for the occlusion-proof path; elsewhere it falls back to a screen grab.
 - **`civ7://status`** - Check connection status to the game
 
 The MCP server auto-reconnects to Civ 7, so agents can start before the game is running. Claude Code and Cursor will start the server automatically when you open a project with the `.mcp.json` config.

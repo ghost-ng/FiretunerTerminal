@@ -72,7 +72,10 @@ class ConnectionManager:
         self._reader: Optional[asyncio.StreamReader] = None
         self._writer: Optional[asyncio.StreamWriter] = None
 
-        self._command_queue: asyncio.Queue[str] = asyncio.Queue()
+        # Commands travel with their response future so concurrent senders
+        # can't interleave and mismatch responses. The sender moves the future
+        # to _pending_responses just before writing, preserving wire order.
+        self._command_queue: asyncio.Queue[tuple[str, asyncio.Future[str]]] = asyncio.Queue()
         self._pending_responses: asyncio.Queue[asyncio.Future[str]] = asyncio.Queue()
 
         self._retry_delay = config.initial_retry_delay
@@ -162,9 +165,9 @@ class ConnectionManager:
         # Create a future for the response
         response_future: asyncio.Future[str] = asyncio.get_event_loop().create_future()
 
-        # Queue the command and its response future
-        await self._command_queue.put(javascript)
-        await self._pending_responses.put(response_future)
+        # Queue the command paired with its response future (atomic — safe
+        # for concurrent callers)
+        await self._command_queue.put((javascript, response_future))
 
         try:
             # Wait for response with timeout
@@ -291,7 +294,7 @@ class ConnectionManager:
             try:
                 # Wait for command with timeout to allow checking shutdown
                 try:
-                    command = await asyncio.wait_for(
+                    command, response_future = await asyncio.wait_for(
                         self._command_queue.get(),
                         timeout=1.0,
                     )
@@ -299,9 +302,13 @@ class ConnectionManager:
                     continue
 
                 if self._writer is None:
+                    if not response_future.done():
+                        response_future.cancel()
                     continue
 
-                # Encode and send command
+                # Register the future in wire order, then send. The game
+                # answers in order, so the receiver matches responses FIFO.
+                await self._pending_responses.put(response_future)
                 data = encode_command(command)
                 self._writer.write(data)
                 await self._writer.drain()
