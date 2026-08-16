@@ -195,7 +195,7 @@ The Civ 7 debug console exposes a rich JavaScript API. The methods and objects a
 
 If you're an AI agent or a human poking around, start there. If you discover something new, [open a PR](https://github.com/ghost-ng/FiretunerTerminal/pulls) to add it.
 
-Want to discover APIs yourself? The **[`tests/`](tests/)** folder has a guide on crawling the game's API ([`tests/api-crawling.md`](tests/api-crawling.md)), a minimal debug-port probe tool ([`tests/probe.py`](tests/probe.py)), and verified walkthroughs like querying the pause menu and exiting to the main menu programmatically.
+Want to discover APIs yourself? The **[`test-harness/`](test-harness/)** folder has a guide on crawling the game's API ([`test-harness/api-crawling.md`](test-harness/api-crawling.md)), a minimal debug-port probe tool ([`test-harness/probe.py`](test-harness/probe.py)), and verified walkthroughs like querying the pause menu and exiting to the main menu programmatically.
 
 ## MCP Server (AI Agent Access)
 

@@ -881,7 +881,7 @@ document.querySelector('screen-dialog-box')?.textContent;           // modal dia
 (global). Also accepted: `keyboard-enter`, `touch-tap`. Works on ui-next
 `Activatable` (hero buttons, tiles) and old `fxs-text-button` alike.
 
-See `tests/` in this repo for the full automation + debugging playbook
+See `test-harness/` in this repo for the full automation + debugging playbook
 (dynamic-import preflight, async-result pattern, log file guide).
 
 ---

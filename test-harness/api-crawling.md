@@ -51,7 +51,7 @@ Same idea in Python: `re.compile(r'(?<![.\w])' + re.escape(name) + r'\.(\w+)\s*\
 
 ## 2. Live crawl over the debug port
 
-Send JS with `python tests/probe.py '<expr>'`. The **last expression is the
+Send JS with `python test-harness/probe.py '<expr>'`. The **last expression is the
 return value**; wrap complex output in `JSON.stringify(...)`.
 
 ### Know your context
@@ -117,7 +117,7 @@ grep -rhoP 'engine\.call\("(\w+)"' "$GAME_DIR" --include="*.js" | sort -u
 ```
 
 Handlers in `ui/.../screens/*/**-model.js` files show which engine calls each
-button ultimately makes (see `tests/pause-menu-exit-to-menu.md` for a worked
+button ultimately makes (see `test-harness/pause-menu-exit-to-menu.md` for a worked
 example).
 
 ## 3. Validation workflow (what to trust)

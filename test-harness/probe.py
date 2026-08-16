@@ -5,9 +5,9 @@ walkthroughs in this folder and handy for quick one-off queries without
 launching the full terminal UI.
 
 Usage:
-    python tests/probe.py 'GameplayMap.getGridWidth()'
-    python tests/probe.py 'typeof Players'
-    python tests/probe.py --host 127.0.0.1 --port 4318 'UI.isInShell()'
+    python test-harness/probe.py 'GameplayMap.getGridWidth()'
+    python test-harness/probe.py 'typeof Players'
+    python test-harness/probe.py --host 127.0.0.1 --port 4318 'UI.isInShell()'
 
 Import as a module for scripted probing:
     from tests.probe import Probe
@@ -20,7 +20,7 @@ import socket
 import sys
 from pathlib import Path
 
-# Allow running from the repo root or from inside tests/
+# Allow running from the repo root or from inside test-harness/
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from civ7_terminal import protocol

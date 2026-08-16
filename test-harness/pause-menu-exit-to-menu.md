@@ -4,7 +4,7 @@ A verified, repeatable session (game version of 2026-08-14) that enumerates the
 in-game pause (Esc) menu options and programmatically returns the game to the
 main menu over the debug port.
 
-All commands below can be sent with `python tests/probe.py '<js>'` or via the
+All commands below can be sent with `python test-harness/probe.py '<js>'` or via the
 MCP `execute_js` tool.
 
 ## 1. Where the menu lives in the game source

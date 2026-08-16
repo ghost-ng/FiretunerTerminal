@@ -10,7 +10,7 @@ in order received, like the game does. Then:
      pointed at the mock, fire N concurrent execute_js tool calls through the
      MCP client SDK, assert every result matches.
 
-Usage:  python tests/test_parallel_mcp.py [--port 43180]
+Usage:  python test-harness/test_parallel_mcp.py [--port 43180]
 Exit code 0 = all passed.
 """
 

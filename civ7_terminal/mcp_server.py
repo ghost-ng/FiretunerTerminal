@@ -186,7 +186,7 @@ TIPS:
     import graph without launching (cache-buster required after redeploys)
   • Use Object.getOwnPropertyNames(obj) to discover new properties
   • Read civ7://api-library for the full reference with all parameters
-  • See tests/ in this repo for the automated testing & debugging playbook
+  • See test-harness/ in this repo for the automated testing & debugging playbook
 """
 
 
