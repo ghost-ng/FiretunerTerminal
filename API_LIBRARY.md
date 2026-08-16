@@ -686,7 +686,6 @@ Game-level systems. Access via `Game.<SubSystem>`.
 | `getPlayerHistory(playerId)` | `object` | Diplomatic history |
 | `getPlayerEvents(playerId)` | `array` | Player's diplomatic events |
 | `getRecentlyEndedDiplomaticEvents()` | `array` | Recently ended events |
-| `getVictories()` | `array` | Diplomatic victories |
 
 ---
 

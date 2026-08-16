@@ -5,8 +5,8 @@
       "methods": {
         "getResourceType": {
           "params": [
-            "iAdjacentX",
-            "iAdjacentY"
+            "iX",
+            "iY"
           ],
           "return_type": "ResourceType"
         },
@@ -23,13 +23,6 @@
           ],
           "return_type": "number"
         },
-        "getTerrainType": {
-          "params": [
-            "iX",
-            "iY"
-          ],
-          "return_type": "TerrainType"
-        },
         "getGridWidth": {
           "params": [],
           "return_type": "number"
@@ -41,6 +34,13 @@
         "getMapSize": {
           "params": [],
           "return_type": null
+        },
+        "getTerrainType": {
+          "params": [
+            "iX",
+            "iY"
+          ],
+          "return_type": "TerrainType"
         },
         "getRandomSeed": {
           "params": [],
@@ -287,13 +287,6 @@
           ],
           "return_type": "DirectionTypes"
         },
-        "getYieldsWithCity": {
-          "params": [
-            "location",
-            "cityID"
-          ],
-          "return_type": null
-        },
         "getRevealedState": {
           "params": [
             "localObserverID",
@@ -352,6 +345,13 @@
           ],
           "return_type": null
         },
+        "getYieldsWithCity": {
+          "params": [
+            "location",
+            "cityID"
+          ],
+          "return_type": null
+        },
         "getYields": {
           "params": [
             "plotIndex",
@@ -362,58 +362,6 @@
         "getRevealedStates": {
           "params": [
             "localPlayerID"
-          ],
-          "return_type": null
-        },
-        "getRouteType": {
-          "params": [
-            "x",
-            "y"
-          ],
-          "return_type": "RouteType"
-        },
-        "isFerry": {
-          "params": [
-            "x",
-            "y"
-          ],
-          "return_type": "boolean"
-        },
-        "getOwnerHostility": {
-          "params": [
-            "x",
-            "y",
-            "localPlayerID"
-          ],
-          "return_type": "string"
-        },
-        "getYield": {
-          "params": [
-            "x",
-            "y",
-            "YieldType",
-            "playerID"
-          ],
-          "return_type": "number"
-        },
-        "isVolcano": {
-          "params": [
-            "x",
-            "y"
-          ],
-          "return_type": null
-        },
-        "isVolcanoActive": {
-          "params": [
-            "x",
-            "y"
-          ],
-          "return_type": null
-        },
-        "isCityWithinMinimumDistance": {
-          "params": [
-            "x",
-            "y"
           ],
           "return_type": null
         },
@@ -429,6 +377,42 @@
             "plotCursorCoords"
           ],
           "return_type": null
+        },
+        "isVolcano": {
+          "params": [
+            "x",
+            "y"
+          ],
+          "return_type": null
+        },
+        "isVolcanoActive": {
+          "params": [
+            "x",
+            "y"
+          ],
+          "return_type": null
+        },
+        "getRouteType": {
+          "params": [
+            "x",
+            "y"
+          ],
+          "return_type": null
+        },
+        "isFerry": {
+          "params": [
+            "x",
+            "y"
+          ],
+          "return_type": null
+        },
+        "getOwnerHostility": {
+          "params": [
+            "x",
+            "y",
+            "localPlayerID"
+          ],
+          "return_type": null
         }
       },
       "properties": {}
@@ -441,6 +425,10 @@
           ],
           "return_type": "PlayerLibrary"
         },
+        "getAliveMajorIds": {
+          "params": [],
+          "return_type": null
+        },
         "getAlive": {
           "params": [],
           "return_type": "PlayerLibrary[]"
@@ -449,19 +437,9 @@
           "params": [],
           "return_type": null
         },
-        "getAliveMajorIds": {
-          "params": [],
-          "return_type": null
-        },
         "isHuman": {
           "params": [
             "localPlayerID"
-          ],
-          "return_type": null
-        },
-        "push": {
-          "params": [
-            "playerConfig"
           ],
           "return_type": null
         },
@@ -481,6 +459,10 @@
           ],
           "return_type": null
         },
+        "getAliveHumanIds": {
+          "params": [],
+          "return_type": null
+        },
         "isAlive": {
           "params": [
             "localPlayerID"
@@ -493,43 +475,16 @@
           ],
           "return_type": null
         },
-        "filter": {
-          "params": [
-            "arg0"
-          ],
-          "return_type": null
-        },
-        "forEach": {
-          "params": [
-            "arg0"
-          ],
-          "return_type": null
-        },
-        "includes": {
-          "params": [
-            "localPlayerID"
-          ],
-          "return_type": null
-        },
-        "some": {
-          "params": [
-            "arg0"
-          ],
+        "getNumAliveHumans": {
+          "params": [],
           "return_type": null
         },
         "getWasEverAliveMajorIds": {
           "params": [],
           "return_type": null
-        },
-        "entries": {
-          "params": [],
-          "return_type": null
         }
       },
       "properties": {
-        "length": {
-          "type": null
-        },
         "AI": {
           "type": null
         },
@@ -543,65 +498,15 @@
     },
     "Game": {
       "methods": {
-        "isRunning": {
-          "params": [],
-          "return_type": null
-        },
         "getHash": {
           "params": [
             "itemBankName"
           ],
           "return_type": "number"
         },
-        "start": {
-          "params": [
-            "startParameters"
-          ],
-          "return_type": null
-        },
-        "cancel": {
-          "params": [],
-          "return_type": null
-        },
-        "randomRange": {
-          "params": [
-            "arg0",
-            "gridHeight - Y_PADDING - 1"
-          ],
-          "return_type": null
-        },
-        "getBenchmarkType": {
-          "params": [],
-          "return_type": null
-        },
-        "setLightweightGraphPosition": {
-          "params": [
-            "x",
-            "y",
-            "width",
-            "height"
-          ],
-          "return_type": null
-        },
-        "getDebugUiVisiblity": {
-          "params": [],
-          "return_type": null
-        },
         "getTurnDate": {
           "params": [],
           "return_type": "string"
-        },
-        "bind": {
-          "params": [
-            "arg0"
-          ],
-          "return_type": null
-        },
-        "setDebugUiVisiblity": {
-          "params": [
-            "arg0"
-          ],
-          "return_type": null
         }
       },
       "properties": {
@@ -611,40 +516,10 @@
         "age": {
           "type": "AgeType"
         },
-        "Location": {
-          "type": null
-        },
-        "Type": {
-          "type": null
-        },
-        "IsAutosave": {
-          "type": null
-        },
-        "IsQuicksave": {
-          "type": null
-        },
-        "FileName": {
-          "type": null
-        },
-        "Directory": {
-          "type": null
-        },
-        "LocationCategories": {
-          "type": null
-        },
-        "ContentType": {
-          "type": null
-        },
-        "playerScores": {
-          "type": null
-        },
-        "updateCallback": {
+        "maxTurns": {
           "type": null
         },
         "Summary": {
-          "type": null
-        },
-        "maxTurns": {
           "type": null
         }
       }
@@ -695,7 +570,7 @@
       "methods": {
         "getUser": {
           "params": [],
-          "return_type": "ConfigurationUserLibrary"
+          "return_type": null
         },
         "getPlayer": {
           "params": [
@@ -711,7 +586,7 @@
           "params": [
             "arg0"
           ],
-          "return_type": "number"
+          "return_type": "string"
         },
         "getGameValue": {
           "params": [
@@ -721,11 +596,11 @@
         },
         "editGame": {
           "params": [],
-          "return_type": "ConfigurationGameMutator"
+          "return_type": null
         },
         "editPlayer": {
           "params": [
-            "localPlayerID"
+            "playerId"
           ],
           "return_type": "ConfigurationPlayerMutator"
         },
@@ -742,26 +617,7 @@
           "return_type": null
         }
       },
-      "properties": {
-        "leaderTypeName": {
-          "type": null
-        },
-        "leaderName": {
-          "type": null
-        },
-        "previousAgeCount": {
-          "type": null
-        },
-        "script": {
-          "type": null
-        },
-        "isNetworkMultiplayer": {
-          "type": null
-        },
-        "isSavedGame": {
-          "type": null
-        }
-      }
+      "properties": {}
     },
     "UI": {
       "methods": {
@@ -775,20 +631,30 @@
           ],
           "return_type": null
         },
-        "getIconURL": {
+        "getAgeTransitionCameraState": {
+          "params": [],
+          "return_type": null
+        },
+        "supports": {
           "params": [
-            "civID == \"RANDOM\" ? \"CIVILIZATION_RANDOM\"",
-            "indCivType == \"MILITARISTIC\" ? \"PLAYER_RELATIONSHIP\""
+            "AutoScaleAdjustment"
           ],
-          "return_type": "string"
+          "return_type": null
         },
         "getOption": {
           "params": [
-            "RIBBON_DISPLAY_OPTION_SET",
-            "RIBBON_DISPLAY_OPTION_TYPE",
-            "optionName"
+            "PlayerCombatCameraPan_optionSet",
+            "PlayerCombatCameraPan_optionType",
+            "PlayerCombatCameraPan_optionName"
           ],
           "return_type": "number"
+        },
+        "getIconURL": {
+          "params": [
+            "selectedReligionType",
+            "ConstructibleClass"
+          ],
+          "return_type": "string"
         },
         "sendAudioEvent": {
           "params": [
@@ -807,14 +673,6 @@
           "params": [],
           "return_type": null
         },
-        "requestPortrait": {
-          "params": [
-            "unitType",
-            "unitType",
-            "isUnique ? \"UnitPortraitsBG_UNIQUE\""
-          ],
-          "return_type": null
-        },
         "isInShell": {
           "params": [],
           "return_type": null
@@ -823,21 +681,9 @@
           "params": [],
           "return_type": null
         },
-        "createModelGroup": {
-          "params": [
-            "arg0"
-          ],
-          "return_type": null
-        },
         "releaseEventID": {
           "params": [
             "eventReference"
-          ],
-          "return_type": null
-        },
-        "requestCinematic": {
-          "params": [
-            "plot"
           ],
           "return_type": null
         },
@@ -845,31 +691,10 @@
           "params": [],
           "return_type": null
         },
-        "createFixedMarker": {
-          "params": [
-            "{ x, y, z"
-          ],
-          "return_type": null
-        },
-        "triggerVFXAtPlot": {
-          "params": [
-            "vfxName",
-            "location",
-            "{ x",
-            "{ angle"
-          ],
-          "return_type": null
-        },
-        "triggerCinematic": {
-          "params": [
-            "location"
-          ],
-          "return_type": null
-        },
         "getIconCSS": {
           "params": [
             "selectedReligionType",
-            "context ? context"
+            "portraitContext"
           ],
           "return_type": "string"
         },
@@ -880,20 +705,12 @@
           ],
           "return_type": "string"
         },
-        "createOverlayGroup": {
-          "params": [
-            "arg0",
-            "UNIT_MOVEMENT_SKIRT",
-            "{ x"
-          ],
-          "return_type": null
-        },
         "setOption": {
           "params": [
-            "RIBBON_DISPLAY_OPTION_SET",
-            "RIBBON_DISPLAY_OPTION_TYPE",
-            "optionName",
-            "enable ? 1"
+            "PlayerCombatCameraPan_optionSet",
+            "PlayerCombatCameraPan_optionType",
+            "PlayerCombatCameraPan_optionName",
+            "value"
           ],
           "return_type": null
         },
@@ -907,29 +724,7 @@
           ],
           "return_type": null
         },
-        "hash": {
-          "params": [
-            "arg0"
-          ],
-          "return_type": null
-        },
-        "releaseMarker": {
-          "params": [
-            "leader3DRevealFlagMarker"
-          ],
-          "return_type": null
-        },
-        "clearBackground": {
-          "params": [],
-          "return_type": null
-        },
-        "setUnitVisibility": {
-          "params": [
-            "arg0"
-          ],
-          "return_type": null
-        },
-        "popFilter": {
+        "requestReviewAppleArcade": {
           "params": [],
           "return_type": null
         },
@@ -939,27 +734,8 @@
           ],
           "return_type": null
         },
-        "pushRegionColorFilter": {
-          "params": [
-            "arg0",
-            "arg1",
-            "OUTER_REGION_OVERLAY_FILTER"
-          ],
-          "return_type": null
-        },
-        "getPlotLocation": {
-          "params": [
-            "desiredDestination",
-            "{ x",
-            "TERRAIN"
-          ],
-          "return_type": null
-        },
-        "createSpriteGrid": {
-          "params": [
-            "name + \"_Background\"",
-            "FixedBillboard"
-          ],
+        "getCursorType": {
+          "params": [],
           "return_type": null
         },
         "getSafeAreaMargins": {
@@ -967,10 +743,6 @@
           "return_type": "SafeAreaMargins"
         },
         "getGameLoadingState": {
-          "params": [],
-          "return_type": null
-        },
-        "notifyUIReady": {
           "params": [],
           "return_type": null
         },
@@ -984,10 +756,12 @@
           "params": [],
           "return_type": null
         },
-        "minimapToWorld": {
-          "params": [
-            "{ x"
-          ],
+        "isTransitioningBetweenAges": {
+          "params": [],
+          "return_type": null
+        },
+        "notifyUIReady": {
+          "params": [],
           "return_type": null
         },
         "canDisplayKeyboard": {
@@ -998,31 +772,7 @@
           "params": [],
           "return_type": null
         },
-        "lookup": {
-          "params": [
-            "eventClass"
-          ],
-          "return_type": null
-        },
         "setClipboardText": {
-          "params": [
-            "arg0"
-          ],
-          "return_type": null
-        },
-        "isDebugPlotInfoVisible": {
-          "params": [],
-          "return_type": null
-        },
-        "setPlotLocation": {
-          "params": [
-            "x",
-            "y",
-            "plotIndex"
-          ],
-          "return_type": null
-        },
-        "isCursorLocked": {
           "params": [],
           "return_type": null
         },
@@ -1047,12 +797,6 @@
         "playUnitSelectSound": {
           "params": [
             "unitType"
-          ],
-          "return_type": null
-        },
-        "pushGaussianBlurFilter": {
-          "params": [
-            "arg0"
           ],
           "return_type": null
         },
@@ -1093,6 +837,14 @@
           "params": [],
           "return_type": null
         },
+        "isGameCenterNetworkBuild": {
+          "params": [],
+          "return_type": null
+        },
+        "isDebugPlotInfoVisible": {
+          "params": [],
+          "return_type": null
+        },
         "notifyUIReadyForEvents": {
           "params": [],
           "return_type": null
@@ -1106,21 +858,6 @@
           "return_type": null
         },
         "isMouseAvailable": {
-          "params": [],
-          "return_type": null
-        },
-        "displayKeyboard": {
-          "params": [
-            "value",
-            "arg1"
-          ],
-          "return_type": null
-        },
-        "getVirtualKeyboardType": {
-          "params": [],
-          "return_type": null
-        },
-        "getIMEConfirmationValueLocation": {
           "params": [],
           "return_type": null
         },
@@ -1143,6 +880,18 @@
           "params": [],
           "return_type": null
         },
+        "displayKeyboard": {
+          "params": [],
+          "return_type": null
+        },
+        "getVirtualKeyboardType": {
+          "params": [],
+          "return_type": null
+        },
+        "getIMEConfirmationValueLocation": {
+          "params": [],
+          "return_type": null
+        },
         "panelDefault": {
           "params": [],
           "return_type": null
@@ -1153,66 +902,8 @@
           ],
           "return_type": null
         },
-        "getCursorType": {
-          "params": [],
-          "return_type": null
-        },
         "getCursorURL": {
           "params": [],
-          "return_type": null
-        },
-        "getScreenPlotPos": {
-          "params": [
-            "plotCursorCoords"
-          ],
-          "return_type": null
-        },
-        "getPlotAt": {
-          "params": [
-            "controllerCursor",
-            "arg1"
-          ],
-          "return_type": null
-        },
-        "wrapWorldPosition": {
-          "params": [
-            "pos",
-            "{ x"
-          ],
-          "return_type": null
-        },
-        "roundDirectionToHex": {
-          "params": [
-            "dx",
-            "dy"
-          ],
-          "return_type": null
-        },
-        "moveFixedMarkerImmediate": {
-          "params": [
-            "miniCursorMarker",
-            "{ x, y, z"
-          ],
-          "return_type": null
-        },
-        "triggerVFXAtPos": {
-          "params": [
-            "arg0",
-            "{ x, y, z"
-          ],
-          "return_type": null
-        },
-        "getDirection": {
-          "params": [
-            "x",
-            "y"
-          ],
-          "return_type": null
-        },
-        "getScreenPos": {
-          "params": [
-            "controllerCursor"
-          ],
           "return_type": null
         },
         "getChatIconGroups": {
@@ -1223,64 +914,6 @@
           "params": [
             "groupId"
           ],
-          "return_type": null
-        },
-        "refreshInput": {
-          "params": [],
-          "return_type": null
-        },
-        "setViewExperience": {
-          "params": [
-            "newExperience"
-          ],
-          "return_type": null
-        },
-        "isShowIntroSequences": {
-          "params": [],
-          "return_type": null
-        },
-        "SetShowIntroSequences": {
-          "params": [
-            "value ? 1"
-          ],
-          "return_type": null
-        },
-        "useReadOnlyInputMappingScreen": {
-          "params": [],
-          "return_type": null
-        },
-        "hasViewExperience": {
-          "params": [],
-          "return_type": null
-        },
-        "supportsHIDPI": {
-          "params": [],
-          "return_type": null
-        },
-        "canSetAutoScaling": {
-          "params": [],
-          "return_type": null
-        },
-        "supportsTouchscreenTapDelay": {
-          "params": [],
-          "return_type": null
-        },
-        "getGraphicsProfile": {
-          "params": [
-            "profile as number"
-          ],
-          "return_type": null
-        },
-        "exposeShowIntroVideoOption": {
-          "params": [],
-          "return_type": null
-        },
-        "isRumbleAvailable": {
-          "params": [],
-          "return_type": null
-        },
-        "areAdaptiveTriggersAvailable": {
-          "params": [],
           "return_type": null
         },
         "commitApplicationOptions": {
@@ -1323,6 +956,74 @@
           "params": [],
           "return_type": null
         },
+        "refreshInput": {
+          "params": [],
+          "return_type": null
+        },
+        "setViewExperience": {
+          "params": [
+            "newExperience"
+          ],
+          "return_type": null
+        },
+        "getStretchMenusToFit": {
+          "params": [],
+          "return_type": null
+        },
+        "setStretchMenusToFit": {
+          "params": [
+            "newStretch"
+          ],
+          "return_type": null
+        },
+        "isShowIntroSequences": {
+          "params": [],
+          "return_type": null
+        },
+        "SetShowIntroSequences": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        },
+        "useReadOnlyInputMappingScreen": {
+          "params": [],
+          "return_type": null
+        },
+        "hasViewExperience": {
+          "params": [],
+          "return_type": null
+        },
+        "supportsHIDPI": {
+          "params": [],
+          "return_type": null
+        },
+        "canSetAutoScaling": {
+          "params": [],
+          "return_type": null
+        },
+        "supportsTouchscreenTapDelay": {
+          "params": [],
+          "return_type": null
+        },
+        "getGraphicsProfile": {
+          "params": [
+            "profile as number"
+          ],
+          "return_type": null
+        },
+        "exposeShowIntroVideoOption": {
+          "params": [],
+          "return_type": null
+        },
+        "isRumbleAvailable": {
+          "params": [],
+          "return_type": null
+        },
+        "areAdaptiveTriggersAvailable": {
+          "params": [],
+          "return_type": null
+        },
         "supportsDLC": {
           "params": [],
           "return_type": null
@@ -1347,37 +1048,12 @@
           ],
           "return_type": null
         },
-        "isNonPreferredCivsDisabled": {
-          "params": [],
-          "return_type": null
-        },
-        "addBackgroundLayer": {
-          "params": [
-            "arg0",
-            "arg1"
-          ],
-          "return_type": null
-        },
-        "addMaskedBackgroundLayer": {
-          "params": [
-            "backgroundName",
-            "arg1",
-            "{\r\n\t\t\t\t\tstretch"
-          ],
-          "return_type": null
-        },
         "shouldIncludeAppleCredit": {
           "params": [],
           "return_type": null
         },
         "shouldDisplayBenchmarkingTools": {
           "params": [],
-          "return_type": null
-        },
-        "pushGlobalColorFilter": {
-          "params": [
-            "{ saturation"
-          ],
           "return_type": null
         },
         "isNetworkBuild": {
@@ -1389,6 +1065,10 @@
           "return_type": null
         },
         "shouldShowAdditionalContent": {
+          "params": [],
+          "return_type": null
+        },
+        "shouldShowLowMemoryWarning": {
           "params": [],
           "return_type": null
         },
@@ -1407,18 +1087,6 @@
           ],
           "return_type": null
         },
-        "loadAsset": {
-          "params": [
-            "assetName"
-          ],
-          "return_type": null
-        },
-        "isAssetLoaded": {
-          "params": [
-            "currentPreloadingAsset"
-          ],
-          "return_type": null
-        },
         "setShowODRDownloadPrompt": {
           "params": [
             "arg0"
@@ -1430,6 +1098,10 @@
           "return_type": null
         },
         "supportsAutoMatching": {
+          "params": [],
+          "return_type": null
+        },
+        "supportsHotseat": {
           "params": [],
           "return_type": null
         },
@@ -1489,15 +1161,17 @@
           "return_type": null
         },
         "setGlobalScale": {
+          "params": [],
+          "return_type": null
+        },
+        "setCursorSize": {
           "params": [
             "arg0"
           ],
           "return_type": null
         },
-        "setCursorSize": {
-          "params": [
-            "{ i"
-          ],
+        "isCursorLocked": {
+          "params": [],
           "return_type": null
         },
         "viewChanged": {
@@ -1514,68 +1188,11 @@
         "Control": {
           "type": null
         },
-        "ModelGroup": {
-          "type": null
-        },
-        "Marker": {
-          "type": null
-        },
-        "Cinematic": {
-          "type": null
-        },
-        "PlotSet": {
-          "type": null
-        },
-        "BorderStyle": {
-          "type": null
-        },
         "Debug": {
-          "type": null
-        },
-        "ModelInstance": {
-          "type": null
-        },
-        "ForegroundCamera": {
-          "type": null
-        },
-        "PlotOverlay": {
-          "type": null
-        },
-        "ColorFilter": {
-          "type": null
-        },
-        "OverlayGroup": {
-          "type": null
-        },
-        "BorderOverlay": {
-          "type": null
-        },
-        "SpriteGrid": {
-          "type": null
-        },
-        "HexGridOverlay": {
-          "type": null
-        },
-        "Plot": {
-          "type": null
-        },
-        "SpriteParams": {
-          "type": null
-        },
-        "TextParams": {
           "type": null
         },
         "Color": {
           "type": "PlayerColor"
-        },
-        "VFXParams": {
-          "type": null
-        },
-        "ModelParams": {
-          "type": null
-        },
-        "AssetID": {
-          "type": null
         }
       }
     },
@@ -1589,17 +1206,23 @@
     },
     "WorldUI": {
       "methods": {
+        "pushGaussianBlurFilter": {
+          "params": [
+            "arg0"
+          ],
+          "return_type": null
+        },
         "requestPortrait": {
           "params": [
             "unitType",
             "unitType",
-            "isUnique ? \"UnitPortraitsBG_UNIQUE\""
+            "arg2"
           ],
           "return_type": null
         },
         "createModelGroup": {
           "params": [
-            "arg0"
+            "name"
           ],
           "return_type": null
         },
@@ -1611,7 +1234,7 @@
         },
         "createFixedMarker": {
           "params": [
-            "{ x, y, z"
+            "arg0"
           ],
           "return_type": null
         },
@@ -1619,8 +1242,8 @@
           "params": [
             "vfxName",
             "location",
-            "{ x",
-            "{ angle"
+            "arg2",
+            "arg3"
           ],
           "return_type": null
         },
@@ -1634,13 +1257,20 @@
           "params": [
             "arg0",
             "UNIT_MOVEMENT_SKIRT",
-            "{ x"
+            "arg2"
           ],
           "return_type": null
         },
         "hash": {
           "params": [
             "arg0"
+          ],
+          "return_type": null
+        },
+        "moveFixedMarkerImmediate": {
+          "params": [
+            "leader3DMarkerCenter",
+            "arg1"
           ],
           "return_type": null
         },
@@ -1675,7 +1305,7 @@
         "getPlotLocation": {
           "params": [
             "desiredDestination",
-            "{ x",
+            "arg1",
             "TERRAIN"
           ],
           "return_type": "float3"
@@ -1688,12 +1318,6 @@
           "return_type": null
         },
         "minimapToWorld": {
-          "params": [
-            "{ x"
-          ],
-          "return_type": null
-        },
-        "pushGaussianBlurFilter": {
           "params": [
             "arg0"
           ],
@@ -1715,7 +1339,7 @@
         "wrapWorldPosition": {
           "params": [
             "pos",
-            "{ x"
+            "arg1"
           ],
           "return_type": null
         },
@@ -1726,17 +1350,10 @@
           ],
           "return_type": null
         },
-        "moveFixedMarkerImmediate": {
-          "params": [
-            "miniCursorMarker",
-            "{ x, y, z"
-          ],
-          "return_type": null
-        },
         "triggerVFXAtPos": {
           "params": [
             "arg0",
-            "{ x, y, z"
+            "arg1"
           ],
           "return_type": null
         },
@@ -1764,13 +1381,13 @@
           "params": [
             "backgroundName",
             "arg1",
-            "{\r\n\t\t\t\t\tstretch"
+            "arg2"
           ],
           "return_type": null
         },
         "pushGlobalColorFilter": {
           "params": [
-            "{ saturation"
+            "arg0"
           ],
           "return_type": null
         },
@@ -1785,6 +1402,19 @@
             "currentPreloadingAsset"
           ],
           "return_type": null
+        },
+        "triggerScreenVFX": {
+          "params": [
+            "vfxName",
+            "minXY",
+            "maxXY",
+            "arg3"
+          ],
+          "return_type": null
+        },
+        "clearTemporalHistory": {
+          "params": [],
+          "return_type": null
         }
       },
       "properties": {
@@ -1797,6 +1427,9 @@
         "Cinematic": {
           "type": null
         },
+        "ForegroundCamera": {
+          "type": null
+        },
         "PlotSet": {
           "type": null
         },
@@ -1804,9 +1437,6 @@
           "type": null
         },
         "ModelInstance": {
-          "type": null
-        },
-        "ForegroundCamera": {
           "type": null
         },
         "PlotOverlay": {
@@ -1824,13 +1454,13 @@
         "SpriteGrid": {
           "type": null
         },
+        "SpriteParams": {
+          "type": null
+        },
         "HexGridOverlay": {
           "type": null
         },
         "Plot": {
-          "type": null
-        },
-        "SpriteParams": {
           "type": null
         },
         "TextParams": {
@@ -1843,6 +1473,24 @@
           "type": null
         },
         "AssetID": {
+          "type": null
+        },
+        "Scene": {
+          "type": null
+        },
+        "Location": {
+          "type": null
+        },
+        "Angle": {
+          "type": null
+        },
+        "Color": {
+          "type": null
+        },
+        "SelectionScriptParams": {
+          "type": null
+        },
+        "BackgroundParams": {
           "type": null
         }
       }
@@ -1858,8 +1506,8 @@
         },
         "compose": {
           "params": [
-            "volcanoDetailsKey",
-            "settlementInDistantLands",
+            "arg0",
+            "unassignedBonus",
             "completionScore",
             "theirInfluenceBonus"
           ],
@@ -1868,14 +1516,21 @@
         "stylize": {
           "params": [
             "arg0",
-            "value > 0 ? \"text-positive\"",
-            "goldenAgeTurnsLeft",
-            "theirInfluenceBonus"
+            "foodExportPotential",
+            "name",
+            "projectName",
+            "projectName"
           ],
           "return_type": "string"
         },
         "getCurrentDisplayLocale": {
           "params": [],
+          "return_type": null
+        },
+        "plainText": {
+          "params": [
+            "rawAbilityTitle"
+          ],
           "return_type": null
         },
         "keyExists": {
@@ -1886,14 +1541,14 @@
         },
         "compare": {
           "params": [
-            "Description ?? \"\"",
-            "Description ?? \"\""
+            "settlementANameString",
+            "settlementBNameString"
           ],
           "return_type": null
         },
         "toUpper": {
           "params": [
-            "StoryTitle"
+            "newStr"
           ],
           "return_type": null
         },
@@ -1901,12 +1556,6 @@
           "params": [
             "baseReligionName",
             "customReligionName"
-          ],
-          "return_type": null
-        },
-        "plainText": {
-          "params": [
-            "string"
           ],
           "return_type": null
         },
@@ -1920,6 +1569,10 @@
           "params": [
             "victoryProgression / maxAgeProgress"
           ],
+          "return_type": null
+        },
+        "toLower": {
+          "params": [],
           "return_type": null
         },
         "getIconTagsForLocStrings": {
@@ -2009,17 +1662,11 @@
           "return_type": null
         },
         "addRoute": {
-          "params": [
-            "x",
-            "y",
-            "arg2"
-          ],
+          "params": [],
           "return_type": null
         },
         "addDiscoveryType": {
-          "params": [
-            "arg0"
-          ],
+          "params": [],
           "return_type": null
         },
         "addIndependentType": {
@@ -2078,64 +1725,24 @@
           ],
           "return_type": "District"
         },
+        "getFreeConstructible": {
+          "params": [
+            "plotCoord",
+            "localPlayerID"
+          ],
+          "return_type": null
+        },
         "getAtLocation": {
           "params": [
-            "plotCoordinate"
+            "plotIndex"
           ],
           "return_type": "District"
-        },
-        "getDistrictIds": {
-          "params": [],
-          "return_type": null
-        },
-        "getDistrictHealth": {
-          "params": [
-            "location"
-          ],
-          "return_type": null
-        },
-        "getDistrictMaxHealth": {
-          "params": [
-            "location"
-          ],
-          "return_type": null
         },
         "getLocations": {
           "params": [
             "districtIdsRural"
           ],
           "return_type": "PlotCoord[]"
-        },
-        "getIdsOfType": {
-          "params": [
-            "districtType"
-          ],
-          "return_type": null
-        },
-        "getIdsOfTypes": {
-          "params": [
-            "arg0"
-          ],
-          "return_type": null
-        },
-        "lookup": {
-          "params": [
-            "AdjacentDistrict"
-          ],
-          "return_type": null
-        },
-        "getFreeConstructible": {
-          "params": [
-            "plotCoordinate",
-            "localPlayerID"
-          ],
-          "return_type": null
-        },
-        "getDistrictIsBesieged": {
-          "params": [
-            "location"
-          ],
-          "return_type": null
         },
         "getIdAtLocation": {
           "params": [
@@ -2144,11 +1751,7 @@
           "return_type": null
         }
       },
-      "properties": {
-        "cityCenter": {
-          "type": null
-        }
-      }
+      "properties": {}
     },
     "Database": {
       "methods": {
@@ -2158,16 +1761,14 @@
           ],
           "return_type": "number"
         },
-        "register": {
-          "params": [],
-          "return_type": null
-        },
         "query": {
           "params": [
             "arg0",
-            "SQL",
-            "TraditionType as Type",
-            "ReasonType FROM LeaderCivilizationBias\""
+            "arg1",
+            "Name",
+            "Description",
+            "AgeType",
+            "ProgressionTreeNodeType\""
           ],
           "return_type": null
         },
@@ -2196,15 +1797,11 @@
           "return_type": null
         },
         "runWhenInitialized": {
-          "params": [
-            "arg0"
-          ],
+          "params": [],
           "return_type": null
         },
         "runWhenLoaded": {
-          "params": [
-            "arg0"
-          ],
+          "params": [],
           "return_type": null
         }
       },
@@ -2240,13 +1837,6 @@
         "define": {
           "params": [
             "EditorKeyboardBindingPanelTagName",
-            "{\r\n\t\tcreateInstance"
-          ],
-          "return_type": null
-        },
-        "preloadImage": {
-          "params": [
-            "url",
             "arg1"
           ],
           "return_type": null
@@ -2260,28 +1850,9 @@
         "initializeComponents": {
           "params": [],
           "return_type": null
-        },
-        "appendChild": {
-          "params": [
-            "accessibilityContainer"
-          ],
-          "return_type": null
-        },
-        "removeChild": {
-          "params": [
-            "arg0"
-          ],
-          "return_type": null
         }
       },
-      "properties": {
-        "classList": {
-          "type": null
-        },
-        "children": {
-          "type": null
-        }
-      }
+      "properties": {}
     },
     "GameInfo": {
       "methods": {},
@@ -2296,13 +1867,13 @@
           "type": "Unit_StatDefinition"
         },
         "ProgressionTreeNodeUnlocks": {
-          "type": "ProgressionTreeNodeUnlockDefinition"
+          "type": "ProgressionTreeNodeUnlockDefinition[]"
         },
         "Buildings": {
           "type": "BuildingDefinition"
         },
         "LegacyCivilizationTraits": {
-          "type": "CivilizationTraitDefinition"
+          "type": null
         },
         "UniqueQuarters": {
           "type": null
@@ -2319,15 +1890,6 @@
         "Ages": {
           "type": "AgeDefinition"
         },
-        "Civilizations": {
-          "type": "string"
-        },
-        "Projects": {
-          "type": "ProjectDefinition"
-        },
-        "Victories": {
-          "type": "VictoryDefinition"
-        },
         "Maps": {
           "type": null
         },
@@ -2341,6 +1903,9 @@
           "type": "BiomeType"
         },
         "StartBiasBiomes": {
+          "type": "string"
+        },
+        "Civilizations": {
           "type": "string"
         },
         "StartBiasTerrains": {
@@ -2382,10 +1947,10 @@
         "MapResourceMinimumAmountModifier": {
           "type": null
         },
-        "Feature_NaturalWonders": {
+        "MapIslandBehavior": {
           "type": null
         },
-        "MapIslandBehavior": {
+        "Feature_NaturalWonders": {
           "type": null
         },
         "Resource_Distribution": {
@@ -2397,17 +1962,23 @@
         "AdvancedStartDeckCardEntries": {
           "type": "DefinitionCollection<AdvancedStartDeckCardEntryDefinition>"
         },
+        "AdviceInstances": {
+          "type": "AdviceInstanceDefinition"
+        },
+        "GameSpeeds": {
+          "type": null
+        },
         "AgeProgressionMilestones": {
           "type": null
         },
-        "KeywordAbilities": {
-          "type": null
-        },
-        "UnitAbilities": {
-          "type": null
+        "Victories": {
+          "type": "VictoryDefinition"
         },
         "Attributes": {
           "type": null
+        },
+        "Projects": {
+          "type": "ProjectDefinition"
         },
         "Constructible_Adjacencies": {
           "type": null
@@ -2424,6 +1995,12 @@
         "TypeQuotes": {
           "type": null
         },
+        "TypeTags": {
+          "type": null
+        },
+        "HappinessStages": {
+          "type": null
+        },
         "CityStateBonuses": {
           "type": "CityStateBonusDefinition"
         },
@@ -2432,6 +2009,12 @@
         },
         "Religions": {
           "type": "ReligionDefinition"
+        },
+        "Project_Units": {
+          "type": null
+        },
+        "GreatPersonClasses": {
+          "type": null
         },
         "Resource_YieldChanges": {
           "type": null
@@ -2514,6 +2097,18 @@
         "CivilopediaPageSidebarPanels": {
           "type": null
         },
+        "UnlockRewards": {
+          "type": null
+        },
+        "UnlockRequirements": {
+          "type": null
+        },
+        "KeywordAbilities": {
+          "type": null
+        },
+        "UnitAbilities": {
+          "type": null
+        },
         "Ideologies": {
           "type": null
         },
@@ -2529,10 +2124,25 @@
         "DiplomacyActions": {
           "type": "DiplomacyActionDefinition"
         },
+        "CivSelfSyncretismUnlocks": {
+          "type": null
+        },
+        "GovernmentModifiers": {
+          "type": null
+        },
+        "Traditions": {
+          "type": "TraditionDefinition"
+        },
+        "CityStateTypes": {
+          "type": null
+        },
         "Defeats": {
           "type": null
         },
         "EndGameMovies": {
+          "type": null
+        },
+        "StartingGovernments": {
           "type": null
         },
         "GreatWorks": {
@@ -2540,9 +2150,6 @@
         },
         "GreatWork_YieldChanges": {
           "type": "GreatWork_YieldChangeDefinition"
-        },
-        "TypeTags": {
-          "type": null
         },
         "Continents": {
           "type": null
@@ -2562,26 +2169,26 @@
         "NotificationSounds": {
           "type": null
         },
+        "AdvisorWarnings": {
+          "type": "AdvisorWarningDefinition"
+        },
         "BeliefClasses": {
+          "type": null
+        },
+        "WorkerYields": {
+          "type": null
+        },
+        "WorkerYields_AgeModifier": {
           "type": null
         },
         "RandomEventUI": {
           "type": null
         },
-        "Traditions": {
-          "type": "TraditionDefinition"
-        },
-        "CivilizationTraits": {
+        "LoadingInfo_Civilizations": {
           "type": null
         },
-        "TradeYields": {
-          "type": "TradeYieldDefinition"
-        },
-        "StartingGovernments": {
+        "CultureSlots": {
           "type": null
-        },
-        "PlotEffects": {
-          "type": "PlotEffectDefinition"
         },
         "UnitReplaces": {
           "type": "UnitReplaceDefinition[]"
@@ -2604,34 +2211,37 @@
         "AgeProgressionRewards": {
           "type": "AgeProgressionRewardDefinition"
         },
-        "LoadingInfo_Civilizations": {
-          "type": null
-        },
-        "UnlockRewards": {
-          "type": null
-        },
         "LegacyCivilizations": {
-          "type": null
-        },
-        "UnlockRequirements": {
           "type": null
         },
         "Modifiers": {
           "type": null
         },
-        "DiplomaticProjects_UI_Data": {
-          "type": null
-        },
         "TraditionModifiers": {
-          "type": null
-        },
-        "VictoryCinematics": {
           "type": null
         },
         "AgeProgressionDarkAgeRewardInfos": {
           "type": null
         },
+        "VictoryCinematics": {
+          "type": null
+        },
         "AgeProgressionMilestoneRewards": {
+          "type": null
+        },
+        "PlotEffects": {
+          "type": "PlotEffectDefinition"
+        },
+        "DiplomaticProjects_UI_Data": {
+          "type": null
+        },
+        "Legacies": {
+          "type": null
+        },
+        "AgeSuccessors": {
+          "type": null
+        },
+        "LegacySets": {
           "type": null
         },
         "LoadingInfo_Leaders": {
@@ -2643,7 +2253,16 @@
         "Difficulties": {
           "type": null
         },
-        "GameSpeeds": {
+        "VictoryTypes": {
+          "type": null
+        },
+        "VictoryDominationPercents": {
+          "type": null
+        },
+        "VictoryDataUIs": {
+          "type": null
+        },
+        "RandomEventPlotEffects": {
           "type": null
         },
         "DisplayQueuePriorities": {
@@ -2652,19 +2271,10 @@
         "InterfaceModes": {
           "type": "InterfaceModeDefinition"
         },
-        "missingMods": {
-          "type": null
-        },
-        "unownedMods": {
-          "type": null
-        },
-        "isLiveEventGame": {
-          "type": null
-        },
-        "ID": {
-          "type": null
-        },
         "ModifierStrings": {
+          "type": null
+        },
+        "ModifierArguments": {
           "type": null
         },
         "LeaderInfo": {
@@ -2718,7 +2328,7 @@
         },
         "createJSModel": {
           "params": [
-            "observableName",
+            "arg0",
             "CityCaptureChooser"
           ],
           "return_type": null
@@ -2823,11 +2433,11 @@
   "sub_objects": {
     "Cities": {
       "methods": {
-        "getCityIds": {
+        "getCapital": {
           "params": [],
           "return_type": null
         },
-        "getCities": {
+        "getCityIds": {
           "params": [],
           "return_type": null
         },
@@ -2836,15 +2446,23 @@
             "observer"
           ],
           "return_type": null
+        },
+        "getCities": {
+          "params": [],
+          "return_type": null
         }
       },
       "properties": {}
     },
     "Units": {
       "methods": {
+        "forEach": {
+          "params": [],
+          "return_type": null
+        },
         "lookup": {
           "params": [
-            "playerMerchantType"
+            "greatPersonType"
           ],
           "return_type": "UnitDefinition"
         },
@@ -2855,12 +2473,6 @@
           ],
           "return_type": "UnitType[]"
         },
-        "forEach": {
-          "params": [
-            "arg0"
-          ],
-          "return_type": null
-        },
         "getBuildUnit": {
           "params": [
             "arg0"
@@ -2869,22 +2481,24 @@
         },
         "getUnits": {
           "params": [],
-          "return_type": "Unit[]"
+          "return_type": null
         },
-        "getNumUnitsOfType": {
+        "get": {
           "params": [
-            "UnitType"
+            "localPlayerID"
           ],
           "return_type": null
         },
-        "getUnitIds": {
-          "params": [],
-          "return_type": "ComponentID[]"
+        "isReplacedUnitUnlocked": {
+          "params": [
+            "UnitType",
+            "arg1",
+            "arg2"
+          ],
+          "return_type": null
         },
         "find": {
-          "params": [
-            "arg0"
-          ],
+          "params": [],
           "return_type": null
         },
         "getUnitTypesWithTag": {
@@ -2894,9 +2508,7 @@
           "return_type": "UnitType[]"
         },
         "filter": {
-          "params": [
-            "arg0"
-          ],
+          "params": [],
           "return_type": null
         }
       },
@@ -2979,7 +2591,7 @@
       "methods": {
         "canMakePeaceWith": {
           "params": [
-            "arg0",
+            "id",
             "arg1"
           ],
           "return_type": "DiplomacyQueryResult"
@@ -2994,7 +2606,7 @@
         },
         "isAtWarWith": {
           "params": [
-            "playerId"
+            "localPlayerID"
           ],
           "return_type": null
         },
@@ -3054,7 +2666,7 @@
         "getProjectDataForUI": {
           "params": [
             "initialPlayer",
-            "targetPlayer != null && targetPlayer != GameContext.localPlayerID ? targetPlayer",
+            "selectedPlayerID",
             "NO_DIPLOMACY_TARGET",
             "NO_DIPLOMACY_ACTION_GROUP",
             "arg4",
@@ -3076,7 +2688,7 @@
         },
         "hasTeammate": {
           "params": [
-            "id"
+            "leaderId"
           ],
           "return_type": null
         },
@@ -3189,7 +2801,7 @@
         },
         "get": {
           "params": [
-            "playerA"
+            "localPlayer"
           ],
           "return_type": null
         }
@@ -3200,17 +2812,11 @@
       "methods": {
         "lookup": {
           "params": [
-            "resourceChosenIndex"
+            "AdjacentSpecificResource"
           ],
           "return_type": "ResourceDefinition"
         },
-        "getNumTreasureFleetResources": {
-          "params": [
-            "arg0"
-          ],
-          "return_type": null
-        },
-        "getNumFactoryResources": {
+        "forEach": {
           "params": [],
           "return_type": null
         },
@@ -3229,6 +2835,48 @@
             "resourceValue"
           ],
           "return_type": null
+        },
+        "getResourceOnPlot": {
+          "params": [
+            "resourceValue"
+          ],
+          "return_type": null
+        },
+        "getAssignedResources": {
+          "params": [],
+          "return_type": null
+        },
+        "getAssignedResourcesCap": {
+          "params": [],
+          "return_type": null
+        },
+        "getAutoTreasureFleetValue": {
+          "params": [],
+          "return_type": null
+        },
+        "getProducedTreasureFleetGold": {
+          "params": [],
+          "return_type": null
+        },
+        "getProducedTreasureFleetGDP": {
+          "params": [],
+          "return_type": null
+        },
+        "getProducedTreasureFleetPoints": {
+          "params": [],
+          "return_type": null
+        },
+        "getGlobalTurnsUntilTreasureGenerated": {
+          "params": [],
+          "return_type": null
+        },
+        "getTurnsUntilTreasureGenerated": {
+          "params": [],
+          "return_type": null
+        },
+        "canStartTreasureFleet": {
+          "params": [],
+          "return_type": null
         }
       },
       "properties": {
@@ -3243,14 +2891,6 @@
           "params": [],
           "return_type": null
         },
-        "isInRailNetwork": {
-          "params": [],
-          "return_type": null
-        },
-        "isConnectedToOwnersCapitalByLand": {
-          "params": [],
-          "return_type": null
-        },
         "isInTradeNetwork": {
           "params": [],
           "return_type": null
@@ -3260,6 +2900,10 @@
     },
     "Districts": {
       "methods": {
+        "getDistricts": {
+          "params": [],
+          "return_type": null
+        },
         "get": {
           "params": [
             "playerID"
@@ -3282,6 +2926,10 @@
             "localPlayerID",
             "$index"
           ],
+          "return_type": null
+        },
+        "hasCreatedReligion": {
+          "params": [],
           "return_type": null
         },
         "getPlayerFromReligion": {
@@ -3317,10 +2965,6 @@
         "canCreateReligion": {
           "params": [],
           "return_type": null
-        },
-        "hasCreatedReligion": {
-          "params": [],
-          "return_type": null
         }
       },
       "properties": {}
@@ -3334,9 +2978,7 @@
           "return_type": null
         },
         "forEach": {
-          "params": [
-            "(yieldDef"
-          ],
+          "params": [],
           "return_type": null
         },
         "extractYieldChangesData": {
@@ -3355,9 +2997,7 @@
           "return_type": null
         },
         "findIndex": {
-          "params": [
-            "arg0"
-          ],
+          "params": [],
           "return_type": null
         }
       },
@@ -3372,9 +3012,6 @@
       "properties": {
         "isEmpty": {
           "type": null
-        },
-        "CurrentProductionTypeHash": {
-          "type": null
         }
       }
     },
@@ -3383,13 +3020,6 @@
         "toString": {
           "params": [],
           "return_type": null
-        },
-        "testAttackInto": {
-          "params": [
-            "selectedUnitID",
-            "parameters"
-          ],
-          "return_type": "CombatTypes"
         },
         "getDefensibleDistrict": {
           "params": [
@@ -3410,6 +3040,13 @@
             "args"
           ],
           "return_type": null
+        },
+        "testAttackInto": {
+          "params": [
+            "id",
+            "parameters"
+          ],
+          "return_type": "CombatTypes"
         }
       },
       "properties": {}
@@ -3461,6 +3098,10 @@
     },
     "VictoryManager": {
       "methods": {
+        "isScoreVictoryEnabled": {
+          "params": [],
+          "return_type": "boolean"
+        },
         "getLatestPlayerDefeat": {
           "params": [
             "localPlayerID"
@@ -3470,6 +3111,18 @@
         "getVictories": {
           "params": [],
           "return_type": "VictoryManagerLibrary_VictoryInfo[]"
+        },
+        "getCountdownVictoryDominanceScore": {
+          "params": [
+            "militaryVictoryHash"
+          ],
+          "return_type": null
+        },
+        "isCountdownVictoryEnabled": {
+          "params": [
+            "VictoryType"
+          ],
+          "return_type": null
         }
       },
       "properties": {}
@@ -3503,9 +3156,13 @@
       "methods": {
         "lookup": {
           "params": [
-            "eventType"
+            "RandomEventType"
           ],
           "return_type": "RandomEventDefinition"
+        },
+        "find": {
+          "params": [],
+          "return_type": null
         }
       },
       "properties": {}
@@ -3519,13 +3176,13 @@
           ],
           "return_type": null
         },
-        "isCrisisEnabled": {
+        "getCurrentCrisisStage": {
           "params": [
             "arg0"
           ],
           "return_type": null
         },
-        "getCurrentCrisisStage": {
+        "isCrisisEnabled": {
           "params": [
             "arg0"
           ],
@@ -3683,18 +3340,9 @@
     },
     "UnitOperations": {
       "methods": {
-        "canStart": {
+        "canStartAny": {
           "params": [
-            "unitID",
-            "operationName",
-            "parameters",
-            "arg3"
-          ],
-          "return_type": "OperationResult"
-        },
-        "forEach": {
-          "params": [
-            "arg0"
+            "localPlayerID"
           ],
           "return_type": null
         },
@@ -3703,6 +3351,19 @@
             "arg0"
           ],
           "return_type": "UnitOperationDefinition"
+        },
+        "forEach": {
+          "params": [],
+          "return_type": null
+        },
+        "canStart": {
+          "params": [
+            "UnitID",
+            "operationName",
+            "parameters",
+            "arg3"
+          ],
+          "return_type": "AttackOperationResult"
         },
         "sendRequest": {
           "params": [
@@ -3721,7 +3382,7 @@
           "params": [
             "selectedCityID",
             "BUILD",
-            "{ ConstructibleType",
+            "OperationArguments",
             "arg3"
           ],
           "return_type": null
@@ -3747,26 +3408,15 @@
     },
     "UnitCommands": {
       "methods": {
-        "canStart": {
-          "params": [
-            "selectedUnitID",
-            "MAKE_TRADE_ROUTE",
-            "CommandArguments",
-            "arg3"
-          ],
-          "return_type": "OperationResult"
-        },
-        "forEach": {
-          "params": [
-            "arg0"
-          ],
-          "return_type": null
-        },
         "lookup": {
           "params": [
             "arg0"
           ],
           "return_type": "UnitCommandDefinition"
+        },
+        "forEach": {
+          "params": [],
+          "return_type": null
         },
         "sendRequest": {
           "params": [
@@ -3775,6 +3425,15 @@
             "actionParams"
           ],
           "return_type": null
+        },
+        "canStart": {
+          "params": [
+            "selectedUnitID",
+            "MAKE_TRADE_ROUTE",
+            "CommandArguments",
+            "arg3"
+          ],
+          "return_type": "OperationResult"
         }
       },
       "properties": {}
@@ -3785,7 +3444,7 @@
           "params": [
             "_cityID",
             "CHANGE_GROWTH_MODE",
-            "{ ConstructibleType",
+            "OperationArguments",
             "arg3"
           ],
           "return_type": "OperationResult"
@@ -3841,7 +3500,7 @@
           "params": [
             "workingDealId",
             "localPlayerID",
-            "CITIES"
+            "INFLUENCE"
           ],
           "return_type": "DiplomacyDealItem[]"
         },
@@ -3902,6 +3561,12 @@
             "Key"
           ],
           "return_type": null
+        },
+        "getPendingSessionNotificationStatement": {
+          "params": [
+            "notificationID"
+          ],
+          "return_type": null
         }
       },
       "properties": {}
@@ -3919,9 +3584,7 @@
           "return_type": "ConstructibleID[]"
         },
         "find": {
-          "params": [
-            "arg0"
-          ],
+          "params": [],
           "return_type": null
         },
         "getNumWonders": {
@@ -3957,6 +3620,12 @@
             "$index"
           ],
           "return_type": "number"
+        },
+        "get": {
+          "params": [
+            "playerId"
+          ],
+          "return_type": null
         }
       },
       "properties": {
@@ -3980,17 +3649,14 @@
           "return_type": "PlayerId"
         }
       },
-      "properties": {}
+      "properties": {
+        "hasSuzerain": {
+          "type": null
+        }
+      }
     },
     "LegacyPaths": {
       "methods": {
-        "getVictoryPointsFromPlayer": {
-          "params": [
-            "$hash",
-            "id"
-          ],
-          "return_type": null
-        },
         "lookup": {
           "params": [
             "LegacyPathType"
@@ -4013,6 +3679,26 @@
     },
     "Stats": {
       "methods": {
+        "getTotalGreatWorksSlotted": {
+          "params": [],
+          "return_type": null
+        },
+        "getNumWonders": {
+          "params": [
+            "originalConstructor",
+            "currentAgeOnly"
+          ],
+          "return_type": null
+        },
+        "getNumConqueredSettlements": {
+          "params": [
+            "countMinorPlayers",
+            "countHomelands",
+            "countDistantLands",
+            "bCoastalOnly"
+          ],
+          "return_type": null
+        },
         "getNetYield": {
           "params": [
             "YIELD_HAPPINESS"
@@ -4060,18 +3746,18 @@
       },
       "properties": {
         "isFinalAge": {
+          "type": "boolean"
+        },
+        "isAgeOver": {
+          "type": null
+        },
+        "isExtendedGame": {
           "type": null
         },
         "ageCountdownStarted": {
           "type": "boolean"
         },
         "getAgeCountdownLength": {
-          "type": null
-        },
-        "isExtendedGame": {
-          "type": null
-        },
-        "isAgeOver": {
           "type": null
         }
       }
@@ -4129,7 +3815,7 @@
             "independentID",
             "localObserverID"
           ],
-          "return_type": "IndependentRelationship"
+          "return_type": null
         },
         "getDistanceToNearestIndependent": {
           "params": [
@@ -4172,9 +3858,7 @@
           "return_type": "ProgressionTree"
         },
         "find": {
-          "params": [
-            "arg0"
-          ],
+          "params": [],
           "return_type": null
         },
         "lookup": {
@@ -4233,6 +3917,38 @@
           "params": [
             "UnlockType",
             "localPlayerID"
+          ],
+          "return_type": null
+        },
+        "getSyncreticCivUnlocksForChoice": {
+          "params": [
+            "id",
+            "SYNCRETIC_CHOICE_INFRASTRUCTURE"
+          ],
+          "return_type": "CivilizationType[]"
+        },
+        "getInfrastructureChoiceSyncreticUnlocks": {
+          "params": [
+            "CivilizationType ?? \"\""
+          ],
+          "return_type": null
+        },
+        "getUnitChoiceSyncreticUnlocks": {
+          "params": [
+            "CivilizationType ?? \"\""
+          ],
+          "return_type": null
+        },
+        "getSelfChoiceSyncreticUnlocks": {
+          "params": [
+            "CivilizationType ?? \"\""
+          ],
+          "return_type": null
+        },
+        "isUnlockedForPlayer": {
+          "params": [
+            "UnlockType",
+            "playerId"
           ],
           "return_type": null
         }
