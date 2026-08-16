@@ -160,7 +160,7 @@ The last line `r` returns the built string. Or force a newline with `Ctrl+Enter`
 
 ## Autocomplete
 
-Tab completion for the Civ7 JavaScript API, extracted directly from the game's source maps. Covers 18 globals, 40 sub-objects, 531 methods, and 252 properties — see the full **[Type Reference](TYPE_REFERENCE.md)** for every method signature and property.
+Tab completion for the Civ7 JavaScript API, extracted directly from the game's source maps. Covers 18 globals, 40 sub-objects, 507 methods, and 232 properties — see the full **[Type Reference](TYPE_REFERENCE.md)** for every method signature and property.
 
 ### Setup
 
@@ -194,6 +194,8 @@ This creates a `completions.json` file. Re-run after game updates to pick up any
 The Civ 7 debug console exposes a rich JavaScript API. The methods and objects are visible in the game's JS files, but there's no single reference that pulls it all together — so we built one. **[`API_LIBRARY.md`](API_LIBRARY.md)** is a community-driven quick reference covering `GameplayMap`, `Players`, `Game`, cities, units, diplomacy, and more. Saves you from digging through game files every time you need a method signature.
 
 If you're an AI agent or a human poking around, start there. If you discover something new, [open a PR](https://github.com/ghost-ng/FiretunerTerminal/pulls) to add it.
+
+Want to discover APIs yourself? The **[`tests/`](tests/)** folder has a guide on crawling the game's API ([`tests/api-crawling.md`](tests/api-crawling.md)), a minimal debug-port probe tool ([`tests/probe.py`](tests/probe.py)), and verified walkthroughs like querying the pause menu and exiting to the main menu programmatically.
 
 ## MCP Server (AI Agent Access)
 
