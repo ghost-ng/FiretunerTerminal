@@ -85,6 +85,28 @@ Configuration.getMap().getValue(key) ?? Game.getProperty(key)
 - After `UI.reloadUI()` expect a brief window where queries return
   empty/partial DOM.
 
+## Multiplayer / hotseat limitation (verified 2026-08-16)
+
+**The debug port stops servicing commands once a multiplayer lobby opens —
+including local hotseat.** Sequence observed: main menu → MULTIPLAYER →
+hotseat → game creator all respond normally (GameSetup writes verified);
+the moment "Host Lobby" opens the staging screen, every command times out
+while the TCP connection stays ESTABLISHED and the game renders normally.
+Suspected tuner suspension in MP contexts (anti-cheat).
+
+Consequences for automation:
+- Hotseat lobby setup (adding human slots, launching) cannot be driven via
+  MCP — manual step.
+- Whether the tuner revives once the hotseat GAME loads is untested.
+- Fallback verification channel: the map script's `console.log` output in
+  `Scripting.log` (map-gen context logging is unaffected), plus any state
+  the script persists via `Game.setProperty`.
+
+Hotseat entry (the part that DOES automate): the MP landing/creator screens
+are old-framework — plain `action-activate` CustomEvent dispatch works
+(`.mp-landing-new__hotseat-button`, then `fxs-hero-button` with caption
+`LOC_UI_MP_HOST_LOBBY`).
+
 ## Connection notes
 
 - If the game is not running, calls fail at the transport level — treat as
