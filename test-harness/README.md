@@ -24,7 +24,7 @@ Companion material for finding and validating the APIs the tests above rely on:
 
 | File | Contents |
 |------|----------|
-| [probe.py](probe.py) | Minimal synchronous debug-port client: `python test-harness/probe.py '<js>'` sends one expression and prints the response; import `Probe` for scripted sessions |
+| `tests/probe.py` (local, untracked) | Minimal synchronous debug-port client: `python tests/probe.py '<js>'` sends one expression and prints the response; import `Probe` for scripted sessions |
 | [api-crawling.md](api-crawling.md) | How to discover/validate API functions and calls: static source-map crawl vs live prototype-chain introspection, grep pitfalls, batch probing, validation rules |
 | [pause-menu-exit-to-menu.md](pause-menu-exit-to-menu.md) | Worked example: enumerate the pause menu options live and return to the main menu via `engine.call("exitToMainMenu")` |
 

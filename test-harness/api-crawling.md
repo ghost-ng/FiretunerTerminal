@@ -51,7 +51,7 @@ Same idea in Python: `re.compile(r'(?<![.\w])' + re.escape(name) + r'\.(\w+)\s*\
 
 ## 2. Live crawl over the debug port
 
-Send JS with `python test-harness/probe.py '<expr>'`. The **last expression is the
+Send JS with `python tests/probe.py '<expr>'`. The **last expression is the
 return value**; wrap complex output in `JSON.stringify(...)`.
 
 ### Know your context
