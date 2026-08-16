@@ -259,6 +259,20 @@ The MCP server auto-reconnects to Civ 7, so agents can start before the game is 
 
 <video src="assets/civ7mcp.mp4" controls width="100%"></video>
 
+### Live UI Iteration - No Game Restarts
+
+This is where the MCP server really earns its keep: an agent can make live changes to a running game. The debug bridge exposes `UI.reloadUI()`, which reloads the game's UI documents and re-fetches JS/CSS - so an agent can edit mod files, redeploy, and hot-reload the interface without you ever leaving the game.
+
+Here's a real session. A modded map type's icon wasn't showing up on the Game Setup screen, so the agent probed the running game through the MCP bridge, mapped out exactly what `UI.reloadUI()` can and can't refresh, then inspected the live DOM to find out why the icon div was never being created:
+
+![Agent probing reload hooks and inspecting the live game UI](assets/Example1.png)
+
+Then it fixed the selector in the mod's JS, redeployed the files, and reloaded the UI through the bridge - fix verified in-game, zero restarts:
+
+![Agent deploying a fix and hot-reloading the UI through the MCP bridge](assets/Example2.png)
+
+The edit-redeploy-reload loop turns UI mod iteration from minutes per change (full game restart) into seconds. Database and module-cache changes still need a restart since those are built at boot, but anything UI-side - scripts, CSS, icons, layout - can be iterated on live.
+
 ### Example: Agent Querying a Live Game
 
 Here's what it looks like when an AI agent uses the MCP server to query a real Civ 7 game. Each call is a single `execute_js` tool invocation:
