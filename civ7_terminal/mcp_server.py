@@ -7,6 +7,7 @@ from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Optional
 
 from mcp.server.fastmcp import FastMCP, Context, Image
 from mcp.server.session import ServerSession
@@ -24,18 +25,24 @@ class Civ7Context:
 @asynccontextmanager
 async def civ7_lifespan(server: FastMCP) -> AsyncIterator[Civ7Context]:
     """Manage Civ7 connection lifecycle."""
+    global _connection
     config = ConnectionConfig(host=_host, port=_port)
     connection = ConnectionManager(config)
     await connection.start()
+    _connection = connection
     try:
         yield Civ7Context(connection=connection)
     finally:
+        _connection = None
         await connection.stop()
 
 
 # Module-level config set by main() before server starts
 _host = "127.0.0.1"
 _port = 4318
+# Set by civ7_lifespan; lets parameterless handlers (resources) reach the
+# connection, since resource functions with extra params become URI templates
+_connection: Optional[ConnectionManager] = None
 
 mcp = FastMCP("Civ7 Debug Console", lifespan=civ7_lifespan)
 
@@ -58,8 +65,8 @@ async def execute_js(
     """
     connection = ctx.request_context.lifespan_context.connection
 
-    if connection.state == ConnectionState.DISCONNECTED:
-        return "ERROR: Not connected to Civ7 debug port. Is the game running with FireTuner enabled?"
+    if connection.state != ConnectionState.CONNECTED:
+        return "ERROR: Not connected to Civ7 debug port. Is the game running with FireTuner enabled? (Note: the game closes the tuner port during multiplayer/hotseat sessions.)"
 
     response = await connection.send_command(code)
 
@@ -95,10 +102,9 @@ async def screenshot(save_path: str = "", max_width: int = 1568) -> Image:
 
 
 @mcp.resource("civ7://status")
-async def get_status(ctx: Context[ServerSession, Civ7Context]) -> str:
+async def get_status() -> str:
     """Get current connection status to the Civ7 debug port."""
-    connection = ctx.request_context.lifespan_context.connection
-    state = connection.state
+    state = _connection.state if _connection is not None else ConnectionState.DISCONNECTED
 
     if state == ConnectionState.CONNECTED:
         return f"Connected to Civ7 at {_host}:{_port}"
