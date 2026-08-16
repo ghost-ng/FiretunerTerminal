@@ -93,8 +93,9 @@ hotseat → game creator all respond normally (GameSetup writes verified);
 the moment "Host Lobby" opens the staging screen, commands time out, and
 shortly after the listener is gone entirely — new connections get
 ConnectionRefused while the game runs fine. Anti-cheat behavior. The MCP
-server will show as disconnected; it recovers when the port reopens (after
-leaving the MP session — verify timing when known).
+server will show as disconnected; **the listener reopens on exiting the MP
+session to the main menu** (verified 2026-08-16: same process, no game
+restart needed — the MCP server auto-reconnected and served commands).
 
 Consequences for automation:
 - Hotseat lobby setup (adding human slots, launching) cannot be driven via
