@@ -162,6 +162,33 @@ async def press_button(ctx: Context[ServerSession, Civ7Context], caption: str) -
 
 
 @mcp.tool()
+async def reveal_map(ctx: Context[ServerSession, Civ7Context], scope: str = "human") -> str:
+    """Reveal the entire map (requires a loaded game).
+
+    Uses the same mechanism as Firaxis's own Map tuner panel
+    (Visibility.revealAllPlots). Reveals terrain permanently for the chosen
+    players; does not grant live visibility of units in unseen territory.
+
+    Args:
+        scope: "human" (default) reveals for human players, "all" for every
+            alive major (use this in autoplay games, which have no humans),
+            or a numeric player id like "0".
+    """
+    return await _run_js(ctx, game_tools.reveal_map_js(scope))
+
+
+@mcp.tool()
+async def list_civs_and_units(ctx: Context[ServerSession, Civ7Context]) -> str:
+    """Detailed review of every alive civ and all their units (requires a game).
+
+    Per civ: localized civ/leader names, human flag, gold, city names, and the
+    full unit roster (localized name, unit type, position, damage) plus
+    per-type counts. For a lighter summary use get_game_state instead.
+    """
+    return await _run_js(ctx, game_tools.LIST_CIVS_UNITS_JS)
+
+
+@mcp.tool()
 async def read_game_logs(name: str = "", tail_lines: int = 100, grep: str = "") -> str:
     """Read the game's own log files for failure diagnosis.
 
@@ -240,6 +267,8 @@ TOOLS:
   get_screen()           — Current UI screen stack, pressable buttons, open dialogs.
   press_button(caption)  — Press a UI button by caption (engine-input pattern).
   render_map()           — Draw the map from exact tile data (terrain, owners, cities, units).
+  reveal_map(scope)      — Reveal the whole map (human/all/player id; Firaxis tuner mechanism).
+  list_civs_and_units()  — Full roster: every civ with leader, gold, cities, all units + counts.
   read_game_logs(name)   — Tail/grep the game's logs (Scripting.log etc). No args = list logs.
   screenshot()           — Capture the game window as an image (OS-level; optional save_path).
   help()                 — This help text.

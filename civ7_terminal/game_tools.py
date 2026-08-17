@@ -225,6 +225,72 @@ def get_game_state_js(sections: list[str]) -> str:
     )
 
 
+def reveal_map_js(scope: str) -> str:
+    """Payload revealing all plots — same mechanism as Firaxis's Map tuner panel
+    (Visibility.revealAllPlots, WorldBuilder fallback). scope: 'human' | 'all' |
+    a numeric player id as a string."""
+    scope_js = json.dumps(scope)
+    return (
+        """(() => {
+  if (!UI.isInGame()) return JSON.stringify({error: 'not in a game'});
+  const scope = """ + scope_js + """;
+  const ids = Players.getAliveMajorIds().filter(id => {
+    if (scope === 'all') return true;
+    if (scope === 'human') return Players.get(id).isHuman;
+    return String(id) === scope;
+  });
+  const revealed = [];
+  for (const id of ids) {
+    if (typeof Visibility !== 'undefined' && Visibility.revealAllPlots) {
+      Visibility.revealAllPlots(id);
+    } else {
+      WorldBuilder.MapPlots.setAllRevealed(id, true);
+    }
+    revealed.push(id);
+  }
+  return JSON.stringify({
+    revealedFor: revealed,
+    note: revealed.length ? undefined :
+      "no players matched scope '" + scope + "' (autoplay games have no humans - use scope 'all' or a player id)"
+  });
+})()"""
+    )
+
+
+LIST_CIVS_UNITS_JS = """
+(() => {
+  if (!UI.isInGame()) return JSON.stringify({error: 'not in a game'});
+  const L = (s) => (typeof Locale !== 'undefined' && s) ? Locale.compose(s) : s;
+  const civs = Players.getAliveMajorIds().map(id => {
+    const p = Players.get(id);
+    const units = (p.Units ? p.Units.getUnits() : []).map(u => {
+      const info = GameInfo.Units.lookup(u.type);
+      return {
+        name: L(u.name), type: info ? info.UnitType : String(u.type),
+        x: u.location.x, y: u.location.y,
+        damage: (u.Health && typeof u.Health.damage === 'number') ? u.Health.damage : undefined
+      };
+    });
+    const unitCounts = {};
+    units.forEach(u => { unitCounts[u.type] = (unitCounts[u.type] || 0) + 1; });
+    return {
+      id,
+      civ: L(p.civilizationFullName),
+      leader: L(p.leaderName ?? p.leaderType),
+      isHuman: p.isHuman,
+      gold: p.Treasury ? Math.round(p.Treasury.goldBalance) : null,
+      cities: p.Cities ? p.Cities.getCities().map(c => L(c.name)) : [],
+      unitTotal: units.length,
+      unitCounts,
+      units
+    };
+  });
+  return JSON.stringify({turn: Game.turn, civs},
+    (k, v) => typeof v === 'bigint' ? v.toString() : v, 1);
+})()
+"""
+
+
 # render_map tile dump: compact int arrays + legends built from GameInfo, so
 # the Python side needs no hardcoded type IDs.
 MAP_DUMP_JS = """
