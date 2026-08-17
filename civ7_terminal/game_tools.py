@@ -49,8 +49,13 @@ def _game_window_present() -> bool:
     return _find_game_window() is not None
 
 
-def diagnose_disconnect() -> str:
+def diagnose_disconnect(tuner_port: int = 4318) -> str:
     """Explain WHY the tuner port is unreachable, in order of likelihood."""
+    if _port_open(tuner_port):
+        return (
+            "The tuner port is actually open — the connection is likely mid-reconnect "
+            "(it retries with backoff, up to 30s). Retry in a few seconds."
+        )
     if not _game_window_present():
         return "Civ 7 does not appear to be running (no game window found). Start the game."
     setting = _enable_tuner_setting()

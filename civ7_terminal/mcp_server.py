@@ -67,7 +67,7 @@ async def execute_js(
     connection = ctx.request_context.lifespan_context.connection
 
     if connection.state != ConnectionState.CONNECTED:
-        diagnosis = await asyncio.to_thread(game_tools.diagnose_disconnect)
+        diagnosis = await asyncio.to_thread(game_tools.diagnose_disconnect, _port)
         return f"ERROR: Not connected to Civ7 debug port. Diagnosis: {diagnosis}"
 
     response = await connection.send_command(code)
@@ -115,7 +115,7 @@ async def get_status() -> str:
 
     if state == ConnectionState.CONNECTED:
         return f"Connected to Civ7 at {_host}:{_port}"
-    diagnosis = await asyncio.to_thread(game_tools.diagnose_disconnect)
+    diagnosis = await asyncio.to_thread(game_tools.diagnose_disconnect, _port)
     verb = "Connecting to" if state == ConnectionState.CONNECTING else "Disconnected from"
     return f"{verb} Civ7 ({_host}:{_port}). Diagnosis: {diagnosis}"
 
