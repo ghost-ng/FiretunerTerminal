@@ -156,6 +156,51 @@ GET_SCREEN_JS = """
 """
 
 
+DESCRIBE_SCREEN_JS = """
+(() => {
+  const txt = (el) => (el.textContent || '').trim();
+  const vis = (el) => el.offsetParent !== null;
+
+  // Screen composition: what's mounted, collapsed to counts
+  const counts = {};
+  Array.from(document.querySelectorAll('.fullscreen > *')).forEach(e => {
+    counts[e.tagName] = (counts[e.tagName] || 0) + 1;
+  });
+
+  // Visible headings / labels — what a human would read to orient themselves
+  const labels = [...new Set(
+    Array.from(document.querySelectorAll(
+      'fxs-header, [class*="title"], [class*="header"], h1, h2, h3'))
+      .filter(vis).map(txt).filter(t => t && t.length < 80)
+  )].slice(0, 30);
+
+  // Pressable things (same sources as press_button)
+  const buttons = [...new Set(
+    Array.from(document.querySelectorAll(
+      'div.hero-button-2, [data-activatable="true"], fxs-text-button, fxs-button, .fxs-button'))
+      .filter(vis).map(txt).filter(Boolean)
+  )].slice(0, 40);
+
+  const dialog = (document.querySelector('screen-dialog-box')?.textContent || '').trim() || null;
+
+  const inGame = UI.isInGame();
+  const context = {inGame};
+  if (inGame && typeof Game !== 'undefined') {
+    context.turn = Game.turn;
+    context.turnDate = Game.getTurnDate ? Game.getTurnDate() : null;
+  }
+
+  return JSON.stringify({
+    context,
+    screenComposition: counts,
+    visibleLabels: labels,
+    pressableButtons: buttons,
+    dialog
+  }, null, 1);
+})()
+"""
+
+
 def press_button_js(caption: str) -> str:
     """Payload that finds a button by caption (case-insensitive) and presses it."""
     cap = json.dumps(caption)

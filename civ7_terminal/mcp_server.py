@@ -150,6 +150,19 @@ async def get_screen(ctx: Context[ServerSession, Civ7Context]) -> str:
 
 
 @mcp.tool()
+async def describe_screen(ctx: Context[ServerSession, Civ7Context]) -> str:
+    """Semantic summary of what is displayed right now — for orientation.
+
+    Returns game context (in game? turn/date), the screen composition
+    (mounted UI elements collapsed to counts), the visible headings/labels a
+    human would read, pressable button captions, and any open dialog text.
+    Complements get_screen (raw stack, press-oriented) and screenshot
+    (pixels). Works in menus and in-game.
+    """
+    return await _run_js(ctx, game_tools.DESCRIBE_SCREEN_JS)
+
+
+@mcp.tool()
 async def press_button(ctx: Context[ServerSession, Civ7Context], caption: str) -> str:
     """Press a UI button by its visible caption (case-insensitive; substring ok).
 
@@ -265,6 +278,7 @@ TOOLS:
   execute_js(code)       — Run JavaScript on the Civ7 debug port. Last expression is returned.
   get_game_state()       — Structured JSON snapshot (sections: overview,players,cities,units,map).
   get_screen()           — Current UI screen stack, pressable buttons, open dialogs.
+  describe_screen()      — Semantic what-is-displayed summary: labels, composition, context.
   press_button(caption)  — Press a UI button by caption (engine-input pattern).
   render_map()           — Draw the map from exact tile data (terrain, owners, cities, units).
   reveal_map(scope)      — Reveal the whole map (human/all/player id; Firaxis tuner mechanism).

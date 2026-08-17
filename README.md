@@ -254,6 +254,7 @@ Add to your `claude_desktop_config.json` (same idea - use the venv Python path i
 
 - **`execute_js(code)`** - Send any JavaScript to the game, get the response back
 - **`get_game_state(sections?)`** - Structured JSON snapshot of the live game: overview (turn/age), players (civ, gold, research, counts), cities, units, map dimensions. No JS required.
+- **`describe_screen()`** - Semantic summary of what is on screen: game context (turn/date), screen composition, the visible headings/labels a human would read, pressable buttons, dialog text.
 - **`get_screen()`** / **`press_button(caption)`** - UI automation: see the current screen stack, pressable buttons, and open dialogs, then press buttons by caption using the engine-input pattern (synthetic DOM clicks are ignored by the game). Enough to drive the whole create-game flow.
 - **`render_map(save_path?, tile_px?)`** - Draw the map from exact per-tile engine data: terrain/biome colors, territory outlines, cities, and units with a player legend. Ground truth for map-mod testing, vs. interpreting screenshots.
 - **`read_game_logs(name?, tail_lines?, grep?)`** - Tail or grep the game's own logs (Scripting.log, Database.log, Modding.log...) for failure diagnosis. No args lists available logs.
