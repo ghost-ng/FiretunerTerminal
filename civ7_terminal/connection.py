@@ -1,6 +1,8 @@
 """Async connection manager with auto-reconnect for Civ7 debug port."""
 
 import asyncio
+import itertools
+import json
 from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Callable, Optional
@@ -13,6 +15,24 @@ from .protocol import (
     decode_message,
     encode_command,
 )
+
+
+_MARKER_PREFIX = "__C7R"
+
+
+def _marker(req_id: int) -> str:
+    return f"{_MARKER_PREFIX}{req_id}__"
+
+
+def _parse_marker(payload: str) -> tuple[Optional[int], str]:
+    """Split a response into (request_id, body); id is None if untagged."""
+    if payload.startswith(_MARKER_PREFIX):
+        end = payload.find("__", len(_MARKER_PREFIX))
+        if end != -1:
+            id_part = payload[len(_MARKER_PREFIX):end]
+            if id_part.isdigit():
+                return int(id_part), payload[end + 2:]
+    return None, payload
 
 
 class ConnectionState(Enum):
@@ -72,11 +92,13 @@ class ConnectionManager:
         self._reader: Optional[asyncio.StreamReader] = None
         self._writer: Optional[asyncio.StreamWriter] = None
 
-        # Commands travel with their response future so concurrent senders
-        # can't interleave and mismatch responses. The sender moves the future
-        # to _pending_responses just before writing, preserving wire order.
-        self._command_queue: asyncio.Queue[tuple[str, asyncio.Future[str]]] = asyncio.Queue()
-        self._pending_responses: asyncio.Queue[asyncio.Future[str]] = asyncio.Queue()
+        # Each command is wrapped in JS that prefixes the result with a unique
+        # request marker, so responses are matched by ID rather than arrival
+        # order — a live game can emit unsolicited messages that would desync
+        # FIFO matching. Queue items: (request_id, wrapped_js, future).
+        self._command_queue: asyncio.Queue[tuple[int, str, asyncio.Future[str]]] = asyncio.Queue()
+        self._pending: dict[int, asyncio.Future[str]] = {}
+        self._req_counter = itertools.count(1)
 
         self._retry_delay = config.initial_retry_delay
         self._shutdown_event = asyncio.Event()
@@ -165,9 +187,21 @@ class ConnectionManager:
         # Create a future for the response
         response_future: asyncio.Future[str] = asyncio.get_event_loop().create_future()
 
-        # Queue the command paired with its response future (atomic — safe
-        # for concurrent callers)
-        await self._command_queue.put((javascript, response_future))
+        # Wrap the code so the result comes back tagged with this request's
+        # marker. The wrapper replicates the engine's own stringification
+        # (objects JSON.stringify'd with bigint handling, otherwise String()).
+        req_id = next(self._req_counter)
+        marker = _marker(req_id)
+        wrapped = (
+            f"(() => {{ const __m = {json.dumps(marker)}; try {{ "
+            f"const __r = eval({json.dumps(javascript)}); "
+            f"if (typeof __r === 'object' && __r !== null) return __m + JSON.stringify(__r, "
+            f"(k, v) => typeof v === 'bigint' ? v.toString() : v); "
+            f"return __m + String(__r); "
+            f"}} catch (e) {{ return __m + e.toString(); }} }})()"
+        )
+
+        await self._command_queue.put((req_id, wrapped, response_future))
 
         try:
             # Wait for response with timeout
@@ -259,13 +293,10 @@ class ConnectionManager:
         self._set_state(ConnectionState.DISCONNECTED)
 
         # Fail any pending response futures
-        while not self._pending_responses.empty():
-            try:
-                future = self._pending_responses.get_nowait()
-                if not future.done():
-                    future.cancel()
-            except asyncio.QueueEmpty:
-                break
+        for future in self._pending.values():
+            if not future.done():
+                future.cancel()
+        self._pending.clear()
 
     async def _wait_for_retry(self) -> None:
         """Wait for retry with countdown updates."""
@@ -294,7 +325,7 @@ class ConnectionManager:
             try:
                 # Wait for command with timeout to allow checking shutdown
                 try:
-                    command, response_future = await asyncio.wait_for(
+                    req_id, command, response_future = await asyncio.wait_for(
                         self._command_queue.get(),
                         timeout=1.0,
                     )
@@ -306,9 +337,8 @@ class ConnectionManager:
                         response_future.cancel()
                     continue
 
-                # Register the future in wire order, then send. The game
-                # answers in order, so the receiver matches responses FIFO.
-                await self._pending_responses.put(response_future)
+                # Register before sending so the response can't race the write
+                self._pending[req_id] = response_future
                 data = encode_command(command)
                 self._writer.write(data)
                 await self._writer.drain()
@@ -334,16 +364,14 @@ class ConnectionManager:
                 payload = await self._reader.readexactly(length)
                 message = decode_message(header, payload)
 
-                # Notify response callback
-                self._notify_response(message.payload)
-
-                # Complete pending response future
-                try:
-                    future = self._pending_responses.get_nowait()
-                    if not future.done():
-                        future.set_result(message.payload)
-                except asyncio.QueueEmpty:
-                    pass  # Unsolicited response
+                # Match tagged responses to their request; anything untagged
+                # is unsolicited game output and only goes to the callback
+                req_id, body = _parse_marker(message.payload)
+                self._notify_response(body)
+                if req_id is not None:
+                    future = self._pending.pop(req_id, None)
+                    if future is not None and not future.done():
+                        future.set_result(body)
 
             except asyncio.IncompleteReadError:
                 # Connection closed

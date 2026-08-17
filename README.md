@@ -253,6 +253,10 @@ Add to your `claude_desktop_config.json` (same idea - use the venv Python path i
 ### What Agents Get
 
 - **`execute_js(code)`** - Send any JavaScript to the game, get the response back
+- **`get_game_state(sections?)`** - Structured JSON snapshot of the live game: overview (turn/age), players (civ, gold, research, counts), cities, units, map dimensions. No JS required.
+- **`get_screen()`** / **`press_button(caption)`** - UI automation: see the current screen stack, pressable buttons, and open dialogs, then press buttons by caption using the engine-input pattern (synthetic DOM clicks are ignored by the game). Enough to drive the whole create-game flow.
+- **`render_map(save_path?, tile_px?)`** - Draw the map from exact per-tile engine data: terrain/biome colors, territory outlines, cities, and units with a player legend. Ground truth for map-mod testing, vs. interpreting screenshots.
+- **`read_game_logs(name?, tail_lines?, grep?)`** - Tail or grep the game's own logs (Scripting.log, Database.log, Modding.log...) for failure diagnosis. No args lists available logs.
 - **`screenshot(save_path?, max_width?)`** - Capture the game window as a PNG image. This is an OS-level capture (the debug port is text-only) using PrintWindow, so it works even when other windows overlap the game. Pair it with camera calls via `execute_js` to frame a shot of the map. Windows only for the occlusion-proof path; elsewhere it falls back to a screen grab.
 - **`civ7://status`** - Check connection status to the game
 
