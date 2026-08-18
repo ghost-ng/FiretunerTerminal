@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Callable, Optional
 
+from . import cdp
 from .protocol import (
     HEADER_SIZE,
     Message,
@@ -18,6 +19,20 @@ from .protocol import (
 
 
 _MARKER_PREFIX = "__C7R"
+
+
+def _wrap_js(javascript: str, marker: str = "") -> str:
+    """Wrap user JS so the result is stringified the way the engine does
+    (objects JSON.stringify'd with bigint handling, otherwise String()),
+    optionally prefixed with a request marker for the tuner channel."""
+    return (
+        f"(() => {{ const __m = {json.dumps(marker)}; try {{ "
+        f"const __r = eval({json.dumps(javascript)}); "
+        f"if (typeof __r === 'object' && __r !== null) return __m + JSON.stringify(__r, "
+        f"(k, v) => typeof v === 'bigint' ? v.toString() : v); "
+        f"return __m + String(__r); "
+        f"}} catch (e) {{ return __m + e.toString(); }} }})()"
+    )
 
 
 def _marker(req_id: int) -> str:
@@ -73,6 +88,7 @@ class ConnectionManager:
         on_state_change: Optional[Callable[[ConnectionState, Optional[float]], None]] = None,
         on_response: Optional[Callable[[str], None]] = None,
         on_error: Optional[Callable[[str, bool], None]] = None,
+        on_protocol_change: Optional[Callable[[Optional[str], Optional[str]], None]] = None,
     ):
         """
         Initialize the connection manager.
@@ -82,11 +98,19 @@ class ConnectionManager:
             on_state_change: Callback for state changes (state, retry_countdown).
             on_response: Callback for received responses.
             on_error: Callback for error messages.
+            on_protocol_change: Callback (new, old) when the active transport
+                switches between "tuner" and "cdp" (or None when neither works).
         """
         self.config = config
         self._on_state_change = on_state_change
         self._on_response = on_response
         self._on_error = on_error
+        self._on_protocol_change = on_protocol_change
+        # Which transport answered last: "tuner" | "cdp" | None. The CDP
+        # fallback engages per-command while the tuner socket is down (the
+        # game suspends the tuner during MP/hotseat but the Cohtml debugger
+        # on port 9444 keeps evaluating the same JS context).
+        self._active_protocol: Optional[str] = None
 
         self._state = ConnectionState.DISCONNECTED
         self._reader: Optional[asyncio.StreamReader] = None
@@ -119,6 +143,20 @@ class ConnectionManager:
     def is_connected(self) -> bool:
         """Check if currently connected."""
         return self._state == ConnectionState.CONNECTED
+
+    @property
+    def active_protocol(self) -> Optional[str]:
+        """The transport that answered last: "tuner", "cdp", or None."""
+        return self._active_protocol
+
+    def _set_protocol(self, protocol: Optional[str]) -> None:
+        """Record the active transport and notify on actual switches."""
+        if protocol == self._active_protocol:
+            return
+        old = self._active_protocol
+        self._active_protocol = protocol
+        if self._on_protocol_change:
+            self._on_protocol_change(protocol, old)
 
     def _set_state(self, state: ConnectionState, retry_countdown: Optional[float] = None) -> None:
         """Update state and notify callback."""
@@ -184,34 +222,63 @@ class ConnectionManager:
         if not javascript.strip():
             return None
 
-        # Create a future for the response
-        response_future: asyncio.Future[str] = asyncio.get_event_loop().create_future()
+        # Route by health, not just socket state: after a zombie-socket
+        # timeout the state can briefly read CONNECTED while the transport is
+        # useless — active_protocol "cdp" means stay on CDP until the
+        # reconnect loop actually restores the tuner (which resets it).
+        if self._state == ConnectionState.CONNECTED and self._active_protocol != "cdp":
+            return await self._send_via_tuner(javascript)
+        return await self._send_via_cdp(javascript)
 
-        # Wrap the code so the result comes back tagged with this request's
-        # marker. The wrapper replicates the engine's own stringification
-        # (objects JSON.stringify'd with bigint handling, otherwise String()).
+    async def _send_via_tuner(self, javascript: str) -> Optional[str]:
+        """Send over the tuner socket; response matched by request marker."""
+        response_future: asyncio.Future[str] = asyncio.get_event_loop().create_future()
         req_id = next(self._req_counter)
-        marker = _marker(req_id)
-        wrapped = (
-            f"(() => {{ const __m = {json.dumps(marker)}; try {{ "
-            f"const __r = eval({json.dumps(javascript)}); "
-            f"if (typeof __r === 'object' && __r !== null) return __m + JSON.stringify(__r, "
-            f"(k, v) => typeof v === 'bigint' ? v.toString() : v); "
-            f"return __m + String(__r); "
-            f"}} catch (e) {{ return __m + e.toString(); }} }})()"
-        )
+        wrapped = _wrap_js(javascript, _marker(req_id))
 
         await self._command_queue.put((req_id, wrapped, response_future))
 
         try:
             # Wait for response with timeout
             response = await asyncio.wait_for(response_future, timeout=30.0)
+            self._set_protocol("tuner")
             return response
         except asyncio.TimeoutError:
-            self._notify_error("Command timed out waiting for response")
-            return None
+            # MP suspension keeps established tuner sockets ESTABLISHED but
+            # stops servicing them (verified live) — the socket looks
+            # connected while every command hangs. Try the CDP fallback.
+            self._pending.pop(req_id, None)
+            self._notify_error("Tuner command timed out — trying CDP fallback")
+            response = await self._send_via_cdp(javascript)
+            if response is not None and self._writer is not None:
+                # CDP answered, so the game is alive and the tuner socket is
+                # a zombie. Close it: the reconnect loop takes over, later
+                # commands skip straight to CDP, and the loop restores the
+                # tuner (with a switch notification) once its listener is back.
+                self._writer.close()
+            return response
         except asyncio.CancelledError:
+            # The future gets cancelled when the connection drops mid-flight
+            # (sender found a dead writer, or _close_connection swept the
+            # pending map) — rescue the command over CDP unless shutting down.
+            if self._shutdown_event.is_set():
+                return None
+            return await self._send_via_cdp(javascript)
+
+    async def _send_via_cdp(self, javascript: str) -> Optional[str]:
+        """Tuner down — evaluate over the Cohtml CDP debugger instead."""
+        try:
+            response = await cdp.evaluate(
+                _wrap_js(javascript), host=self.config.host, timeout=30.0
+            )
+        except cdp.CdpError:
+            self._set_protocol(None)
             return None
+        self._set_protocol("cdp")
+        # The tuner path surfaces responses through the receiver loop's
+        # callback (that's how the terminal displays them) — mirror that.
+        self._notify_response(response)
+        return response
 
     async def _connection_loop(self) -> None:
         """Main connection loop with auto-reconnect."""
@@ -224,6 +291,7 @@ class ConnectionManager:
                     self._retry_delay = self.config.initial_retry_delay
                     self._last_error_msg = None
                     self._error_count = 0
+                    self._set_protocol("tuner")
 
                     # Start sender and receiver tasks
                     self._sender_task = asyncio.create_task(self._sender_loop())

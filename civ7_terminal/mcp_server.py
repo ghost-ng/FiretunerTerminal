@@ -14,7 +14,7 @@ from mcp.server.session import ServerSession
 
 from .connection import ConnectionConfig, ConnectionManager, ConnectionState
 from .screenshot import ScreenshotError, capture_game_window
-from . import game_tools
+from . import cdp, game_tools
 
 
 @dataclass
@@ -28,7 +28,7 @@ async def civ7_lifespan(server: FastMCP) -> AsyncIterator[Civ7Context]:
     """Manage Civ7 connection lifecycle."""
     global _connection
     config = ConnectionConfig(host=_host, port=_port)
-    connection = ConnectionManager(config)
+    connection = ConnectionManager(config, on_protocol_change=_on_protocol_change)
     await connection.start()
     _connection = connection
     try:
@@ -44,6 +44,24 @@ _port = 4318
 # Set by civ7_lifespan; lets parameterless handlers (resources) reach the
 # connection, since resource functions with extra params become URI templates
 _connection: Optional[ConnectionManager] = None
+
+# Pending transport-switch notice, surfaced once in the next execute_js
+# result (internal JSON-returning tools skip it so parsing stays clean).
+_protocol_notice: Optional[str] = None
+
+
+def _on_protocol_change(new: Optional[str], old: Optional[str]) -> None:
+    global _protocol_notice
+    if new == "cdp":
+        _protocol_notice = (
+            f"[transport] tuner port unreachable — switched to CDP fallback "
+            f"(port {cdp.CDP_PORT}, same JS context; the game suspends the tuner "
+            f"during MP/hotseat sessions)"
+        )
+    elif new == "tuner" and old == "cdp":
+        _protocol_notice = "[transport] tuner port is back — switched from CDP fallback to tuner"
+    print(f"civ7-mcp: active protocol {old} -> {new}", file=sys.stderr)
+
 
 mcp = FastMCP("Civ7 Debug Console", lifespan=civ7_lifespan)
 
@@ -64,23 +82,30 @@ async def execute_js(
         - "GameplayMap.getGridWidth()" returns the map width
         - "Players.getAliveMajorIds()" returns alive player IDs
     """
-    connection = ctx.request_context.lifespan_context.connection
-
-    if connection.state != ConnectionState.CONNECTED:
-        diagnosis = await asyncio.to_thread(game_tools.diagnose_disconnect, _port)
-        return f"ERROR: Not connected to Civ7 debug port. Diagnosis: {diagnosis}"
-
-    response = await connection.send_command(code)
-
-    if response is None:
-        return "ERROR: Command timed out or connection lost."
-
+    response = await _run_js(ctx, code)
+    global _protocol_notice
+    if _protocol_notice and not response.startswith("ERROR:"):
+        response = f"{_protocol_notice}\n{response}"
+        _protocol_notice = None
     return response
 
 
 async def _run_js(ctx: Context[ServerSession, Civ7Context], code: str) -> str:
-    """Internal: run JS through the shared connection with the same error text."""
-    return await execute_js(code, ctx)
+    """Internal: run JS through the shared connection (tuner, or the CDP
+    fallback while the tuner is suspended) with uniform error text."""
+    connection = ctx.request_context.lifespan_context.connection
+
+    # send_command falls back to CDP by itself when the tuner is down — only
+    # a None (both transports failed / timed out) warrants a diagnosis.
+    response = await connection.send_command(code)
+
+    if response is None:
+        if connection.state == ConnectionState.CONNECTED:
+            return "ERROR: Command timed out or connection lost."
+        diagnosis = await asyncio.to_thread(game_tools.diagnose_disconnect, _port)
+        return f"ERROR: Not connected to Civ7 debug port. Diagnosis: {diagnosis}"
+
+    return response
 
 
 @mcp.tool()
@@ -114,7 +139,19 @@ async def get_status() -> str:
     state = _connection.state if _connection is not None else ConnectionState.DISCONNECTED
 
     if state == ConnectionState.CONNECTED:
-        return f"Connected to Civ7 at {_host}:{_port}"
+        return f"Connected to Civ7 at {_host}:{_port} (protocol: tuner)"
+
+    # Tuner is down — check whether the CDP fallback carries commands. A live
+    # round-trip is the truth, not just an open port.
+    if _connection is not None:
+        pong = await _connection.send_command("'pong'")
+        if pong == "pong":
+            return (
+                f"Tuner port {_port} closed — commands are flowing over the CDP "
+                f"fallback (port {cdp.CDP_PORT}, protocol: cdp). The game suspends "
+                f"the tuner during MP/hotseat; it reopens at the main menu."
+            )
+
     diagnosis = await asyncio.to_thread(game_tools.diagnose_disconnect, _port)
     verb = "Connecting to" if state == ConnectionState.CONNECTING else "Disconnected from"
     return f"{verb} Civ7 ({_host}:{_port}). Diagnosis: {diagnosis}"

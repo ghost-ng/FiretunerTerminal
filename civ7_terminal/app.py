@@ -1,5 +1,6 @@
 """Main Textual application for Civ7 Debug Terminal."""
 
+import asyncio
 from typing import Optional
 
 import pyperclip
@@ -12,6 +13,7 @@ from textual.screen import ModalScreen
 from textual.widgets import Button, Input, Static, Tab, TabbedContent, TabPane, TextArea
 
 from .completions import CompletionEngine
+from . import cdp as cdp_port
 from .connection import ConnectionConfig, ConnectionManager, ConnectionState
 from .widgets import StatusBar, TerminalSession
 
@@ -487,6 +489,7 @@ class Civ7TerminalApp(App):
             on_state_change=self._on_connection_state_change,
             on_response=self._on_response,
             on_error=self._on_connection_error,
+            on_protocol_change=self._on_protocol_change,
         )
 
         # Start connection
@@ -611,6 +614,27 @@ class Civ7TerminalApp(App):
             except Exception:
                 pass
 
+    def _on_protocol_change(self, new: Optional[str], old: Optional[str]) -> None:
+        """Echo transport switches (tuner <-> CDP fallback) and update the bar."""
+        try:
+            self.query_one(StatusBar).set_protocol(new)
+        except Exception:
+            pass  # Widget not available yet
+
+        # Only transitions involving the fallback are worth a line — plain
+        # tuner connects are already announced by the state-change handler.
+        if new == "cdp":
+            msg = ("Tuner port unreachable — switched to CDP fallback "
+                   f"(port {cdp_port.CDP_PORT}, same JS context)")
+        elif new == "tuner" and old == "cdp":
+            msg = "Tuner port is back — switched from CDP fallback to tuner"
+        else:
+            return
+        session = self._get_active_session()
+        if session:
+            session.add_info(msg)
+            session.log_info(msg)
+
     def _on_response(self, response: str) -> None:
         """Handle received response."""
         # Route response to the tab that sent the command
@@ -707,7 +731,8 @@ class Civ7TerminalApp(App):
             session.add_info("  /copy    - Copy last response to clipboard")
             session.add_info("  /copyall - Copy all terminal output to clipboard")
             session.add_info("  /clear   - Clear the screen")
-            session.add_info("  /quit    - Exit the terminal")
+            session.add_info("  /status  - Show connection status, active protocol (tuner/CDP), and verify it")
+            session.add_info("  /quit    - Exit the terminal (alias: /exit)")
             session.add_info("  /help    - Show this help")
             session.add_info("")
             session.add_info("Keyboard shortcuts:")
@@ -738,11 +763,58 @@ class Civ7TerminalApp(App):
         elif cmd == "/clear":
             session.clear()
 
-        elif cmd == "/quit":
+        elif cmd == "/status":
+            await self._show_connection_status(session)
+
+        elif cmd in ("/quit", "/exit"):
             self.exit()
 
         else:
             session.add_error(f"Unknown command: {cmd}")
+
+    async def _show_connection_status(self, session) -> None:
+        """Report connection state and verify the debug port responds."""
+        if not self._connection:
+            session.add_error("No connection manager initialized")
+            return
+
+        cfg = self._connection.config
+        session.add_info(f"Target: {cfg.host}:{cfg.port} (tuner)")
+
+        state = self._connection.state
+        if state == ConnectionState.CONNECTED:
+            session.add_info("Protocol: tuner - verifying debug port...")
+            response = await self._connection.send_command("\"'pong'\"")
+            if response == "'pong'":
+                session.add_info("Debug port verified - responding to commands")
+            elif response is not None:
+                session.add_error(f"Debug port answered but echo mismatched: {response!r}")
+            else:
+                session.add_error("Socket open but the debug port did not respond")
+            return
+
+        # Tuner down — see whether the CDP fallback carries commands (the
+        # game suspends the tuner during MP/hotseat; port 9444 stays up).
+        session.add_info("Tuner socket: down - checking CDP fallback...")
+        response = await self._connection.send_command("\"'pong'\"")
+        if response == "'pong'":
+            session.add_info(
+                f"Protocol: CDP fallback (port {cdp_port.CDP_PORT}) - verified, "
+                "responding to commands"
+            )
+            session.add_info("Tuner reopens when the game returns to the main menu")
+            return
+
+        if state == ConnectionState.CONNECTING:
+            session.add_info("Socket: connecting (retrying)...")
+        else:
+            session.add_error("Socket: disconnected (tuner and CDP both unreachable)")
+        try:
+            from . import game_tools
+            diagnosis = await asyncio.to_thread(game_tools.diagnose_disconnect, cfg.port)
+            session.add_info(f"Diagnosis: {diagnosis}")
+        except Exception:
+            pass
 
     def action_quit(self) -> None:
         """Quit the application."""

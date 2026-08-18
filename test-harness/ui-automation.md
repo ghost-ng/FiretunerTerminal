@@ -91,6 +91,49 @@ NEW GAME → [flow steps] → Launch Game → (loading) → "Begin Game" button
   needs no dialog handling. (Found in base `ui/automation/` scripts, which
   are themselves a good reference for game-flow automation.)
 
+## Hotseat / multiplayer flow (verified end-to-end via CDP 9444)
+
+The tuner port closes in MP (see mcp-testing.md) — the terminal and MCP
+server now fall back to the Cohtml CDP debugger automatically, so the same
+tools/JS patterns keep working; expect a one-time ~30s stall on the first
+command after the lobby opens (zombie-socket detection). The tuner listener
+reopens on exiting the MP session to the main menu (leaving the lobby via
+its Back button is enough) and the connection switches back by itself.
+
+```
+MAIN MENU --MULTIPLAYER (fxs-text-button)--> SCREEN-MP-LANDING
+  --.mp-landing-new__hotseat-button (action-activate)--> SCREEN-MP-CREATE-GAME
+  --GameSetup config (the Map param here is the SupportsSinglePlayer="0" row)--
+  --fxs-hero-button caption LOC_UI_MP_HOST_LOBBY (action-activate)--> SCREEN-MP-LOBBY
+```
+
+In the lobby:
+
+```js
+// Add human slots (SS_TAKEN = human). Direct property assignment is
+// silently ignored -- must use the setter:
+Configuration.editPlayer(1).setSlotStatus(SlotStatus.SS_TAKEN);
+// SlotStatus: {SS_OPEN:0, SS_COMPUTER:1, SS_CLOSED:2, SS_TAKEN:3, SS_OBSERVER:4}
+
+// Launch: press the Ready toggle
+document.querySelector('screen-mp-lobby fxs-activatable.ready-button')
+```
+
+After loading, hotseat inserts a **turn-transition screen** with plain
+`.fxs-button` divs labeled "Save Game" / **"Start Turn"** -- press Start
+Turn to enter the active player's turn (appears between every player's
+turn, not just the first).
+
+Notes:
+- GameSetup config applied in the CREATE-GAME screen survived into the
+  lobby in scripted runs -- but re-verify in the lobby; manual fiddling has
+  reset it before.
+- Engine behavior found this way: `bHumansTogether`
+  (assign-starting-plots.js) forces all humans onto the largest landmass
+  when the age has `HumanPlayersPrimaryHemisphere` (Antiquity does) -- mods
+  wanting separated humans must re-place them post-assignment via
+  `StartPositioner.setStartPosition` swaps.
+
 ## Dialogs
 
 Fatal-error dialogs (`SCREEN-DIALOG-BOX` in the stack) block everything.

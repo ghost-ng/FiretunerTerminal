@@ -13,7 +13,7 @@ import socket
 from pathlib import Path
 from typing import Optional
 
-CDP_PORT = 9444  # Cohtml UI debugger; stays open during MP tuner suspension
+from .cdp import CDP_PORT  # Cohtml UI debugger; stays open during MP tuner suspension
 
 FIRAXIS_DIR = Path(os.environ.get("LOCALAPPDATA", "")) / "Firaxis Games" / "Sid Meier's Civilization VII"
 LOGS_DIR = FIRAXIS_DIR / "Logs"
@@ -69,7 +69,9 @@ def diagnose_disconnect(tuner_port: int = 4318) -> str:
             "Civ 7 is running with the tuner enabled, but the tuner port is closed — "
             "the game suspends it during multiplayer/hotseat sessions (the UI debugger "
             f"on port {CDP_PORT} is still up, which confirms the game is alive). "
-            "It reopens when the game returns to the main menu."
+            "Commands normally auto-fall back to CDP on that port; seeing this error "
+            "means the CDP evaluation itself failed — retry, or wait for the game to "
+            "return to the main menu, which reopens the tuner."
         )
     return (
         "Civ 7 appears to be running but the tuner port is closed and the cause is "

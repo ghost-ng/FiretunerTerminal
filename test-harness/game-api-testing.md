@@ -155,6 +155,33 @@ that proved useful: water % (land/(land+water)), distant-land share
 (region-0 land / land), physical landmass count vs rolled config, per-size
 comparisons (Tiny vs Huge budgets need independent scaling).
 
+### Age progression & autoplay (probed 2026-08-16)
+
+`Game.AgeProgressManager` (in-game): `getCurrentAgeProgressionPoints()`,
+`getMaxAgeProgressionPoints()`, `isAgeOver` (property, not function),
+`ageCountdownStarted`, `isMilestoneComplete(...)`.
+
+**DANGER: `Game.AgeProgressManager.updateAgeProgressionPoints(N)` hard-
+crashes the game in the CURRENT build — unconditionally.** Verified three
+times: CDP/UI context (+140), tuner channel during autoplay (+10), and
+tuner channel while idle at the player's turn 1 (+10). The shipped
+VictoriesDefeats.ltp panel uses this exact call (+1/+10), so it worked in
+earlier builds — it does not anymore (likely broken by the same 2026 patch
+that reworked the Voronoi system). There is currently NO safe direct
+age-advance API. Fast-forward recipe: `AgeLength: AGE_LENGTH_ABBREVIATED`
+at setup + `Autoplay` (~15-20 min per age). `engine.call(
+"transitionToNextAge")` is only honored once the age has already ended.
+
+Safe fast-forward: the `Autoplay` global (FireTuner autoplay panel API):
+
+```js
+Autoplay.setTurns(50);           // number of turns to autoplay
+Autoplay.setReturnAsPlayer(0);   // player to return control to
+Autoplay.setObserveAsPlayer(0);  // observe from this player's view
+Autoplay.setActive(true);        // start; setActive(false) / setPause to stop
+// Other: isActive, turns, isPaused, setAsAI/setAsHuman/setAsLocalPlayer
+```
+
 ### Per-player homeland verification (verified)
 
 `player.isDistantLands({x, y})` is relative to the player's spawn region
@@ -171,6 +198,27 @@ Players.get(id).isDistantLands(ownSpawn)                       // → false
 ```
 
 Region id 0 (islands + dedicated distant landmasses) is distant to everyone.
+
+### StartPositioner — spawn positions & quality (verified)
+
+```js
+// Fertility score the engine uses to rank start plots.
+// MAP-GEN CONTEXT ONLY -- StartPositioner is NOT defined in the in-game
+// UI context (ReferenceError). In-game spawn-quality proxy: count land,
+// non-impassable tiles via getPlotIndicesInRadius(x, y, 2).
+StartPositioner.getPlotFertilityForCoord(x, y)   // number, higher = better
+
+// Reassign a start position (map-gen context; used for post-assignment
+// player moves/swaps -- e.g. separating humans that the engine's
+// bHumansTogether behavior forced onto one landmass):
+StartPositioner.setStartPosition(plotIndex, playerId);
+// Full swap = two setStartPosition calls + updating your local
+// startPositions array (indexed by playerId, not loop index!).
+```
+
+Spawn-quality assertion pattern: compare each human start's fertility to
+the mean fertility across all player starts (e.g. require >= 50% of mean)
+-- catches relocated players inheriting dud positions.
 
 ## UI / engine — meta controls
 

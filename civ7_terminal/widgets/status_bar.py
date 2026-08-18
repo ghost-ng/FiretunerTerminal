@@ -65,6 +65,7 @@ class StatusBar(Widget):
     retry_countdown: reactive[float | None] = reactive(None)
     host: reactive[str] = reactive("127.0.0.1")
     port: reactive[int] = reactive(4318)
+    protocol: reactive[str | None] = reactive(None)
 
     def compose(self) -> ComposeResult:
         """Compose the status bar layout."""
@@ -86,6 +87,10 @@ class StatusBar(Widget):
         """React to retry countdown changes."""
         self._update_status()
 
+    def watch_protocol(self, protocol: str | None) -> None:
+        """React to active-protocol changes (tuner vs CDP fallback)."""
+        self._update_status()
+
     def watch_host(self, host: str) -> None:
         """React to host changes."""
         self._update_host_info()
@@ -101,6 +106,10 @@ class StatusBar(Widget):
         if self.state == ConnectionState.CONNECTED:
             status_widget.update("[●]")
             status_widget.set_classes("status status-connected")
+        elif self.protocol == "cdp":
+            # Tuner socket is down but commands flow over the CDP fallback
+            status_widget.update("[◑] CDP fallback")
+            status_widget.set_classes("status status-connecting")
         elif self.state == ConnectionState.CONNECTING:
             status_widget.update("[◐]")
             status_widget.set_classes("status status-connecting")
@@ -130,6 +139,10 @@ class StatusBar(Widget):
         """
         self.state = state
         self.retry_countdown = retry_countdown
+
+    def set_protocol(self, protocol: str | None) -> None:
+        """Update the active transport ("tuner", "cdp", or None)."""
+        self.protocol = protocol
 
     def set_host_info(self, host: str, port: int) -> None:
         """

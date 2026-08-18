@@ -261,9 +261,9 @@ Add to your `claude_desktop_config.json` (same idea - use the venv Python path i
 - **`list_civs_and_units()`** - Full roster review: every alive civ with localized leader/civ names, gold, city names, and all units (type, position, damage) plus per-type counts.
 - **`read_game_logs(name?, tail_lines?, grep?)`** - Tail or grep the game's own logs (Scripting.log, Database.log, Modding.log...) for failure diagnosis. No args lists available logs.
 - **`screenshot(save_path?, max_width?)`** - Capture the game window as a PNG image. This is an OS-level capture (the debug port is text-only) using PrintWindow, so it works even when other windows overlap the game. Pair it with camera calls via `execute_js` to frame a shot of the map. Windows only for the occlusion-proof path; elsewhere it falls back to a screen grab.
-- **`civ7://status`** - Check connection status to the game
+- **`civ7://status`** - Check connection status to the game, including which transport is active
 
-The MCP server auto-reconnects to Civ 7, so agents can start before the game is running. Claude Code and Cursor will start the server automatically when you open a project with the `.mcp.json` config.
+The MCP server auto-reconnects to Civ 7, so agents can start before the game is running. When the game suspends the FireTuner port (it does this during multiplayer/hotseat sessions), commands automatically fall back to the Cohtml CDP debugger on port 9444 — same JS context, same results — and switch back once the tuner returns. `execute_js` prefixes a one-line `[transport]` notice to its next result whenever the protocol switches. Claude Code and Cursor will start the server automatically when you open a project with the `.mcp.json` config.
 
 ### Demo
 

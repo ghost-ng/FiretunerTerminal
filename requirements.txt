@@ -4,3 +4,4 @@ mcp[cli]>=1.0.0
 mss>=9.0.0
 pygetwindow>=0.0.9
 Pillow>=10.0.0
+websocket-client>=1.6.0

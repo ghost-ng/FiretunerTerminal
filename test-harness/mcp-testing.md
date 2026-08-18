@@ -97,13 +97,26 @@ server will show as disconnected; **the listener reopens on exiting the MP
 session to the main menu** (verified 2026-08-16: same process, no game
 restart needed — the MCP server auto-reconnected and served commands).
 
+**Since 2026-08-17 the terminal and MCP server fall back to CDP (port
+9444) automatically** — `ConnectionManager.send_command` routes to the CDP
+debugger whenever the tuner is down, so hotseat lobby setup, launching, and
+in-game assertions all work through the same MCP tools with no manual step.
+`/status` and `civ7://status` report the active protocol, and switches are
+echoed (terminal: info line; MCP: a one-line `[transport]` notice prefixed
+to the next `execute_js` result).
+
 Consequences for automation:
-- Hotseat lobby setup (adding human slots, launching) cannot be driven via
-  MCP — manual step.
 - **The tuner does NOT revive once the hotseat game loads** (verified
   2026-08-16: Turn 1 in a loaded hotseat game, port 4318 has no listener
   at all — the game process listens only on 9444).
-- Fallback verification channel: the map script's `console.log` output in
+- **Zombie sockets** (verified 2026-08-17): entering the lobby closes the
+  tuner *listener* but leaves established tuner connections ESTABLISHED and
+  silently unserviced — the first command on such a socket pays a one-time
+  30s timeout before the fallback engages (the manager then closes the
+  zombie and routes straight to CDP). The suspended socket would even
+  resume service after leaving the MP session, but the manager reconnects
+  fresh instead.
+- Secondary verification channel: the map script's `console.log` output in
   `Scripting.log` (map-gen context logging is unaffected), plus any state
   the script persists via `Game.setProperty`.
 
@@ -127,9 +140,11 @@ Verified live in a hotseat game: `1+1` → 2, `Game.turn` → 1,
 `create_connection('ws://127.0.0.1:9444/json/devtools/page/0')`.
 
 Caveats: only one CDP client at a time (the official Dev Tools app competes
-for it); JSON-RPC framing instead of the tuner protocol, so the MCP server
-does not use it (yet); local debugging only — do not use to interact with
-real online multiplayer sessions.
+for it; the automatic fallback opens one connection per command, so it only
+collides while a command is in flight); local debugging only — do not use
+to interact with real online multiplayer sessions. This transport is now
+built in: `civ7_terminal/cdp.py`, used automatically by
+`ConnectionManager` whenever the tuner is unreachable.
 
 Hotseat entry (the part that DOES automate): the MP landing/creator screens
 are old-framework — plain `action-activate` CustomEvent dispatch works
