@@ -259,6 +259,26 @@ Add to your `claude_desktop_config.json` (same idea - use the venv Python path i
 - **`render_map(save_path?, tile_px?)`** - Draw the map from exact per-tile engine data: terrain/biome colors, territory outlines, cities, and units with a player legend. Ground truth for map-mod testing, vs. interpreting screenshots.
 - **`reveal_map(scope?)`** - Reveal the whole map via `Visibility.revealAllPlots` (the same mechanism as Firaxis's Map tuner panel). Scope: `human` (default), `all`, or a player id. Note the gameplay side effects: natural-wonder cinematics fire and all civs are met.
 - **`list_civs_and_units()`** - Full roster review: every alive civ with localized leader/civ names, gold, city names, and all units (type, position, damage) plus per-type counts.
+- **`get_continents()`** - Every continent on the map: type, localized name, tile count, cities on it and which players are present there.
+- **`get_players()`** - Major-player roster: civ, leader, team, gold, government, capital, city/unit counts, and diplomacy (met / at war with).
+- **`get_citystates()`** - Independent powers & city-states: localized name, village plot, unit count, suzerain-bonus state, and hostile/friendly relationship toward each major.
+- **`get_age()`** - Current age (type, localized name, chronology index), turn/date, and age progression points.
+- **`get_map_resources(include_locations?)`** - Whole-map resource scan: counts per resource type with localized names and class, optionally with every tile location.
+- **`get_player_resources(player_id?)`** - A player's resources (or all majors'): type, name, class, source plot, assignment info, imports.
+- **`get_continent_size()`** - Continent size metrics: tiles, % of land/map, bounding boxes, plus map land/water totals.
+- **`get_tile(x, y)`** / **`get_units_at(x, y)`** / **`get_city(x, y)`** - Plot-level deep inspection: everything about one hex, full detail for its units (moves, damage, promotions, army), and full city detail (populations, growth, happiness, net yields, production, buildings).
+- **`get_victory_progress()`** / **`get_milestones(player_id?)`** - Victory progress per team and age-progression milestones + legacy-path scores per player — the natural assertion targets for automated runs.
+- **`get_diplomacy()`** - Full major-to-major matrix: met, relationship levels, active wars with names.
+- **`get_tech_civics(player_id)`** - Both research trees: current node, turns left, completed nodes.
+- **`get_yields(player_id?)`** - Net per-turn yields per type plus gold balance.
+- **`get_city_production(player_id?)`** - Every city's current production and queue, resolved to type names.
+- **`get_wonders()`** / **`get_religion()`** / **`get_trade_routes(player_id?)`** - Built + natural wonders, religion state (pantheons, beliefs, holy cities), and active trade routes with endpoints and payloads.
+- **`get_notifications(player_id?)`** - Pending notifications and end-turn blockers ("why can't the turn end?").
+- **`search_api(object_expr, pattern)`** - Live API introspection: find members of any game object by regex.
+- **`autoplay(action, turns?, observe_as?)`** / **`end_turn()`** - AI fast-forward (the verified FireTuner Autoplay recipe) and single turn advancement. Both mutate game state.
+- **`look_at(x, y)`** - Point the camera at a plot before a screenshot.
+- **`execute_js_file(path)`** / **`preflight_mod(module_path)`** / **`reload_ui()`** - The mod dev loop: run a test-suite file from disk, validate a module's import graph via cache-busted dynamic import, and hot-reload the UI without a game restart.
+- **`list_saves()`** - List local save files (Steam Cloud saves have no local directory; the tool says so).
 - **`read_game_logs(name?, tail_lines?, grep?)`** - Tail or grep the game's own logs (Scripting.log, Database.log, Modding.log...) for failure diagnosis. No args lists available logs.
 - **`screenshot(save_path?, max_width?)`** - Capture the game window as a PNG image. This is an OS-level capture (the debug port is text-only) using PrintWindow, so it works even when other windows overlap the game. Pair it with camera calls via `execute_js` to frame a shot of the map. Windows only for the occlusion-proof path; elsewhere it falls back to a screen grab.
 - **`civ7://status`** - Check connection status to the game, including which transport is active

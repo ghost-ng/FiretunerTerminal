@@ -31,6 +31,7 @@ A community-built quick reference for the Civilization 7 debug console JavaScrip
 - [Game.Combat](#gamecombat)
 - [Game.Trade](#gametrade)
 - [Game.CityStates](#gamecitystates)
+- [Game.IndependentPowers](#gameindependentpowers)
 - [GameContext](#gamecontext)
 - [Configuration](#configuration)
 - [UI](#ui)
@@ -605,6 +606,9 @@ Properties of a unit from `Players.get(id).Units.getUnits()[i]`.
 | `getCountImportedResources()` | `number` | Imported resource count |
 | `getCityIDAssigned(resourceType)` | `number` | City assigned to resource |
 | `getUnassignedResourceYieldBonus()` | `number` | Unassigned bonus |
+
+`getResources()` entry shape (verified live 2026-08-18):
+`{uniqueResource: {resource: <hash for GameInfo.Resources.lookup>, prestigeCivilization: -1}, value: <plot index; x = value % width, y = floor(value / width)>}`
 | `isRessourceAssignmentLocked()` | `boolean` | Assignment locked |
 
 ---
@@ -752,6 +756,81 @@ Game-level systems. Access via `Game.<SubSystem>`.
 | `isBonusActive(type, playerId)` | `boolean` | Is bonus active |
 | `canHaveBonus(type)` | `boolean` | Can have bonus |
 | `hasAssignedBonus(type)` | `boolean` | Has assigned bonus |
+
+---
+
+## Game.IndependentPowers
+
+Independent powers / city-states (verified live 2026-08-18).
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `independentName(id)` | `string` | LOC key for the independent's name (resolve with `Locale.compose`) |
+| `getNumIndependents()` | `number` | Number of independents |
+| `isIndependentAlive(id)` | `boolean` | Alive check |
+| `isIndependentEncampment(id)` | `boolean` | Encampment vs village |
+| `getIndependentHostility(id, playerId)` | `string` | LOC key: `LOC_INDEPENDENT_RELATIONSHIP_HOSTILE` / `..._FRIENDLY` / ... |
+| `getIndependentRelationship(id, playerId)` | `number` | Relationship enum (1 = hostile, 3 = friendly observed) |
+| `getIndependentPlayerLevel(id)` | `number` | Independent level |
+| `getIndependentPlayerIDAt(x, y)` | `number` | Player id at plot; **also returns major ids on their plots** — filter against `Players.getAliveIndependentIds()` |
+| `getIndependentPlayerIDFromUnit(unitId)` | `number` | Owner of an independent unit |
+| `getDistanceToNearestIndependent(x, y)` | `number` | Distance to nearest independent |
+| `setIndependentSuzerain(...)` | — | UNTESTED — mutates game state |
+| `changeIndependentPlayerLevel(...)` | — | UNTESTED — mutates game state |
+
+Related: `Players.get(id).isIndependent` is `true` for these (while `isMinor`
+is `false`); `Players.get(id).getCityStateCityStateType()` returns the
+city-state type hash used by `Game.CityStates` bonus queries.
+
+---
+
+## Verified surfaces (live-probed 2026-08-18)
+
+Working member sets confirmed against a running Exploration-age game; the
+`get_*` MCP tools in `civ7_terminal/game_tools.py` are built on these and
+double as usage examples.
+
+- **GameInfo tables are iterable**: `[...GameInfo.Ages]`, `[...GameInfo.Yields]`,
+  `[...GameInfo.AgeProgressionMilestones]` all work (`.map` directly does not).
+  `GameInfo.Ages.lookup(Game.age)` → `{AgeType, Name, ChronologyIndex, ...}`.
+- **`Player.Stats`**: `getNetYield(yieldHash)` → number (per-turn net).
+  `getYields()` returns a ~200KB breakdown tree — avoid in payloads.
+- **`Player.LegacyPaths`**: `getEnabledLegacyPaths()`, `getCompletedLegacyPaths()`,
+  `getScore(legacyPathType)`; milestone check:
+  `Game.AgeProgressManager.isMilestoneComplete(milestoneHash)`.
+- **`Player.Techs` / `Player.Culture`** (same shape): `getResearching()` →
+  `{type, progress, depth, maxDepth}`, `getTurnsLeft()`, `getResearched()`.
+- **`Player.Diplomacy`**: `getRelationshipLevel(other)`,
+  `getRelationshipLevelName(other)` → LOC key; `Game.Diplomacy.getWarData(a, b)`
+  → `{warName}`.
+- **City sub-objects**: `BuildQueue` (`currentProductionTypeHash`,
+  `currentTurnsLeft`, `getQueue()` items carry `constructibleType`/`unitType`/
+  `projectType`), `Growth` (`turnsUntilGrowth`, `currentFood`, `growthRate`),
+  `Happiness` (`netHappinessPerTurn`, `hasUnrest`), `Yields`
+  (`getNetYield(yieldHash)`), `Constructibles` (`getIds()` → instance ids).
+- **`Constructibles` global**: `Constructibles.get(id)` → instance with
+  `typeName` (e.g. `BUILDING_PALACE`), `type` hash, `location`, `complete`,
+  `damaged`, `cityId`. Wonder detection: `GameInfo.Constructibles.lookup(type)
+  .ConstructibleClass === 'WONDER'`.
+- **Unit sub-objects**: `Movement` (`movementMovesRemaining`, `maxMoves`),
+  `Health.damage`, `Experience` (`getLevel`, `getPromotions()`), unit props
+  `typeName`, `isCommanderUnit`, `isEmbarked`, `isFortified`, `armyId`.
+- **`Game.Notifications`**: `getIdsForPlayer(id)`, then `getMessage/getSummary/
+  getTypeName/getSeverity/getBlocksTurnAdvancement(nid)`; `hasEndTurnBlocking(id)`.
+- **`Player.Religion`**: `hasPantheon()`, `getPantheons()`, `getBeliefs()`,
+  `getReligionName()`, `hasHolyCity()`, `getHolyCityName()`,
+  `getReligionInMajorityOfCities()`.
+- **`Player.Trade.getCurrentTradeRoutes()`** entries: `{targetCityId,
+  nearestCityId, domain, importPayloads: [{uniqueResource: {resource}}],
+  exportYields: [{yieldType, amount}], pathPlots}`; resolve city ids with the
+  **`Cities` global**: `Cities.get(cityId)`.
+- **`GameplayMap` extras**: `getElevation`, `isImpassable`, `isLake`,
+  `isFreshWater`, `isNaturalWonder`, `isRiver`, `isNavigableRiver`,
+  `getRiverName(x, y)`, `getContinentType`. Per-tile `getYield/getYields`
+  returned 0/[] in probes — not useful.
+- **Saves**: `SaveDirectories`/`SaveTypes`/`SaveLocations` globals are enums;
+  with Steam Cloud there is no local save directory. No direct save-game JS
+  API found (Automation only exposes `generateSaveName`, `copyAutosave`).
 
 ---
 
