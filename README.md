@@ -281,7 +281,9 @@ Add to your `claude_desktop_config.json` (same idea - use the venv Python path i
 - **`list_saves()`** - List local save files (Steam Cloud saves have no local directory; the tool says so).
 - **`read_game_logs(name?, tail_lines?, grep?)`** - Tail or grep the game's own logs (Scripting.log, Database.log, Modding.log...) for failure diagnosis. No args lists available logs.
 - **`screenshot(save_path?, max_width?)`** - Capture the game window as a PNG image. This is an OS-level capture (the debug port is text-only) using PrintWindow, so it works even when other windows overlap the game. Pair it with camera calls via `execute_js` to frame a shot of the map. Windows only for the occlusion-proof path; elsewhere it falls back to a screen grab.
+- **`help()`** - Quick-reference summary of every tool and Civ7 API category, for agents orienting themselves.
 - **`civ7://status`** - Check connection status to the game, including which transport is active
+- **`civ7://api-library`** - The full `API_LIBRARY.md` JavaScript API reference, served as an MCP resource
 
 The MCP server auto-reconnects to Civ 7, so agents can start before the game is running. When the game suspends the FireTuner port (it does this during multiplayer/hotseat sessions), commands automatically fall back to the Cohtml CDP debugger on port 9444 — same JS context, same results — and switch back once the tuner returns. `execute_js` prefixes a one-line `[transport]` notice to its next result whenever the protocol switches. Claude Code and Cursor will start the server automatically when you open a project with the `.mcp.json` config.
 
