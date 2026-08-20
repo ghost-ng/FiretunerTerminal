@@ -9,7 +9,12 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
 
-from mcp.server.fastmcp import FastMCP, Context, Image
+try:
+    from mcp.server.fastmcp import FastMCP, Context, Image
+except ModuleNotFoundError as error:  # MCP 2 renamed FastMCP to MCPServer
+    if error.name != "mcp.server.fastmcp":
+        raise
+    from mcp.server.mcpserver import MCPServer as FastMCP, Context, Image
 from mcp.server.session import ServerSession
 
 from .connection import ConnectionConfig, ConnectionManager, ConnectionState
