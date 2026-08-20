@@ -59,6 +59,7 @@ python -m venv venv
 .\venv\Scripts\Activate.ps1
 
 pip install -r requirements.txt
+pip install --no-deps -e .
 ```
 
 ### Linux/Mac
@@ -71,6 +72,7 @@ python3 -m venv venv
 source venv/bin/activate
 
 pip install -r requirements.txt
+pip install --no-deps -e .
 ```
 
 ## Enable FireTuner in Civ 7
@@ -231,6 +233,25 @@ claude mcp add --transport stdio --scope user civ7 -- /path/to/FiretunerTerminal
 # Without venv (if mcp + civ7_terminal are globally installed)
 claude mcp add --transport stdio --scope user civ7 -- python -m civ7_terminal.mcp_server
 ```
+
+### Codex Setup
+
+Use the same Python environment as above:
+
+```powershell
+# With venv on Windows
+codex mcp add civ7 -- "C:\path\to\FiretunerTerminal\venv\Scripts\python.exe" -m civ7_terminal.mcp_server
+```
+
+```bash
+# With venv on Linux/macOS
+codex mcp add civ7 -- /path/to/FiretunerTerminal/venv/bin/python -m civ7_terminal.mcp_server
+
+# Without venv (if mcp + civ7_terminal are globally installed)
+codex mcp add civ7 -- python -m civ7_terminal.mcp_server
+```
+
+Verify the saved configuration with `codex mcp get civ7`, then start a new Codex session so the Civ 7 tools are loaded. To remove the integration later, run `codex mcp remove civ7`.
 
 ### Claude Desktop Setup
 
