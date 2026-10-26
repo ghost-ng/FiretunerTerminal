@@ -113,9 +113,11 @@ async def screenshot(save_path: str = "", max_width: int = 1568) -> Image:
     """Capture a screenshot of the running Civ 7 game window and return it as an image.
 
     This is an OS-level capture of the game window (the debug port itself is
-    text-only). The window is brought to the foreground first. Falls back to
-    the primary monitor if the Civ 7 window can't be found. Combine with
-    execute_js camera calls (e.g. Camera.lookAtPlot(x, y)) to frame the shot.
+    text-only). On Linux, X11/XWayland window pixels are read directly without
+    changing focus or workspace; the tool errors if direct capture is unavailable
+    rather than returning an unrelated desktop image. Other platforms use a
+    screen-grab fallback if platform-specific capture is unavailable. Combine
+    with execute_js camera calls (e.g. Camera.lookAtPlot(x, y)) to frame the shot.
 
     Args:
         save_path: Optional file path to also save the PNG to disk.
